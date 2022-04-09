@@ -38,7 +38,6 @@ import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit.MessageUnreadWatcher
 import com.vivo.push.PushClient
-import com.yyide.chatim.activity.schedule.SchoolCalendarActivity
 import com.yyide.chatim.alipush.AliasUtil
 import com.yyide.chatim.alipush.MyMessageReceiver
 import com.yyide.chatim.alipush.NotifyUtil
@@ -103,55 +102,44 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     private var appFragment = NAppFragment()
     private var helpFragment = HelpFragment()
 
+    private var currentFragment: Fragment? = null
 
+    // 保存fragmentList
     private val fragmentList = mutableListOf<Fragment>()
-    private val homeFragmentStr = "homeFragment"
-    private val messageFragmentStr = "messageFragment"
-    private val scheduleFragmentStr = "scheduleFragment"
-    private val appFragmentStr = "appFragment"
-    private val helpFragmentStr = "helpFragment"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setScreenFull()
         if (savedInstanceState != null) {
 
             fragmentList.clear()
+
             /*获取保存的fragment  没有的话返回null*/
-            homeFragment = supportFragmentManager.getFragment(
-                savedInstanceState,
-                homeFragmentStr
-            ) as HomeFragment
-            messageFragment = supportFragmentManager.getFragment(
-                savedInstanceState,
-                messageFragmentStr
-            ) as MessageFragment
-            scheduleFragment = supportFragmentManager.getFragment(
-                savedInstanceState,
-                scheduleFragmentStr
-            ) as ScheduleFragment2
-            appFragment = supportFragmentManager.getFragment(
-                savedInstanceState,
-                appFragmentStr
-            ) as NAppFragment
-            helpFragment = supportFragmentManager.getFragment(
-                savedInstanceState,
-                helpFragmentStr
-            ) as HelpFragment
+            homeFragment = supportFragmentManager.findFragmentByTag(
+                HomeFragment::class.simpleName
+            ) as HomeFragment ?: HomeFragment()
+            messageFragment = supportFragmentManager.findFragmentByTag(
+                MessageFragment::class.simpleName
+            ) as MessageFragment ?: MessageFragment()
+            scheduleFragment = supportFragmentManager.findFragmentByTag(
+                ScheduleFragment2::class.simpleName
+            ) as ScheduleFragment2 ?: ScheduleFragment2()
+            appFragment = supportFragmentManager.findFragmentByTag(
+                NAppFragment::class.simpleName
+            ) as NAppFragment ?: NAppFragment()
+            helpFragment = supportFragmentManager.findFragmentByTag(
+                HelpFragment::class.simpleName
+            ) as HelpFragment ?: HelpFragment()
 
             addToFragmentList(homeFragment)
             addToFragmentList(messageFragment)
             addToFragmentList(scheduleFragment)
             addToFragmentList(appFragment)
             addToFragmentList(helpFragment)
-
-        } else {
-            initFragment()
+            hideAllFragment()
         }
-
-
-        setScreenFull()
+        initFragment()
         EventBus.getDefault().register(this)
         registerMessageReceiver() // used for receive msg
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
@@ -221,11 +209,6 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     }
 
     private fun initFragment() {
-        addFragment(homeFragment)
-        addFragment(messageFragment)
-        addFragment(scheduleFragment)
-        addFragment(appFragment)
-        addFragment(helpFragment)
         showFragment(HOME_TYPE, homeFragment)
     }
 
@@ -235,10 +218,9 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         }
     }
 
-    private fun addFragment(fragment: Fragment) {
-        if (!fragment.isAdded) {
-            supportFragmentManager.beginTransaction().add(binding.content.id, fragment).commit()
-            fragmentList.add(fragment)
+    private fun hideAllFragment() {
+        for (frag in fragmentList) {
+            supportFragmentManager.beginTransaction().hide(frag).commit()
         }
     }
 
@@ -259,6 +241,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     }
 
     private fun showFragment(type: Int, fragment: Fragment) {
+
         if (type != HOME_TYPE) {
             binding.ivHome.visibility = View.INVISIBLE
             binding.tab1.visibility = View.VISIBLE
@@ -272,13 +255,23 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         binding.tab4.isChecked = type == APP_TYPE
         binding.tab5.isChecked = type == HELP_TYPE
 
-        for (frag in fragmentList) {
-            if (frag != fragment) {
-                supportFragmentManager.beginTransaction().hide(frag).commit()
+        val transaction = supportFragmentManager.beginTransaction()
+
+        if (!fragment.isAdded) {
+            if (currentFragment == null) {
+                transaction.add(binding.content.id, fragment, fragment::class.simpleName)
+            } else {
+                transaction.hide(currentFragment!!)
+                    .add(binding.content.id, fragment, fragment::class.simpleName)
             }
+            addToFragmentList(fragment)
+        } else {
+            transaction.hide(currentFragment!!).show(fragment)
         }
 
-        supportFragmentManager.beginTransaction().show(fragment).commit()
+
+        currentFragment = fragment
+        transaction.commitAllowingStateLoss()
     }
 
 
@@ -835,14 +828,4 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         }
         return null
     }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        supportFragmentManager.putFragment(outState, homeFragmentStr, homeFragment)
-        supportFragmentManager.putFragment(outState, messageFragmentStr, messageFragment)
-        supportFragmentManager.putFragment(outState, scheduleFragmentStr, scheduleFragment)
-        supportFragmentManager.putFragment(outState, appFragmentStr, appFragment)
-        supportFragmentManager.putFragment(outState, helpFragmentStr, helpFragment)
-        super.onSaveInstanceState(outState)
-    }
-
 }
