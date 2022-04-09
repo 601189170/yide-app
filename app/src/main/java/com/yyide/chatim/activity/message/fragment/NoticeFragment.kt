@@ -2,12 +2,6 @@ package com.yyide.chatim.activity.message.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.BackgroundColorSpan
-import android.text.style.DrawableMarginSpan
-import android.text.style.ImageSpan
 import android.view.Gravity
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -24,8 +18,12 @@ import com.yyide.chatim.databinding.FragmentMessageNoticeBinding
 import com.yyide.chatim.databinding.ItemMessageContentBinding
 import com.yyide.chatim.dialog.TableWeekPopUp
 import com.yyide.chatim.model.message.AcceptMessageItem
+import com.yyide.chatim.model.message.EventMessageBean
 import com.yyide.chatim.model.table.ChildrenItem
 import com.yyide.chatim.utils.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import razerdp.basepopup.BasePopupWindow
 
 
@@ -62,12 +60,36 @@ class NoticeFragment :
         }
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
         initView()
         initListener()
         request()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEventMessageHandle(item: EventMessageBean) {
+        if (item.type != 0 || dataAdapter.data.isNullOrEmpty()) {
+            return
+        }
+        val index = dataAdapter.data.indexOfFirst { it.id == item.item.id }
+        dataAdapter.data[index] = item.item
+        if (index != -1) {
+            dataAdapter.notifyItemChanged(index, null)
+        }
+
     }
 
     private fun initData() {
@@ -103,40 +125,54 @@ class NoticeFragment :
                     if (viewModel.selectContent?.id != "0" && item.isTop) {
                         viewBind.itemMessageContentTopIv.show()
                     }
-                    if (item.isView) {
-                        viewBind.itemMessageContentTitleTv.setCompoundDrawablesRelative(
-                            null,
-                            null,
-                            null,
-                            null
-                        )
-                        viewBind.itemMessageContentTitleTv.text = " ${item.title}"
-                    }else{
-                        viewBind.itemMessageContentTitleTv.text = item.title
-                    }
-                    val subStr = "${item.identityUserName}发布于${item.timerDate}"
+                    viewBind.itemMessageContentTitleTv.text = item.title
+                    val subStr = "${item.identityUserName}发布于"
                     viewBind.itemMessageContentSubTv.text = subStr
-                    when(viewModel.selectContent?.id){
-                        viewModel.noticeTypeByReceive ->{
-                            if (item.isConfirm) {
-                                viewBind.itemMessageContentStateIv.hide()
-                                viewBind.itemMessageContentStateTv.text = "已确认"
-                                viewBind.itemMessageContentStateTv.setTextColor(R.color.black11.asColor())
-                            } else {
-                                viewBind.itemMessageContentStateIv.show()
-                                viewBind.itemMessageContentStateTv.text = "去确认"
-                                viewBind.itemMessageContentStateTv.setTextColor(R.color.punch_normal.asColor())
+                    viewBind.itemMessageContentSubTimeTv.text = item.timerDate
+                    when (viewModel.selectContent?.id) {
+                        viewModel.noticeTypeByReceive -> {
+                            if (item.isView) {
+                                viewBind.itemMessageContentTitleTv.setCompoundDrawablesRelative(
+                                    null,
+                                    null,
+                                    null,
+                                    null
+                                )
+                            }
+                            if (item.isNeedConfirm) {
+                                if (item.isConfirm) {
+                                    viewBind.itemMessageContentStateIv.hide()
+                                    viewBind.itemMessageContentStateTv.text = "已确认"
+                                    viewBind.itemMessageContentStateTv.setTextColor(R.color.black11.asColor())
+                                } else {
+                                    viewBind.itemMessageContentStateIv.show()
+                                    viewBind.itemMessageContentStateTv.text = "去确认"
+                                    viewBind.itemMessageContentStateTv.setTextColor(R.color.punch_normal.asColor())
+                                }
+                            }else{
+                                viewBind.itemMessageContentStateTv.remove()
+                                viewBind.itemMessageContentStateIv.remove()
                             }
                         }
                         viewModel.noticeTypeByPublish -> {
+                            viewBind.itemMessageContentStateTv.show()
+                            viewBind.itemMessageContentStateIv.show()
+                            viewBind.itemMessageContentTitleTv.setCompoundDrawablesRelative(
+                                null,
+                                null,
+                                null,
+                                null
+                            )
                             if (TimeUtil.isDateOver3(item.timerDate)) {
                                 viewBind.itemMessageContentStateIv.hide()
                                 viewBind.itemMessageContentStateTv.text = "已发布"
                                 viewBind.itemMessageContentStateTv.setTextColor(R.color.black11.asColor())
+                                viewBind.itemMessageContentSubTimeTv.setTextColor(R.color.black10.asColor())
                             } else {
                                 viewBind.itemMessageContentStateIv.hide()
                                 viewBind.itemMessageContentStateTv.text = "待发布"
                                 viewBind.itemMessageContentStateTv.setTextColor(R.color.not_publish_color.asColor())
+                                viewBind.itemMessageContentSubTimeTv.setTextColor(R.color.not_publish_color.asColor())
                             }
                         }
                     }
@@ -149,6 +185,7 @@ class NoticeFragment :
         binding.messageNoticeRv.adapter = dataAdapter
         dataAdapter.setEmptyView(R.layout.empty)
         dataAdapter.loadMoreModule.setOnLoadMoreListener {
+            logd("current = $current")
             dataAdapter.loadMoreModule.isEnableLoadMore = true
             current++
             request()
@@ -183,10 +220,13 @@ class NoticeFragment :
         }
 
         contentPopUp.setData(viewModel.mContentList, viewModel.selectContent)
+        binding.messageNoticeContentTv.text = viewModel.selectContent?.name ?: "我收到的"
         contentTimePopUp.setData(viewModel.mContentTimeList, viewModel.selectContentTime)
+        binding.messageNoticeContentTimeTv.text = viewModel.selectContentTime?.name ?: "今日"
 
 
         viewModel.acceptMessage.observe(requireActivity()) {
+            binding.messageNoticeSfl.isRefreshing = false
             if (current == 1) {
                 dataAdapter.setList(it.acceptMessage)
             } else {
@@ -199,6 +239,13 @@ class NoticeFragment :
                 dataAdapter.loadMoreModule.loadMoreComplete()
             }
         }
+
+        binding.messageNoticeSfl.setOnRefreshListener {
+            current = 1
+            request()
+        }
+        binding.messageNoticeSfl.setColorSchemeColors(requireActivity().resources.getColor(R.color.colorPrimary))
+
 
     }
 

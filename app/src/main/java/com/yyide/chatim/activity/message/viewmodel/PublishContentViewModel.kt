@@ -22,6 +22,12 @@ class PublishContentViewModel : ViewModel() {
     private val messageInfoLiveData = MutableLiveData<Result<AcceptItemInfo>>()
     val messageInfo = messageInfoLiveData
 
+    private val revokeLiveData = MutableLiveData<Result<Boolean>>()
+    val revokeResult = revokeLiveData
+
+    private val reTopLiveData = MutableLiveData<Result<Boolean>>()
+    val reTopResult = reTopLiveData
+
 
     fun getDetail(pId: Int, cType: Int, mType: Int) {
         viewModelScope.launch {
@@ -30,7 +36,8 @@ class PublishContentViewModel : ViewModel() {
             map["contentType"] = cType
             map["messType"] = mType
             val body = JSON.toJSONString(map).toRequestBody(BaseConstant.JSON)
-            MessagePushNetWork.requestPublishMessageInfo(body)
+            val result = MessagePushNetWork.requestPublishMessageInfo(body)
+            messageInfoLiveData.value = result
         }
     }
 
@@ -44,7 +51,7 @@ class PublishContentViewModel : ViewModel() {
             map["id"] = id
             val body = JSON.toJSONString(map).toRequestBody(BaseConstant.JSON)
             val result = MessagePushNetWork.requestRevokeMessage(body)
-
+            revokeResult.value = result
         }
     }
 
@@ -58,6 +65,7 @@ class PublishContentViewModel : ViewModel() {
             map["id"] = id
             val body = JSON.toJSONString(map).toRequestBody(BaseConstant.JSON)
             val result = MessagePushNetWork.requestReTopMessage(body)
+            reTopResult.value = result
         }
     }
 

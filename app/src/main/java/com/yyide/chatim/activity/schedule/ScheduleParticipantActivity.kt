@@ -39,6 +39,8 @@ class ScheduleParticipantActivity : BaseActivity() {
     val fragments = mutableListOf<Fragment>()
     val tabs = mutableListOf<String>()
     private val participantSharedViewModel: ParticipantSharedViewModel by viewModels()
+    // 判断是否从会议选择的参与人
+    var isFromMeeting = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,7 +98,11 @@ class ScheduleParticipantActivity : BaseActivity() {
     private fun initViewPager() {
         fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_STAFF))
         ///fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_STUDENT))
-        fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_GUARDIAN))
+        if (isFromMeeting){
+            fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_MEETING_GUARDIAN))
+        }else{
+            fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_GUARDIAN))
+        }
         tabs.add("教职工")
         //tabs.add("学生")
         tabs.add("家长")
@@ -123,6 +129,8 @@ class ScheduleParticipantActivity : BaseActivity() {
 
     private fun initView() {
         val stringExtra = intent.getStringExtra("data")
+        val type = intent.getStringExtra("type") ?: ""
+        isFromMeeting = type == "meeting"
         loge("参与人已选中$stringExtra")
         val participantDataList = JSONArray.parseArray(
             stringExtra,

@@ -1,11 +1,11 @@
 package com.yyide.chatim.kotlin.network.message
 
 import com.yyide.chatim.kotlin.network.base.BaseResponse
-import com.yyide.chatim.model.message.AcceptItemInfo
-import com.yyide.chatim.model.message.AcceptMessageBean
-import com.yyide.chatim.model.message.NotifyInfoBean
+import com.yyide.chatim.model.NoticeMyReleaseDetailBean
+import com.yyide.chatim.model.message.*
 import okhttp3.RequestBody
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
@@ -73,4 +73,26 @@ interface IMessagePushService {
     @Headers("Content-Type: application/json", "Accept: application/json")
     @POST("/cloud/mobile/mess/publish/notifyInfo")
     suspend fun requestNotifyInfo(@Body requestBody: RequestBody): BaseResponse<List<NotifyInfoBean>>
+
+    /**
+     * 信息发布-发布消息详情-通知范围-部门人员
+     */
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @POST("/cloud/mess/publish/notifyEmployees")
+    suspend fun requestNotifyStaffList(@Body requestBody: RequestBody): BaseResponse<List<NotifyInfoBean>>
+
+    /**
+     * 信息发布-发布消息详情-通知范围-家长人员
+     */
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @POST("/cloud/mess/publish/notifyElterns")
+    suspend fun requestNotifyParentList(@Body requestBody: RequestBody): BaseResponse<List<ResponseParentBean>>
+
+    /**
+     * 首页弹窗
+     */
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @GET("/cloud/mobile/mess/receive/index/show")
+    suspend fun requestHomeDialog(): BaseResponse<HomeNoticeDetaiBean>
+
 }

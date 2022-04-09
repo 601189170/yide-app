@@ -10,7 +10,7 @@ data class AcceptMessageItem(
     @SerializedName("viewUsers")
     val viewUsers: Int = 0,
     @SerializedName("isConfirm")
-    val isConfirm: Boolean = false,
+    var isConfirm: Boolean = false,
     @SerializedName("isView")
     val isView: Boolean = false,
     @SerializedName("timerDate")
@@ -20,7 +20,7 @@ data class AcceptMessageItem(
     @SerializedName("confirmUsers")
     val confirmUsers: Int = 0,
     @SerializedName("title")
-    val title: String = "",
+    var title: String = "",
     @SerializedName("contentType")
     val contentType: Int = 0,
     @SerializedName("messType")
@@ -28,7 +28,10 @@ data class AcceptMessageItem(
     @SerializedName("receiveId")
     val receiveId: Int = 0,
     val identityUserName: String = "",
-    val isTop: Boolean = false,
-    val isRetract: Boolean = false,
+    var isTop: Boolean = false,
+    var isRetract: Boolean = false,
     val isTimer: Boolean = false,
+    var receiveUsers: String = "",
+    var notifyUsersInfo: String = "",
+    var isNeedConfirm: Boolean = false
 ) : Parcelable

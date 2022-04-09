@@ -17,26 +17,35 @@
         android:id="@+id/notify_info_btn_cl"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:background="@color/white"
         android:layout_marginVertical="10dp"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/bg_white20"
+        app:layout_constraintBottom_toTopOf="@id/notify_info_rv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/notify_info_top">
 
-        <Button
+        <TextView
             android:id="@+id/notify_info_staff_btn"
             android:layout_width="170dp"
             android:layout_height="32dp"
-            android:background="@drawable/bg_white_20_start"
+            android:text="教职工"
+            android:gravity="center"
+            android:textColor= "@color/white"
+            android:textSize="14sp"
+            android:background="@drawable/bg_corners_blue_18"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
 
-        <Button
+        <TextView
             android:id="@+id/notify_info_parent_btn"
             android:layout_width="170dp"
             android:layout_height="32dp"
-            android:background="@drawable/bg_white_20_end"
+            android:text="家长"
+            android:gravity="center"
+            android:textColor="#ff333333"
+            android:textSize="14sp"
+            android:background="@drawable/bg_white_18_end"
             app:layout_constraintStart_toEndOf="@id/notify_info_staff_btn"
             app:layout_constraintTop_toTopOf="@id/notify_info_staff_btn"/>
 
@@ -48,7 +57,6 @@
         android:id="@+id/notify_info_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
         android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@id/notify_info_btn_cl"
         app:layout_constraintBottom_toBottomOf="parent">

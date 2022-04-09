@@ -31,8 +31,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/notice_content_sub_tv" />
 
-    <TextView
-        android:id="@+id/notice_content_text"
+    <com.qmuiteam.qmui.widget.webview.QMUIWebView
+        android:id="@+id/notice_content_mv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="15dp"

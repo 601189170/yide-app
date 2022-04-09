@@ -25,6 +25,7 @@ import com.yyide.chatim.model.schedule.SearchParticipantRsp
 import com.yyide.chatim.model.schedule.toParticipantListBean
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
+import com.yyide.chatim.utils.show
 import com.yyide.chatim.view.SpacesFlowItemDecoration
 import com.yyide.chatim.viewmodel.ParticipantSharedViewModel
 import com.yyide.chatim.viewmodel.StaffParticipantViewModel
@@ -46,8 +47,21 @@ class StaffParticipantFragment : Fragment() {
         arguments?.let {
             type = it.getInt(ARG_TYPE)
         }
-        requestData(null)
-        staffParticipantViewModel.getResponseResult().observe(this) {
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        staffParticipantBinding = FragmentStaffParticipantBinding.inflate(layoutInflater)
+        return staffParticipantBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        staffParticipantViewModel.getResponseResult().observe(requireActivity()) {
             if (it != null) {
 
                 listCache[it.name ?: "未知"] = it
@@ -82,19 +96,6 @@ class StaffParticipantFragment : Fragment() {
             }
 //            ToastUtils.showShort("当前部门没有数据")
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
-        staffParticipantBinding = FragmentStaffParticipantBinding.inflate(layoutInflater)
-        return staffParticipantBinding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         val linearLayoutManager = LinearLayoutManager(requireContext())
         linearLayoutManager.orientation = RecyclerView.HORIZONTAL
@@ -214,6 +215,9 @@ class StaffParticipantFragment : Fragment() {
                     }
                 }
             })
+
+
+        requestData(null)
     }
 
     /**
@@ -236,6 +240,10 @@ class StaffParticipantFragment : Fragment() {
                 staffParticipantViewModel.getStudentGuardianParticipant(
                     participantListBean?.id ?: "", participantListBean?.type ?: "1", "2"
                 )
+            }
+            PARTICIPANT_TYPE_MEETING_GUARDIAN -> {
+                staffParticipantBinding.staffParticipantEmpty.tvDesc.text= "会议不支持勾选学生家长"
+                staffParticipantBinding.staffParticipantEmpty.root.show()
             }
             else -> {
             }
@@ -360,6 +368,9 @@ class StaffParticipantFragment : Fragment() {
 
         //家长监护人
         const val PARTICIPANT_TYPE_GUARDIAN = 3
+
+        //从会议进来的家长监护人
+        const val PARTICIPANT_TYPE_MEETING_GUARDIAN = 4
 
         @JvmStatic
         fun newInstance(type: Int) =

@@ -752,9 +752,14 @@
         <activity android:name=".activity.attendance.teacher.NAttendanceActivity" />
         <activity android:name=".activity.attendance.teacher.AttendanceRuleActivity" />
 
+
         <!-- 信息发布 -->
         <activity android:name=".activity.message.MessagePushActivity"/>
         <activity android:name=".activity.message.NoticeContentActivity"/>
+        <activity android:name=".activity.message.PublishContentActivity"/>
+        <activity android:name=".activity.message.MessageNotifyActivity"/>
+        <activity android:name=".activity.message.NotifyParentActivity"/>
+        <activity android:name=".activity.message.NotifyStaffActivity"/>
 
         <!-- 高德地图-->
         <service android:name="com.amap.api.location.APSService" />

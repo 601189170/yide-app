@@ -2,17 +2,16 @@ package com.yyide.chatim.activity.message
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.text.Html
 import androidx.activity.viewModels
+import com.yyide.chatim.R
 import com.yyide.chatim.activity.message.viewmodel.NoticeContentViewModel
 import com.yyide.chatim.activity.message.viewmodel.PublishContentViewModel
 import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.databinding.ActivityPublishContentBinding
 import com.yyide.chatim.model.message.AcceptMessageItem
-import com.yyide.chatim.utils.GlideUtil
-import com.yyide.chatim.utils.hide
-import com.yyide.chatim.utils.show
-import com.yyide.chatim.utils.showShotToast
+import com.yyide.chatim.utils.*
 
 /**
  *
@@ -24,9 +23,9 @@ class PublishContentActivity :
     KTBaseActivity<ActivityPublishContentBinding>(ActivityPublishContentBinding::inflate) {
 
 
-    private var noticeData: AcceptMessageItem? = null
-
+    private lateinit var noticeData: AcceptMessageItem
     private val viewModel by viewModels<PublishContentViewModel>()
+    private var isTop = false
 
     companion object {
         fun startGo(context: Context, item: AcceptMessageItem) {
@@ -36,30 +35,40 @@ class PublishContentActivity :
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initListener()
+        viewModel.getDetail(noticeData.id, noticeData.contentType, noticeData.messType)
+    }
+
     override fun initView() {
         super.initView()
-        noticeData = intent.getParcelableExtra<AcceptMessageItem>("data")
-        noticeData?.let {
-            if (it.isRetract) {
-                binding.publishContentReTopBtn.isEnabled = false
-                binding.publishContentRevokeBtn.isEnabled = false
-            }
-            if (it.contentType == 1) {
-                binding.publishContentIv.show()
-                binding.publishContentText.hide()
-            } else {
-                binding.publishContentIv.hide()
-                binding.publishContentText.show()
-            }
-            viewModel.getDetail(it.id, it.contentType, it.messType)
+        noticeData = intent.getParcelableExtra<AcceptMessageItem>("data") ?: AcceptMessageItem()
+        if (noticeData.isRetract) {
+            binding.publishContentRevokeBtn.isEnabled = false
+            binding.publishContentRevokeBtn.text = getString(R.string.already_reBack)
         }
+        isTop = noticeData.isTop
+        if (noticeData.isTop) {
+            binding.publishContentReTopBtn.text = getString(R.string.cancel_reTop)
+        }
+        if (noticeData.contentType == 1) {
+            binding.publishContentIv.show()
+            binding.publishContentWv.hide()
+        } else {
+            binding.publishContentIv.hide()
+            binding.publishContentWv.show()
+        }
+
+        binding.publishContentRangeTv.text = noticeData.notifyUsersInfo
+        binding.publishContentPeopleTv.text = "${noticeData.confirmUsers}/${noticeData.receiveUsers}"
 
         viewModel.messageInfo.observe(this) {
 
             val data = it.getOrNull() ?: return@observe
             binding.publishContentTop.title.text = data.title
 
-            val subStr = "${data.source}发布于${data.timerDate}"
+            val subStr = "${data.identityUserName}发布于${data.timerDate}"
             binding.publishContentSubTv.text = subStr
 
             binding.publishContentSubEndTv.text = "浏览 ${data.viewUsers}"
@@ -71,14 +80,35 @@ class PublishContentActivity :
                     binding.publishContentIv
                 )
             } else {
-                val str =
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                        Html.fromHtml(data.content, Html.FROM_HTML_MODE_LEGACY).toString()
-                    } else {
-                        Html.fromHtml(data.content).toString()
-                    }
-                binding.publishContentText.text = str
+                binding.publishContentWv.loadDataWithBaseURL(
+                    null,
+                    data.content,
+                    "text/html",
+                    "utf-8",
+                    null
+                )
             }
+        }
+
+
+        viewModel.reTopResult.observe(this) {
+            val data = it.getOrNull() ?: return@observe
+            if (data) {
+                if (isTop) {
+                    binding.publishContentReTopBtn.text = getString(R.string.reTop)
+                    isTop = false
+                } else {
+                    binding.publishContentReTopBtn.text = getString(R.string.cancel_reTop)
+                    isTop = true
+                }
+            }
+            noticeData.isTop = isTop
+        }
+
+        viewModel.revokeResult.observe(this){
+            noticeData.isRetract = true
+            binding.publishContentRevokeBtn.isEnabled = false
+            binding.publishContentRevokeBtn.text = getString(R.string.already_reBack)
         }
 
 
@@ -90,10 +120,18 @@ class PublishContentActivity :
         }
 
         binding.publishContentRevokeBtn.setOnClickListener {
-
+            //viewModel.revokePublishMessage(noticeData.id)
         }
 
         binding.publishContentReTopBtn.setOnClickListener {
+            //viewModel.reTopPublishMessage(noticeData.id)
+        }
+
+        binding.publishContentNotifyRangeCl.setOnClickListener {
+            MessageNotifyActivity.startGo(this, noticeData.id )
+        }
+
+        binding.publishContentNotifyPeopleCl.setOnClickListener {
 
         }
 

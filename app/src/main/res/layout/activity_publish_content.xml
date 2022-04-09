@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <include
         android:id="@+id/publish_content_top"
         layout="@layout/title_layout2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="10dp"
+        android:background="@color/color_F9FAF9"
+        app:layout_constraintBottom_toTopOf="@id/publish_content_revoke_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/publish_content_top"
-        app:layout_constraintBottom_toTopOf="@id/publish_content_revoke_btn">
+        app:layout_constraintTop_toBottomOf="@id/publish_content_top">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -27,34 +28,34 @@
                 android:id="@+id/publish_content_sub_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintWidth_percent="0.5"
+                android:layout_margin="15dp"
                 android:text="郭老师发布于2020-08-06 14:47"
                 android:textColor="#ff666666"
                 android:textSize="12sp"
-                android:layout_margin="15dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.5" />
 
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@drawable/eye"
+                app:layout_constraintBottom_toBottomOf="@id/publish_content_subEnd_tv"
                 app:layout_constraintEnd_toStartOf="@id/publish_content_subEnd_tv"
-                app:layout_constraintTop_toTopOf="@id/publish_content_subEnd_tv"
-                app:layout_constraintBottom_toBottomOf="@id/publish_content_subEnd_tv"/>
+                app:layout_constraintTop_toTopOf="@id/publish_content_subEnd_tv" />
 
             <TextView
                 android:id="@+id/publish_content_subEnd_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="浏览:"
+                android:layout_margin="15dp"
                 android:gravity="end"
+                android:maxLines="1"
+                android:text="浏览:"
                 android:textColor="#ff666666"
                 android:textSize="12sp"
-                android:maxLines="1"
-                android:layout_margin="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <ImageView
@@ -62,18 +63,92 @@
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
                 android:layout_margin="15dp"
+                android:background="@color/white"
                 app:layout_constraintTop_toBottomOf="@id/publish_content_sub_tv" />
 
-            <TextView
-                android:id="@+id/publish_content_text"
+            <com.qmuiteam.qmui.widget.webview.QMUIWebView
+                android:id="@+id/publish_content_wv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_margin="15dp"
-                android:visibility="invisible"
+                android:background="@color/white"
                 android:textColor="#ff333333"
                 android:textSize="13sp"
+                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/publish_content_sub_tv" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/publish_content_notify_range_cl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="15dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/publish_content_iv">
+
+                <TextView
+                    android:id="@+id/publish_content_notify_range_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/notify_range"
+                    android:textColor="#ff333333"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/publish_content_range_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff999999"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/publish_content_notify_range_tv" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <View
+                android:id="@+id/notify_range_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="15dp"
+                android:background="#D8D8D8"
+                app:layout_constraintStart_toStartOf="@id/publish_content_notify_range_cl"
+                app:layout_constraintTop_toBottomOf="@id/publish_content_notify_range_cl" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/publish_content_notify_people_cl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/notify_range_line">
+
+                <TextView
+                    android:id="@+id/publish_content_notify_people_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/notify_people"
+                    android:textColor="#ff333333"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/publish_content_people_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff999999"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/publish_content_notify_people_tv" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -84,25 +159,27 @@
         android:layout_width="160dp"
         android:layout_height="45dp"
         android:layout_marginBottom="15dp"
+        android:background="@drawable/bg_blue"
         android:text="@string/reBack"
+        android:visibility="invisible"
         android:textColor="#ffffffff"
         android:textSize="16sp"
-        android:background="@drawable/bg_blue"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/publish_content_reTop_btn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/publish_content_reTop_btn"
         android:layout_width="160dp"
         android:layout_height="45dp"
         android:layout_marginBottom="15dp"
+        android:background="@drawable/bg_blue"
         android:text="@string/reTop"
+        android:visibility="invisible"
         android:textColor="#ffffffff"
         android:textSize="16sp"
-        android:background="@drawable/bg_blue"
-        app:layout_constraintStart_toEndOf="@id/publish_content_revoke_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toEndOf="@id/publish_content_revoke_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

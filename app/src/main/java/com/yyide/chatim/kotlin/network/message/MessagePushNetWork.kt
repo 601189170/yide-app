@@ -92,4 +92,32 @@ object MessagePushNetWork :
             service.requestNotifyInfo(requestBody)
         }
 
+
+    /**
+     * 发布消息 请求部门人员
+     * @param requestBody RequestBody
+     */
+    suspend fun requestStaffList(requestBody: RequestBody) =
+        getResult {
+            service.requestNotifyStaffList(requestBody)
+        }
+
+    /**
+     * 发布消息 请求家长人员
+     * @param requestBody RequestBody
+     */
+    suspend fun requestParentList(requestBody: RequestBody) =
+        getResult {
+            service.requestNotifyParentList(requestBody)
+        }
+
+
+    /**
+     * 首页确认弹窗
+     */
+    suspend fun showHomeDialog() =
+        getResult {
+            service.requestHomeDialog()
+        }
+
 }
