@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/itemView"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:id="@+id/selectlayout0"
+      app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="50dp">
+        <TextView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+
+            android:id="@+id/title"
+            android:textColor="#999999"
+            android:textSize="14sp"
+            android:text="接受班级"
+
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+        </TextView>
+        <ImageView
+            android:id="@+id/delete"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/icon_work_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </ImageView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/line"
+        android:background="#D8D8D8"
+        app:layout_constraintTop_toBottomOf="@+id/selectlayout0"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+
+        tools:ignore="MissingConstraints">
+
+    </View>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:id="@+id/selectlayout1"
+        app:layout_constraintTop_toBottomOf="@+id/line"
+        android:layout_height="50dp">
+        <TextView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+
+
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:text="接受班级"
+
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+        </TextView>
+        <TextView
+            android:id="@+id/className"
+            android:textSize="14sp"
+            android:textColor="#999999"
+            android:text="一年级5班"
+            android:drawableRight="@drawable/icon_txl_right"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:id="@+id/selectlayout2"
+        app:layout_constraintTop_toBottomOf="@+id/selectlayout1"
+        android:layout_height="50dp">
+        <TextView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+
+
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:text="关联课表"
+
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/subjectName"
+            android:textSize="14sp"
+            android:textColor="#999999"
+            android:text="第2节 8:00-9:00 语文"
+            android:drawableRight="@drawable/icon_txl_right"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

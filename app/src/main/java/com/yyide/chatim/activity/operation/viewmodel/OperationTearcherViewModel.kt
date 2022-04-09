@@ -16,6 +16,8 @@ import okhttp3.RequestBody
 class OperationTearcherViewModel : ViewModel() {
 
     val getSchoolWorkRsp = MutableLiveData<Result<getSchoolWork>>()
+    val deleteWorkResult = MutableLiveData<Result<Boolean>>()
+    val updateRemindResult = MutableLiveData<Result<Boolean>>()
 
 
 
@@ -24,9 +26,29 @@ class OperationTearcherViewModel : ViewModel() {
     fun getSchoolWorkData(isWhole:String){
     viewModelScope.launch {
         val result = NetworkApi.getSchoolWorkData(isWhole)
-        Log.e("TAG", "selectSubjectByUserId: "+JSON.toJSONString(result) )
-
         getSchoolWorkRsp.value = result
     }
-}
+    }
+
+
+    fun deleteWork(isWhole:String){
+        viewModelScope.launch {
+            val result = NetworkApi.deleteWork(isWhole)
+            deleteWorkResult.value = result
+        }
+    }
+
+    fun updateRemind(isWhole:String,workId:String,classesId:String,studentId:String){
+        viewModelScope.launch {
+            val map = mutableMapOf<String, Any>()
+            map["isWhole"] = isWhole
+            map["workId"] = workId
+            map["classesId"] = classesId
+            map["studentId"] = studentId
+            val body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map))
+            val result = NetworkApi.updateRemind(body)
+            updateRemindResult.value = result
+        }
+    }
+
 }

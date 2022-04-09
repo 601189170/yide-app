@@ -62,4 +62,18 @@
         app:layout_constraintTop_toTopOf="@id/iv_schedule_type_img"
         app:layout_constraintBottom_toBottomOf="@id/iv_schedule_type_img"
         android:visibility="visible"/>
+
+    <CheckBox
+
+        android:id="@+id/iv_finish_tag"
+        android:layout_width="@dimen/dp_16"
+        android:layout_height="@dimen/dp_16"
+        android:button="@null"
+        android:checked="false"
+        android:enabled="false"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/schedule_add_label_selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginRight="15dp"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

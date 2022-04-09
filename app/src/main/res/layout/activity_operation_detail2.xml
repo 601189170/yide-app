@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_F9FAF9">
+
+    <include
+        android:id="@+id/top"
+        layout="@layout/title_layout6"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/dp_20"
+        app:layout_constraintTop_toBottomOf="@+id/top">
+
+        <TextView
+            android:id="@+id/tvClassName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_12"
+            android:drawablePadding="@dimen/dp_8"
+            android:text="一年级1班"
+            android:textColor="#ff222222"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:drawableStartCompat="@drawable/icon_zy"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvNode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_4"
+            android:text="第6节"
+            android:visibility="gone"
+            android:textColor="#ff222222"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView38"
+            app:layout_constraintEnd_toStartOf="@+id/textView38" />
+
+        <TextView
+            android:id="@+id/textView38"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:text="15:00-15:45"
+            android:textColor="#ff11C685"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvClassName" />
+            <TextView
+                android:id="@+id/tv_gl"
+                android:textSize="12sp"
+                android:layout_marginTop="@dimen/dp_5"
+                app:layout_constraintLeft_toLeftOf="@+id/tvClassName"
+                app:layout_constraintTop_toBottomOf="@+id/tvClassName"
+                android:text="关联课程：03-13 第一节 08:30"
+                android:textColor="@color/text_666666"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="MissingConstraints">
+
+            </TextView>
+        <View
+            android:id="@+id/viewLine"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@color/line_E4E7ED"
+            app:layout_constraintTop_toBottomOf="@+id/tv_gl" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="08/08作业标题"
+            android:textColor="#ff222222"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/tvClassName"
+            app:layout_constraintTop_toBottomOf="@+id/viewLine" />
+
+        <TextView
+            android:id="@+id/tvExpand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+            android:text="收起"
+            android:textColor="@color/colorAccent"
+            android:textSize="13sp"
+           android:layout_marginRight="5dp"
+           app:layout_constraintRight_toLeftOf="@+id/imExpand"
+            app:layout_constraintTop_toTopOf="@+id/tvTitle" />
+        <ImageView
+
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/imExpand"
+            android:layout_marginRight="@dimen/dp_15"
+            app:layout_constraintTop_toTopOf="@+id/tvExpand"
+            android:layout_marginTop="@dimen/dp_6"
+            android:src="@drawable/icon_down2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+
+        </ImageView>
+        <TextView
+            android:id="@+id/tvContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:text="1.默写全文\n2.预习下一篇文章"
+            android:textColor="#ff909399"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="0dp"
+            android:id="@+id/recyclerView"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            app:layout_constraintEnd_toEndOf="@+id/tvContent"
+            app:layout_constraintStart_toStartOf="@+id/tvContent"
+            app:layout_constraintTop_toBottomOf="@+id/tvContent"
+            tools:itemCount="8"
+            app:spanCount="4"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/item_operation_detail_img" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/fklayout"
+            android:paddingHorizontal="15dp"
+            tools:ignore="MissingConstraints">
+            <TextView
+                android:text="反馈"
+                android:textSize="14sp"
+                android:textColor="#333333"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:id="@+id/viewLine2"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginHorizontal="15dp"
+            android:background="#E4E7ED"
+            app:layout_constraintTop_toBottomOf="@+id/fklayout" />
+    <LinearLayout
+        android:id="@+id/toplayout"
+        app:layout_constraintTop_toBottomOf="@+id/viewLine2"
+        android:layout_width="match_parent"
+        android:paddingHorizontal="15dp"
+        android:gravity="center_vertical"
+        android:layout_height="50dp">
+
+
+        <TextView
+
+            android:text="完成情况："
+            android:textSize="14sp"
+            android:textColor="#333333"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+
+        </TextView>
+        <CheckedTextView
+            android:id="@+id/compelete"
+            android:layout_width="64dp"
+            android:layout_height="30dp"
+            android:background="@drawable/selector_border2"
+            android:checked="false"
+            android:gravity="center"
+            android:text="已完成"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_text_gary_blue_color2"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toStartOf="@+id/tvWeek"
+            app:layout_constraintStart_toEndOf="@+id/textview"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread_inside" />
+        <CheckedTextView
+            android:id="@+id/nocompelete"
+            android:layout_width="64dp"
+            android:layout_marginLeft="15dp"
+            android:layout_height="30dp"
+            android:background="@drawable/selector_border2"
+            android:checked="false"
+            android:gravity="center"
+            android:text="未完成"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_text_gary_blue_color2"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toStartOf="@+id/tvWeek"
+            app:layout_constraintStart_toEndOf="@+id/textview"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread_inside" />
+
+
+    </LinearLayout>
+        <LinearLayout
+
+            app:layout_constraintTop_toBottomOf="@+id/toplayout"
+            android:layout_width="match_parent"
+            android:paddingHorizontal="15dp"
+            android:gravity="center_vertical"
+            android:layout_height="50dp">
+
+
+            <TextView
+
+                android:text="难易程度："
+                android:textSize="14sp"
+                android:textColor="#333333"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="MissingConstraints">
+
+            </TextView>
+            <CheckedTextView
+                android:id="@+id/nd1"
+                android:layout_width="64dp"
+                android:layout_height="30dp"
+                android:background="@drawable/selector_border2"
+                android:checked="false"
+                android:gravity="center"
+                android:text="很简单"
+                android:textAlignment="center"
+                android:textColor="@drawable/selector_text_gary_blue_color2"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toStartOf="@+id/tvWeek"
+                app:layout_constraintStart_toEndOf="@+id/textview"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread_inside" />
+            <CheckedTextView
+                android:id="@+id/nd2"
+                android:layout_width="64dp"
+                android:layout_height="30dp"
+                android:background="@drawable/selector_border2"
+                android:checked="false"
+                android:gravity="center"
+                android:text="有难度"
+                android:textAlignment="center"
+                android:layout_marginLeft="15dp"
+                android:textColor="@drawable/selector_text_gary_blue_color2"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toStartOf="@+id/tvWeek"
+                app:layout_constraintStart_toEndOf="@+id/textview"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread_inside" />
+            <CheckedTextView
+                android:id="@+id/nd3"
+                android:layout_width="64dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/selector_border2"
+                android:checked="false"
+                android:gravity="center"
+                android:text="非常难"
+                android:textAlignment="center"
+                android:textColor="@drawable/selector_text_gary_blue_color2"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toStartOf="@+id/tvWeek"
+                app:layout_constraintStart_toEndOf="@+id/textview"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread_inside" />
+
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:paddingTop="15dp"
+        android:paddingHorizontal="15dp"
+        android:background="@color/white"
+        android:paddingBottom="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="83dp">
+        <TextView
+            android:id="@+id/btn_commit"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="提交反馈"
+            android:gravity="center"
+            android:background="@drawable/bg_work_green_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TextView>
+        <TextView
+            android:id="@+id/btn_commit_gray"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="已提交反馈"
+            android:visibility="gone"
+            android:gravity="center"
+            android:background="@drawable/bg_work_gray_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TextView>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

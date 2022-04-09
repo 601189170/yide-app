@@ -1,27 +1,23 @@
 package com.yyide.chatim.model
 
 data class getSchoolWork(
-    val code: Int,
-    val `data`: Data,
-    val message: String
-) {
-    data class Data(
-            val classesTimetable: ClassesTimetable,
-            val content: String,
-            val feedbackEndTime: String,
-            val feedbackList: List<Feedback>,
-            val id: String,
-            val imgPaths: String,
-            val isScheduled: Boolean,
-            val noFeedbackList: List<NoFeedback>,
-            val noReadList: List<NoRead>,
-            val publisherId: String,
-            val readList: List<Any>,
-            val releaseTime: String,
-            val schoolId: String,
-            val subjectId: String,
-            val title: String
-    ){
+        val classesTimetable:ClassesTimetable,
+        val content: String,
+        val feedbackEndTime: String,
+        val feedbackList: List<Feedback>,
+        val id: String,
+        val imgPaths: String,
+        val isScheduled: Boolean,
+        val noFeedbackList: List<NoFeedback>,
+        val noReadList: List<NoRead>,
+        val publisherId: String,
+        val readList: List<Read>,
+        val releaseTime: String,
+        val schoolId: String,
+        val subjectId: String,
+        val title: String
+)
+   {
         data class ClassesTimetable(
                 val classesId: String,
                 val classesName: String,
@@ -62,6 +58,16 @@ data class getSchoolWork(
                 val studentId: String,
                 val studentName: String
         )
-    }
+
+        data class Read(
+                val completion: Int,
+                val difficulty: Int,
+                val isFeedback: Boolean,
+                val isRead: Boolean,
+                val isRemind: Boolean,
+                val studentId: String,
+                val studentName: String
+        )
+
 }
 

@@ -111,14 +111,20 @@ class StaffParticipantViewModel : ViewModel() {
                     dataBean.name = data.name
 
                     data.list?.forEach {
+
                         val participantListBean =
                             ParticipantRsp.DataBean.ParticipantListBean()
-                        participantListBean.department = true
+
+                            participantListBean.department = true
+
                         participantListBean.checked = false
                         participantListBean.type = it.type
                         participantListBean.name = it.name
                         participantListBean.id = it.id
                         departmentList.add(participantListBean)
+//                        if (it.guardians!=null){
+//                            Log.e("TAG", "guardians: "+it.guardians )
+//                        }
                         it.participantList?.forEach {
                             val participantListBean =
                                     ParticipantRsp.DataBean.ParticipantListBean()

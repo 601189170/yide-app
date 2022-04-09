@@ -1,6 +1,7 @@
 package com.yyide.chatim.adapter.schedule
 
 import android.view.View
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
@@ -8,6 +9,7 @@ import androidx.core.view.isVisible
 import com.alibaba.fastjson.JSON
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.yanzhenjie.recyclerview.SwipeRecyclerView
 import com.yyide.chatim.R
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
@@ -23,6 +25,7 @@ import com.yyide.chatim.utils.loge
  */
 class ScheduleListAdapter :
     BaseMultiItemQuickAdapter<ScheduleData, BaseViewHolder>() {
+
     init {
 
         addItemType(
@@ -44,7 +47,14 @@ class ScheduleListAdapter :
         addItemType(Schedule.TYPE_TIME_AXIS, R.layout.schedule_item_time_axis)
         addItemType(Schedule.TYPE_LIST_VIEW_HEAD, R.layout.schedule_item_list_view_month_head)
     }
+    private  var listener: ImgListener?=null
 
+     fun setImgListener(listener: ImgListener){
+        this.listener=listener
+    }
+    interface ImgListener{
+        fun OnimgSelect(item: ScheduleData)
+    }
     /**
      * 相同的布局设置
      */
@@ -52,6 +62,23 @@ class ScheduleListAdapter :
         loge("ScheduleData ${JSON.toJSONString(item)}")
         holder.setText(R.id.tv_schedule_name, item.name)
         holder.getView<TextView>(R.id.iv_mine_label).visibility = if (item.promoterSelf()) View.VISIBLE else View.GONE
+
+        if (item.promoterSelf()){
+            holder.getView<CheckBox>(R.id.iv_finish_tag).visibility=View.VISIBLE
+            holder.getView<CheckBox>(R.id.iv_finish_tag).isEnabled=true
+            if (item.status == "1") {
+                holder.getView<CheckBox>(R.id.iv_finish_tag).isChecked=true
+            } else {
+                holder.getView<CheckBox>(R.id.iv_finish_tag).isChecked=false
+            }
+
+            holder.getView<CheckBox>(R.id.iv_finish_tag).setOnClickListener(View.OnClickListener {
+                if (listener!=null){
+                    listener!!.OnimgSelect(item)
+                }
+            })
+        }
+
         if (item.isFirstDayOfMonth) {
             holder.getView<Group>(R.id.group_day).visibility = View.VISIBLE
             val dateTime = ScheduleDaoUtil.toDateTime(item.moreDayStartTime)
@@ -143,6 +170,7 @@ class ScheduleListAdapter :
             Schedule.TYPE_LIST_VIEW_HEAD -> {
                 val month = DateUtils.formatTime(item.startTime, "", "MM月")
                 holder.setText(R.id.tv_month_head_title, month)
+                holder.setVisible(R.id.tv_month_head_title, false)
             }
             Schedule.TYPE_TIME_AXIS ->{
                 loge("分割线view")

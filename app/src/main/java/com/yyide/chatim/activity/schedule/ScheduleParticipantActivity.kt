@@ -141,6 +141,9 @@ class ScheduleParticipantActivity : BaseActivity() {
                 if (it!=null){
                     it.name = it.name
                     it.realname = it.realname
+                    if (!TextUtils.isEmpty(it.realname)){
+                        it.name=it.realname
+                    }
                 }
 
                 //it.realname = it.userName

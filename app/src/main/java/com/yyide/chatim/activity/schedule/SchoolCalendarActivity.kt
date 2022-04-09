@@ -78,7 +78,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
                 return@observe
             }
             schoolCalendarBinding.blankPage2.visibility = View.GONE
-            schoolCalendarBinding.top.flTitle.setBackgroundColor(resources.getColor(R.color.school_calendar_bg_color))
+//            schoolCalendarBinding.top.flTitle.setBackgroundColor(resources.getColor(R.color.school_calendar_bg_color))
             schoolCalendarBinding.llSchedule.visibility = View.VISIBLE
             schoolCalendarBinding.layoutCalendar.root.visibility = View.VISIBLE
             initSemesterData(it)
@@ -280,7 +280,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
         schoolCalendarBinding.top.backLayout.setOnClickListener {
             finish()
         }
-        schoolCalendarBinding.top.flTitle.setBackgroundColor(resources.getColor(R.color.school_calendar_bg_color))
+//        schoolCalendarBinding.top.flTitle.setBackgroundColor(resources.getColor(R.color.school_calendar_bg_color))
 
         //calendarComposeLayout = findViewById(R.id.calendarComposeLayout)
         calendarComposeLayout = schoolCalendarBinding.layoutCalendar.calendarComposeLayout

@@ -66,6 +66,7 @@ import com.yyide.chatim.databinding.DialogScheduleMenuBinding;
 import com.yyide.chatim.databinding.DialogScheduleMonthListBinding;
 import com.yyide.chatim.databinding.DialogScheduleRemindBinding;
 import com.yyide.chatim.databinding.DialogScheduleRepetitionBinding;
+import com.yyide.chatim.databinding.DialogWorkSelect2Binding;
 import com.yyide.chatim.databinding.DialogWorkSelectBinding;
 import com.yyide.chatim.model.SubjectBean;
 import com.yyide.chatim.model.schedule.LabelColor;
@@ -79,6 +80,7 @@ import com.yyide.chatim.model.schedule.Schedule;
 import com.yyide.chatim.model.schedule.ScheduleData;
 import com.yyide.chatim.model.schedule.WeekBean;
 import com.yyide.chatim.model.selectBean;
+import com.yyide.chatim.model.selectSubjectByUserIdRsp;
 import com.yyide.chatim.utils.ColorUtil;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.DisplayUtils;
@@ -1406,7 +1408,7 @@ public class DialogUtil {
                 classname.setText(item.name);
 //                 img.setVisibility(item.check?View.VISIBLE:View.GONE);
 
-                     img.setVisibility(viewModel.getTv1data().getValue().name.equals(item.name)?View.VISIBLE:View.GONE);
+                img.setVisibility(viewModel.getLeftData().getValue().name.equals(item.name)?View.VISIBLE:View.GONE);
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1417,7 +1419,66 @@ public class DialogUtil {
                         img.setVisibility(View.VISIBLE);
                         item.check=true;
                         onClassListener.onClass(item);
-                        viewModel.getTv1data().setValue(item);
+                        viewModel.getLeftData().setValue(item);
+                        notifyDataSetChanged();
+                        mDialog.dismiss();
+                    }
+                });
+            }
+        };
+        binding.recy.setLayoutManager(new LinearLayoutManager(context));
+        binding.recy.setAdapter(adapter2);
+        adapter2.setList(list);
+
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.TOP);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (context.getResources().getDisplayMetrics().widthPixels );
+        lp.height = DisplayUtils.dip2px(context, 225f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.75f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
+
+    }
+
+    /**
+     * 我发布的and全部作业
+     */
+    public static void showWorkTypeWorkSelect2(Context context, OnPostSubListener postSubListener,List<selectSubjectByUserIdRsp> list,String id) {
+        DialogWorkSelect2Binding binding = DialogWorkSelect2Binding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+
+
+
+        BaseQuickAdapter adapter2 = new BaseQuickAdapter<selectSubjectByUserIdRsp, BaseViewHolder>(R.layout.item_dialog_select1) {
+
+            @Override
+            protected void convert(@NonNull BaseViewHolder holder, selectSubjectByUserIdRsp item) {
+                ImageView img = (ImageView) holder.getView(R.id.img);
+                TextView classname = (TextView) holder.getView(R.id.classname);
+                ConstraintLayout itemView = (ConstraintLayout) holder.getView(R.id.itemView);
+                classname.setText(item.name);
+//                 img.setVisibility(item.check?View.VISIBLE:View.GONE);
+                if (id.equals(item.id)){
+                    img.setVisibility(View.VISIBLE);
+                }else {
+                    img.setVisibility(View.GONE);
+                }
+
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for (selectSubjectByUserIdRsp selectBean : list) {
+                            selectBean.check=false;
+                        }
+                        img.setVisibility(View.VISIBLE);
+                        item.check=true;
+                        postSubListener.onSubject(item);
                         notifyDataSetChanged();
                         mDialog.dismiss();
                     }
@@ -1659,6 +1720,10 @@ public class DialogUtil {
     }
     public interface OnSubjectListener {
         void onSubject(SubjectBean bean);
+    }
+
+    public interface OnPostSubListener {
+        void onSubject(selectSubjectByUserIdRsp bean);
     }
     /**
      * 判断字符串是否含有Emoji表情

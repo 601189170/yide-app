@@ -39,7 +39,8 @@ import com.yyide.chatim.activity.leave.AskForLeaveActivity;
 import com.yyide.chatim.activity.meeting.MeetingHomeActivity;
 import com.yyide.chatim.activity.message.MessagePushActivity;
 import com.yyide.chatim.activity.message.NoticeContentActivity;
-import com.yyide.chatim.activity.operation.OperationActivity;
+import com.yyide.chatim.activity.operation.OperationActivityByParents;
+import com.yyide.chatim.activity.operation.OperationActivityByTeacher;
 import com.yyide.chatim.activity.table.TableActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseFragment;
@@ -301,7 +302,12 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 //startActivity(new Intent(getContext(), ClassesHonorPhotoListActivity.class));
                 break;
             case R.id.school_name:
-                startActivity(new Intent(getActivity(), OperationActivity.class));
+                if (SpData.getIdentityInfo().staffIdentity()) {
+                    startActivity(new Intent(getActivity(), OperationActivityByTeacher.class));
+                }else {
+                    startActivity(new Intent(getActivity(), OperationActivityByParents.class));
+                }
+//                startActivity(new Intent(getActivity(), SchoolCalendarActivity.class));
                 break;
             case R.id.tvMenu1:
                 startActivity(new Intent(getContext(), AskForLeaveActivity.class));

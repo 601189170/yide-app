@@ -193,10 +193,91 @@ object NetworkApi : BaseNetworkApi<INetworkService>(BaseConstant.API_SERVER_URL)
     /**
      * 教职工查看详情
      */
-    suspend fun getSchoolWorkData(id: String) =
-        getResult {
-            service.getSchoolWorkData(id)
-        }
+    suspend fun getSchoolWorkData(id:String) =
+            getResult{
+                service.getSchoolWorkData(id)
+            }
+
+    /**
+     * 作业-撤销
+     */
+    suspend fun deleteWork(id:String) =
+            getResult{
+                service.deleteWork(id)
+            }
+
+    /**
+     * 教职工作业-提醒家长
+     */
+    suspend fun updateRemind(requestBody: RequestBody) =
+            getResult{
+                service.updateRemind(requestBody)
+            }
+
+    /**
+     * 家长列表获取学生数据
+     */
+    suspend fun selectParentStudent() =
+            getResult{
+                service.selectParentStudent()
+            }
+
+    /**
+     * 家长端-作业列表
+     */
+    suspend fun selectParentPage(requestBody: RequestBody) =
+            getResult{
+                service.selectParentPage(requestBody)
+            }
+
+    /**
+     * 家长端-作业列表
+     */
+    suspend fun getParensWorkInfo(id:String) =
+            getResult{
+                service.getSchoolWorkFeedback(id)
+            }
+
+
+    /**
+     * 家长-提交反馈
+     */
+    suspend fun CommitFeedback(requestBody: RequestBody) =
+            getResult{
+                service.updateWorkFeedback(requestBody)
+            }
+
+    /**
+     * 获取关联课表
+     */
+    suspend fun getWeekTime(requestBody: RequestBody) =
+            getResult{
+                service.getWeekTime(requestBody)
+            }
+
+    /**
+     * 作业添加-获取科目
+     */
+    suspend fun getSubject() =
+            getResult{
+                service.selectSubjectByUserId()
+            }
+
+    /**
+     * 作业添加-获取班级
+     */
+    suspend fun getClassList() =
+            getResult{
+                service.getClassList()
+            }
+    /**
+     * 作业-添加
+     */
+    suspend fun createWork(requestBody: RequestBody) =
+            getResult{
+                service.createWork(requestBody)
+            }
+
 
     /**
      * 获取工作台App列表

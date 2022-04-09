@@ -18,8 +18,10 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.SwichClassAdapter;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.selectParentStudent;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -49,6 +51,10 @@ public class SwitchClassPopNew extends PopupWindow {
     }
 
     private void init() {
+        List<selectParentStudent> list=new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+
+        }
         int index = 0;
         final View mView = LayoutInflater.from(context).inflate(R.layout.layout_bottom_class_pop, null);
 
