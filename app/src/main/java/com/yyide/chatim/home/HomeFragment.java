@@ -359,7 +359,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             noticeFragment.setArguments(bundle);
             fragmentTransaction.replace(R.id.notice_content, noticeFragment);*/
             //班级考勤情况
-            fragmentTransaction.replace(R.id.kq_content, AttendanceSchoolFragment.newInstance());
+            fragmentTransaction.replace(R.id.kq_content, new TableFragment());
             //学生考勤
             fragmentTransaction.replace(R.id.kq_banner_content, new AttendanceStudentFragment());
 

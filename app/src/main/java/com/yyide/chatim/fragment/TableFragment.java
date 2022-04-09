@@ -2,6 +2,7 @@ package com.yyide.chatim.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +20,10 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.HomeTimeTable;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.utils.DateUtils;
+import com.yyide.chatim.utils.LogUtil;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -47,6 +50,12 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     TextView time;
     @BindView(R.id.table_next)
     TextView table_next;
+    @BindView(R.id.tvHours)
+    TextView tvHours;
+    @BindView(R.id.tvMinute)
+    TextView tvMinute;
+    @BindView(R.id.tvSecond)
+    TextView tvSecond;
     @BindView(R.id.table_group)
     Group table_group;
     private View mBaseView;
@@ -106,7 +115,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                             table_next.setText("下一节 | ");
                             break;
                         } else {//正在上课
-                            table_next.setText("本节课 | "); 
+                            table_next.setText("本节课 | ");
                             dataBean = item;
                             break;
                         }
@@ -140,7 +149,8 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     }
 
     private void getData() {
-        if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
+        mvpPresenter.getHomeTable();
+        /*if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
             if (SpData.getClassInfo() != null) {
                 mvpPresenter.selectClassInfoByClassId(SpData.getClassInfo().classesId);
             } else {
@@ -148,7 +158,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
             }
         } else {
             mvpPresenter.SelectSchByTeaid();
-        }
+        }*/
     }
 
     @Override
@@ -168,4 +178,31 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     public void SelectSchByTeaidFail(String msg) {
         setDefaultView("今日无课");
     }
+
+
+    @Override
+    public void SelectHomeTimeTbale(HomeTimeTable msg) {
+        className.setText(msg.data.name);
+        subjectName.setText(msg.data.subjectName);
+        time.setText(msg.data.startTime + "-" + msg.data.endTime);
+
+        new CountDownTimer(msg.data.sec, 1000) {
+            public void onTick(long millisUntilFinished) {
+                long myhour = (millisUntilFinished / 1000) / 3600;
+                long myminute = ((millisUntilFinished / 1000) - myhour * 3600) / 60;
+                long mysecond = millisUntilFinished / 1000 - myhour * 3600
+                        - myminute * 60;
+                tvHours.setText("" + (int) myhour);
+                tvMinute.setText("" + (int) myminute);
+                tvSecond.setText("" + (int) mysecond);
+            }
+
+            public void onFinish() {
+                //TODO 提示上课时间到了
+            }
+        }.start();
+
+    }
+
+
 }
