@@ -51,6 +51,7 @@
     <string name="operation_title">作业</string>
     <string name="filter_title">筛选</string>
     <string name="operation_detail_title">作业详情</string>
+    <string name="operation_post_work_title">发布作业</string>
     <string name="operation_read_html"><b><font color='#909399'>已读 <font color="#11C685"><b>%1$d</b></font>/<b>%2$d</b></font></b></string>
     <string name="operation_completed_html"><b><font color='#909399'>已完成 <font color="#11C685"><b>%1$d</b></font>/<b>%2$d</b></font></b></string>
 

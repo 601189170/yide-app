@@ -84,6 +84,8 @@ public class DeptSelectPop extends PopupWindow {
         TextView cancel = mView.findViewById(R.id.cancel);
         ConstraintLayout bg = mView.findViewById(R.id.bg);
         RecyclerView recyclerView = mView.findViewById(R.id.departments);
+        TextView tv1 = mView.findViewById(R.id.tv1);
+        TextView tv2 = mView.findViewById(R.id.tv2);
         //设置弹框的标题和图标
         TextView tvPopTitle = mView.findViewById(R.id.tv_pop_title);
         switch (type){
@@ -161,6 +163,7 @@ public class DeptSelectPop extends PopupWindow {
                 final Optional<LeaveDeptRsp.DataBean> optionalDataBean = dataBeansList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
                 if (optionalDataBean.isPresent()){
                     final LeaveDeptRsp.DataBean dataBean2 = optionalDataBean.get();
+                    tv1.setText(dataBean2.getDeptName());
                     if (onCheckedListener != null){
                         onCheckedListener.onOnCheckedListener(dataBean2.getDeptId(),dataBean2.getDeptName());
                     }
@@ -174,7 +177,7 @@ public class DeptSelectPop extends PopupWindow {
         popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT, true);
 
-        popupWindow.setAnimationStyle(R.style.popwin_anim_style2);
+        popupWindow.setAnimationStyle(R.style.popwin_anim_style_top);
         popupWindow.setFocusable(true);
         popupWindow.setOutsideTouchable(false);
         popupWindow.setBackgroundDrawable(null);

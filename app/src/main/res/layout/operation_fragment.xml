@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/top"
-        layout="@layout/title_layout2"
+        layout="@layout/title_layout7"
         android:layout_width="match_parent"
         android:layout_height="44dp" />
 
@@ -58,7 +58,7 @@
     <com.flyco.tablayout.SegmentTabLayout
         android:id="@+id/mTabLayout"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:paddingLeft="@dimen/dp_12"
         android:paddingRight="@dimen/dp_12"

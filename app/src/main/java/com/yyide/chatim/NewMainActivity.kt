@@ -38,6 +38,7 @@ import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit.MessageUnreadWatcher
 import com.vivo.push.PushClient
+import com.yyide.chatim.activity.schedule.SchoolCalendarActivity
 import com.yyide.chatim.alipush.AliasUtil
 import com.yyide.chatim.alipush.MyMessageReceiver
 import com.yyide.chatim.alipush.NotifyUtil

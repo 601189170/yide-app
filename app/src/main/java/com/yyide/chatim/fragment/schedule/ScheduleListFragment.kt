@@ -57,7 +57,7 @@ import org.joda.time.format.DateTimeFormatter
  * @description 日程/列表
  */
 class ScheduleListFragment : Fragment(), OnCalendarClickListener,
-    SwipeRefreshLayout.OnRefreshListener {
+    SwipeRefreshLayout.OnRefreshListener ,ScheduleListAdapter.ImgListener{
     lateinit var fragmentScheduleListBinding: FragmentScheduleListBinding
     private val scheduleListViewViewModel: ScheduleListViewViewModel by viewModels()
     private val scheduleEditViewModel: ScheduleEditViewModel by viewModels()
@@ -169,6 +169,8 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
         itemAnimator.supportsChangeAnimations = false
         rvScheduleList.setItemAnimator(itemAnimator)
         scheduleListAdapter = ScheduleListAdapter()
+        calendarComposeLayout.setOnCalendarClickListener(this)
+        scheduleListAdapter.setImgListener(this)
         rvScheduleList.setSwipeMenuCreator(swipeMenuCreator)
         rvScheduleList.setOnItemMenuClickListener(mMenuItemClickListener)
 //        rvScheduleList.addItemDecoration(SpaceItemDecoration(DisplayUtils.dip2px(context,10f)))
@@ -411,11 +413,11 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
                         run {
                             when (type.toInt()) {
                                 Schedule.SCHEDULE_TYPE_SCHEDULE -> {
-                                    if (scheduleData.status == "1") {
-                                        swipeRightMenu.addMenuItem(markUnCompletedMenuItem)
-                                    } else {
-                                        swipeRightMenu.addMenuItem(markCompletedMenuItem)
-                                    }
+//                                    if (scheduleData.status == "1") {
+//                                        swipeRightMenu.addMenuItem(markUnCompletedMenuItem)
+//                                    } else {
+//                                        swipeRightMenu.addMenuItem(markCompletedMenuItem)
+//                                    }
                                     swipeRightMenu.addMenuItem(delMenuItem)
                                 }
                                 Schedule.SCHEDULE_TYPE_CONFERENCE -> {
@@ -442,13 +444,19 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
                 val type = scheduleData.type
                 when(type.toInt()){
                     Schedule.SCHEDULE_TYPE_SCHEDULE ->{
+//                        if (menuPosition == 0) {
+//                            loge("修改")
+//                            curModifySchedule = scheduleData
+//                            scheduleEditViewModel.changeScheduleState(scheduleData)
+//                            return@OnItemMenuClickListener
+//                        }
+//                        if (menuPosition == 1) {
+//                            loge("删除")
+//                            curModifySchedule = scheduleData
+//                            scheduleEditViewModel.deleteScheduleById(scheduleData.id)
+//                            return@OnItemMenuClickListener
+//                        }
                         if (menuPosition == 0) {
-                            loge("修改")
-                            curModifySchedule = scheduleData
-                            scheduleEditViewModel.changeScheduleState(scheduleData)
-                            return@OnItemMenuClickListener
-                        }
-                        if (menuPosition == 1) {
                             loge("删除")
                             curModifySchedule = scheduleData
                             scheduleEditViewModel.deleteScheduleById(scheduleData.id)
@@ -476,5 +484,10 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
 //        scrollOrientation = -1
 //        curTopDateTime = curTopDateTime.minusMonths(1)
 //        scheduleListViewViewModel.scheduleDataList(curTopDateTime, timeAxisDateTime)
+    }
+
+    override fun OnimgSelect(item: ScheduleData) {
+        curModifySchedule = item
+        scheduleEditViewModel.changeScheduleState(item)
     }
 }

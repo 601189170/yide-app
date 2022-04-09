@@ -28,6 +28,7 @@ import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.HelpItemRep;
 import com.yyide.chatim.model.HomeNoticeRsp;
+import com.yyide.chatim.model.HomeTimeTable;
 import com.yyide.chatim.model.LeaveApprovalBean;
 import com.yyide.chatim.model.LeaveDeptRsp;
 import com.yyide.chatim.model.LeaveDetailRsp;
@@ -1061,4 +1062,8 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/attweb/app/eventStatistical/teacherView")
     Observable<AttendanceTeacherRsp> getTeacherAtt(@Body RequestBody requestBody);
+
+    //课表首页
+    @GET("/cloud/app/timetable/getHomeTimetable")
+    Observable<HomeTimeTable> getHomeTimeTable();
 }

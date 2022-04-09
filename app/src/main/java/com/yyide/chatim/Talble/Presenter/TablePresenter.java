@@ -3,6 +3,7 @@ package com.yyide.chatim.Talble.Presenter;
 
 import com.yyide.chatim.Talble.View.listTimeDataByAppView;
 import com.yyide.chatim.base.BasePresenter;
+import com.yyide.chatim.model.HomeTimeTable;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.net.ApiCallback;
 
@@ -58,5 +59,25 @@ public class TablePresenter extends BasePresenter<listTimeDataByAppView> {
             }
         });
     }
+
+    public void getHomeTable() {
+        addSubscription(dingApiStores.getHomeTimeTable(), new ApiCallback<HomeTimeTable>() {
+            @Override
+            public void onSuccess(HomeTimeTable model) {
+                mvpView.SelectHomeTimeTbale(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.SelectSchByTeaidFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
 
 }
