@@ -118,11 +118,9 @@ class NAttendanceActivity :
             BaseQuickAdapter<SignTimeListItem, BaseViewHolder>(R.layout.item_punch_record) {
             override fun convert(holder: BaseViewHolder, item: SignTimeListItem) {
                 val binding = ItemPunchRecordBinding.bind(holder.itemView)
-                val signTypeStr =
-                    if (item.signType == 0) getString(R.string.sign_in) else getString(R.string.sign_out)
+                val signTypeStr = if (item.signType == 0) getString(R.string.sign_in) else getString(R.string.sign_out)
                 val timeStr = "$signTypeStr${item.shouldSignTime}"
-                val signStr =
-                    if (item.signResult == "未打卡") getString(R.string.not_punched) else "已打卡"
+                val signStr = if (item.signResult == "未打卡") getString(R.string.not_punched) else "已打卡"
                 val actualSignTime = "${item.actualSignTime}$signStr"
                 binding.tvPunchTime.text = timeStr
                 binding.tvPunchState.text = actualSignTime
@@ -131,16 +129,16 @@ class NAttendanceActivity :
                         binding.tvPunchStateLogo.text = ""
                         binding.tvPunchStateLogo.setBackgroundResource(R.mipmap.attendance_success_logo)
                     }
-                    "迟到" -> {
-                        binding.tvPunchStateLogo.text = "迟到"
+                    "迟到","早退" -> {
+                        binding.tvPunchStateLogo.text = item.signResult
                         binding.tvPunchStateLogo.setTextColor(R.color.late.asColor())
                         binding.tvPunchStateLogo.setBackgroundResource(R.drawable.bg_yellow_2)
                     }
-                    "早退" -> {
+                    /*"早退" -> {
                         binding.tvPunchStateLogo.text = "早退"
-                        binding.tvPunchStateLogo.setTextColor(R.color.leave_early.asColor())
-                        binding.tvPunchStateLogo.setBackgroundResource(R.drawable.bg_rad_2)
-                    }
+                        binding.tvPunchStateLogo.setTextColor(R.color.late.asColor())
+                        binding.tvPunchStateLogo.setBackgroundResource(R.drawable.bg_yellow_2)
+                    }*/
                     else -> {
                         binding.tvPunchStateLogo.text = ""
                         binding.tvPunchStateLogo.background = null

@@ -116,7 +116,13 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
                 info.type = punchTypeFieldwork
                 info.showContent = locationInfo.address
             }
+
+            if (info.type == punchTypeNOT && it.canSignByWifi) {
+                info.showContent = getApplication<Application>().resources.getString(R.string.warn_out_of_wifi)
+            }
         }
+
+
         // 打卡类型变化了
         if (info.type != punchInfo.value?.type ||
             // 如果是外勤打卡并且描述是不一样的

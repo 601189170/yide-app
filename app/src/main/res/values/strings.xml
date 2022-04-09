@@ -353,6 +353,7 @@
     <string name="statistics">统计</string>
     <string name="watch_rule">查看规则</string>
     <string name="warn_out_of_range">超出管理员指定打卡范围</string>
+    <string name="warn_out_of_wifi">未连接到指定Wi-Fi</string>
     <string name="sign_in">签到</string>
     <string name="sign_out">签退</string>
     <string name="not_punched">未打卡</string>

@@ -118,7 +118,7 @@ class LostFoundFragment :
                 LoadMoreModule {
                 override fun convert(holder: BaseViewHolder, item: AcceptMessageItem) {
                     val viewBind = ItemMessageContentBinding.bind(holder.itemView)
-                    if (viewModel.selectContent?.id != "0" && item.isTop) {
+                    if (viewModel.selectContent?.id != viewModel.noticeTypeByReceive && item.isTop) {
                         viewBind.itemMessageContentTopIv.show()
                     }
                     viewBind.itemMessageContentTitleTv.text = item.title
@@ -127,24 +127,10 @@ class LostFoundFragment :
                     viewBind.itemMessageContentSubTimeTv.text = item.timerDate
                     viewBind.itemMessageContentStateIv.remove()
                     viewBind.itemMessageContentStateTv.remove()
+                    viewBind.itemMessageContentTitleIv.remove()
                     when (viewModel.selectContent?.id) {
-                        viewModel.noticeTypeByReceive -> {
-                            if (item.isView) {
-                                viewBind.itemMessageContentTitleTv.setCompoundDrawablesRelative(
-                                    null,
-                                    null,
-                                    null,
-                                    null
-                                )
-                            }
-                        }
                         viewModel.noticeTypeByPublish -> {
-                            viewBind.itemMessageContentTitleTv.setCompoundDrawablesRelative(
-                                null,
-                                null,
-                                null,
-                                null
-                            )
+                            viewBind.itemMessageContentTitleIv.remove()
                             viewBind.itemMessageContentStateTv.show()
                             if (TimeUtil.isDateOver3(item.timerDate)) {
                                 viewBind.itemMessageContentStateTv.text = "已发布"
@@ -172,6 +158,8 @@ class LostFoundFragment :
         dataAdapter.setOnItemClickListener { adapter, view, position ->
             val jumpData = adapter.data[position] as AcceptMessageItem
             if (viewModel.selectContent?.id == viewModel.noticeTypeByReceive) {
+                jumpData.isView = true
+                dataAdapter.notifyItemChanged(position, null)
                 NoticeContentActivity.startGo(requireContext(), jumpData)
             } else {
                 PublishContentActivity.startGo(requireContext(), jumpData)

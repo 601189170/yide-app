@@ -12,7 +12,7 @@ data class AcceptMessageItem(
     @SerializedName("isConfirm")
     var isConfirm: Boolean = false,
     @SerializedName("isView")
-    val isView: Boolean = false,
+    var isView: Boolean = false,
     @SerializedName("timerDate")
     val timerDate: String = "",
     @SerializedName("id")

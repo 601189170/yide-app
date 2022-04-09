@@ -25,6 +25,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import razerdp.basepopup.BasePopupWindow
+import kotlin.math.log
 
 
 /**
@@ -119,10 +120,9 @@ class NoticeFragment :
             object :
                 BaseQuickAdapter<AcceptMessageItem, BaseViewHolder>(R.layout.item_message_content),
                 LoadMoreModule {
-                @SuppressLint("SetTextI18n")
                 override fun convert(holder: BaseViewHolder, item: AcceptMessageItem) {
                     val viewBind = ItemMessageContentBinding.bind(holder.itemView)
-                    if (viewModel.selectContent?.id != "0" && item.isTop) {
+                    if (viewModel.selectContent?.id != viewModel.noticeTypeByReceive && item.isTop) {
                         viewBind.itemMessageContentTopIv.show()
                     }
                     viewBind.itemMessageContentTitleTv.text = item.title
@@ -132,12 +132,9 @@ class NoticeFragment :
                     when (viewModel.selectContent?.id) {
                         viewModel.noticeTypeByReceive -> {
                             if (item.isView) {
-                                viewBind.itemMessageContentTitleTv.setCompoundDrawablesRelative(
-                                    null,
-                                    null,
-                                    null,
-                                    null
-                                )
+                                viewBind.itemMessageContentTitleIv.remove()
+                            }else{
+                                viewBind.itemMessageContentTitleIv.show()
                             }
                             if (item.isNeedConfirm) {
                                 if (item.isConfirm) {
@@ -157,12 +154,7 @@ class NoticeFragment :
                         viewModel.noticeTypeByPublish -> {
                             viewBind.itemMessageContentStateTv.show()
                             viewBind.itemMessageContentStateIv.show()
-                            viewBind.itemMessageContentTitleTv.setCompoundDrawablesRelative(
-                                null,
-                                null,
-                                null,
-                                null
-                            )
+                            viewBind.itemMessageContentTitleIv.remove()
                             if (TimeUtil.isDateOver3(item.timerDate)) {
                                 viewBind.itemMessageContentStateIv.hide()
                                 viewBind.itemMessageContentStateTv.text = "已发布"
@@ -195,6 +187,8 @@ class NoticeFragment :
         dataAdapter.setOnItemClickListener { adapter, view, position ->
             val jumpData = adapter.data[position] as AcceptMessageItem
             if (viewModel.selectContent?.id == viewModel.noticeTypeByReceive) {
+                jumpData.isView = true
+                dataAdapter.notifyItemChanged(position, null)
                 NoticeContentActivity.startGo(requireContext(), jumpData)
             } else {
                 PublishContentActivity.startGo(requireContext(), jumpData)
@@ -317,6 +311,7 @@ class NoticeFragment :
     fun request() {
         when (viewModel.selectContent?.id) {
             viewModel.noticeTypeByReceive -> {
+                logd("current = $current")
                 viewModel.requestAcceptMessage(current, size)
             }
             viewModel.noticeTypeByPublish -> {
