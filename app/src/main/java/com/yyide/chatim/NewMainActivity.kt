@@ -118,19 +118,19 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
             /*获取保存的fragment  没有的话返回null*/
             homeFragment = supportFragmentManager.findFragmentByTag(
                 HomeFragment::class.simpleName
-            ) as HomeFragment ?: HomeFragment()
+            ) as? HomeFragment ?: HomeFragment()
             messageFragment = supportFragmentManager.findFragmentByTag(
                 MessageFragment::class.simpleName
-            ) as MessageFragment ?: MessageFragment()
+            ) as? MessageFragment ?: MessageFragment()
             scheduleFragment = supportFragmentManager.findFragmentByTag(
                 ScheduleFragment2::class.simpleName
-            ) as ScheduleFragment2 ?: ScheduleFragment2()
+            ) as? ScheduleFragment2 ?: ScheduleFragment2()
             appFragment = supportFragmentManager.findFragmentByTag(
                 NAppFragment::class.simpleName
-            ) as NAppFragment ?: NAppFragment()
+            ) as? NAppFragment ?: NAppFragment()
             helpFragment = supportFragmentManager.findFragmentByTag(
                 HelpFragment::class.simpleName
-            ) as HelpFragment ?: HelpFragment()
+            ) as? HelpFragment ?: HelpFragment()
 
             addToFragmentList(homeFragment)
             addToFragmentList(messageFragment)
