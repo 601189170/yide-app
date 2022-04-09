@@ -20,7 +20,7 @@ data class AcceptMessageItem(
     @SerializedName("confirmUsers")
     val confirmUsers: Int = 0,
     @SerializedName("title")
-    val title: String = "",
+    var title: String = "",
     @SerializedName("contentType")
     val contentType: Int = 0,
     @SerializedName("messType")

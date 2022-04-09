@@ -47,8 +47,21 @@ class StaffParticipantFragment : Fragment() {
         arguments?.let {
             type = it.getInt(ARG_TYPE)
         }
-        requestData(null)
-        staffParticipantViewModel.getResponseResult().observe(this) {
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        staffParticipantBinding = FragmentStaffParticipantBinding.inflate(layoutInflater)
+        return staffParticipantBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        staffParticipantViewModel.getResponseResult().observe(requireActivity()) {
             if (it != null) {
 
                 listCache[it.name ?: "未知"] = it
@@ -83,19 +96,6 @@ class StaffParticipantFragment : Fragment() {
             }
 //            ToastUtils.showShort("当前部门没有数据")
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
-        staffParticipantBinding = FragmentStaffParticipantBinding.inflate(layoutInflater)
-        return staffParticipantBinding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         val linearLayoutManager = LinearLayoutManager(requireContext())
         linearLayoutManager.orientation = RecyclerView.HORIZONTAL
@@ -110,7 +110,6 @@ class StaffParticipantFragment : Fragment() {
         )
         navAdapter.setList(staffParticipantViewModel.getParticipantList().value)
         staffParticipantBinding.rvTopNavList.adapter = navAdapter
-        navAdapter.setEmptyView(R.layout.empty)
         navAdapter.setOnItemClickListener { _, _, position ->
             staffParticipantViewModel.getParticipantList().value?.also {
                 loge("查看部门：${it[position].name}")
@@ -216,6 +215,9 @@ class StaffParticipantFragment : Fragment() {
                     }
                 }
             })
+
+
+        requestData(null)
     }
 
     /**

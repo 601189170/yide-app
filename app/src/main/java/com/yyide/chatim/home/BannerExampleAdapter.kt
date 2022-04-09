@@ -26,7 +26,9 @@ class BannerExampleAdapter(data: MutableList<AcceptMessageItem>?) :
     ) {
         val binding = ItemHomeBannerBinding.bind(holder.itemView)
         binding.tvContent.text = data.title
-        binding.itemHomeBannerUserTv.text = "${data.identityUserName}发布于${data.timerDate}"
+        if (data.identityUserName.isNotEmpty()){
+            binding.itemHomeBannerUserTv.text = "${data.identityUserName}发布于${data.timerDate}"
+        }
 
     }
 

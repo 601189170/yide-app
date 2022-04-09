@@ -38,6 +38,7 @@ import com.yyide.chatim.activity.attendance.teacher.NAttendanceActivity;
 import com.yyide.chatim.activity.leave.AskForLeaveActivity;
 import com.yyide.chatim.activity.meeting.MeetingHomeActivity;
 import com.yyide.chatim.activity.message.MessagePushActivity;
+import com.yyide.chatim.activity.message.NoticeContentActivity;
 import com.yyide.chatim.activity.operation.OperationActivity;
 import com.yyide.chatim.activity.table.TableActivity;
 import com.yyide.chatim.base.BaseConstant;
@@ -72,6 +73,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -153,6 +155,12 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         viewModel.getAcceptMessage().observe(requireActivity(), acceptMessageBean -> {
             if (!acceptMessageBean.getAcceptMessage().isEmpty()) {
                 bannerAdapter.setDatas(acceptMessageBean.getAcceptMessage());
+            }else {
+                List<AcceptMessageItem> noDataList = new ArrayList<>();
+                AcceptMessageItem noData = new AcceptMessageItem();
+                noData.setTitle("暂无通知公告");
+                noDataList.add(noData);
+                bannerAdapter.setDatas(noDataList);
             }
         });
 
@@ -183,10 +191,14 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 .isAutoLoop(true)
                 .setLoopTime(3000);
 
-        banner.start();
         banner.setOnBannerListener((data, position) -> {
-            MessagePushActivity.Companion.startGo(requireContext());
+            if (!data.getTitle().equals("暂无通知公告")) {
+                NoticeContentActivity.Companion.startGo(requireContext(), data);
+            }
         });
+
+
+
     }
 
     @Override
@@ -292,6 +304,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 break;
             case R.id.tvMenu2:
                 //startActivity(new Intent(getContext(), MessagePushActivity.class));
+                MessagePushActivity.Companion.startGo(requireContext());
                 break;
             case R.id.tvMenu3:
                 startActivity(new Intent(getContext(), MeetingHomeActivity.class));
@@ -448,13 +461,11 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public void onStop() {
         super.onStop();
-        banner.stop();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        banner.destroy();
         closeDialog();
         EventBus.getDefault().unregister(this);
     }
