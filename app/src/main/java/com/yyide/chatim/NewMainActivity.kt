@@ -138,6 +138,8 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
             addToFragmentList(appFragment)
             addToFragmentList(helpFragment)
             hideAllFragment()
+
+            currentFragment = homeFragment
         }
         initFragment()
         EventBus.getDefault().register(this)
