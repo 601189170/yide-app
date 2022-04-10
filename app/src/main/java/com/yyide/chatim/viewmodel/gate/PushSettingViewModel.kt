@@ -56,7 +56,7 @@ class PushSettingViewModel : BaseViewModel() {
                     _getPushSettingList.value = Result.Error(exception)
                 }
                 .collect {
-                    if (it.code == 200 && it.data != null) {
+                    if (it.code == BaseConstant.REQUEST_SUCCESS2 && it.data != null) {
                         _getPushSettingList.value = Result.Success(it.data)
                     } else {
                         _getPushSettingList.value = Result.Error(Exception("${it.code},${it.msg}"))
@@ -82,7 +82,7 @@ class PushSettingViewModel : BaseViewModel() {
                     _updatePushSettingList.value = Result.Error(exception)
                 }
                 .collect {
-                    if (it.code == 200) {
+                    if (it.code == BaseConstant.REQUEST_SUCCESS2) {
                         _updatePushSettingList.value = Result.Success(it)
                     } else {
                         _updatePushSettingList.value =

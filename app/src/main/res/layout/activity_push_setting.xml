@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background=" #F9FAF9
-"
+    android:background="#F9FAF9"
     tools:context=".activity.PushSettingActivity">
 
     <include
@@ -17,7 +16,6 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_10"
         app:layout_constraintTop_toBottomOf="@id/top"
         tools:listitem="@layout/item_push_setting" />
 
