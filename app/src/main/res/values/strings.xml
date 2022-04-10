@@ -299,6 +299,7 @@
     <string name="attendance_sign_out_rate_colon">签退率:</string>
     <string name="look_over_all">查看全部</string>
     <string name="select_begin_time">选择开始时间</string>
+    <string name="select_begin_time2">选择时间</string>
     <string name="select_end_time">选择结束时间</string>
     <string name="select_ask_for_leave_begin_time_tip">请选择请假开始时间</string>
     <string name="select_ask_for_leave_end_time_tip">请选择请假结束时间</string>

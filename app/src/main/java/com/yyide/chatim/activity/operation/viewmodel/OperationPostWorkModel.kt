@@ -21,7 +21,7 @@ class OperationPostWorkModel : ViewModel() {
 
     val ClassListData = MutableLiveData<Result<List<getClassList>>>()
 
-    val ispost = MutableLiveData<Result<Boolean>>()
+    val ispost = MutableLiveData<Result<String>>()
 
     val subjectId = MutableLiveData<String>()
 

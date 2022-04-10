@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.alibaba.fastjson.JSON
 import com.flyco.tablayout.listener.OnTabSelectListener
+import com.jzxiang.pickerview.TimePickerDialog
+import com.jzxiang.pickerview.listener.OnDateSetListener
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.operation.fragment.OperationChartFragment
 import com.yyide.chatim.activity.operation.fragment.OperationDataByParentsFragment
@@ -22,8 +24,13 @@ import com.yyide.chatim.dialog.SwitchChirldPop
 import com.yyide.chatim.dialog.SwitchChirldPop2
 import com.yyide.chatim.dialog.SwitchClassAndSubjectPop
 import com.yyide.chatim.dialog.SwitchClassAndSubjectPop2
+import com.yyide.chatim.dialog.SwitchClassAndSubjectPop2.SSSListener
 import com.yyide.chatim.model.*
+import com.yyide.chatim.utils.DatePickerDialogUtil
+import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.view.DialogUtil
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * @Desc 作业首页
@@ -31,7 +38,7 @@ import com.yyide.chatim.view.DialogUtil
  * @Author lrz
  */
 class OperationActivityByParents :
-    KTBaseActivity<OperationFragmentBinding>(OperationFragmentBinding::inflate) {
+    KTBaseActivity<OperationFragmentBinding>(OperationFragmentBinding::inflate),SSSListener {
 
     companion object {
         private val mFragments = ArrayList<Fragment>()
@@ -43,6 +50,9 @@ class OperationActivityByParents :
     private var listclassssub = mutableListOf<selectParentStudent>()
     private var list2 = mutableListOf<selectParentStudent.Children>()
     var index:Int?=0
+
+    private val requestServerTimeFormat = "yyyy-MM-dd HH:mm"
+    private val allDayTimeFormat = "yyyy-MM-dd"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -50,10 +60,33 @@ class OperationActivityByParents :
 
 
         tl_3()
+        viewModel.getStudentDatas()
 
+        viewModel.startTime.observe(this) {
+            binding.layoutTime.tvStartTime.text=it
+        }
+        viewModel.endTime.observe(this) {
+            binding.layoutTime.tvEndTime.text=it
+        }
+        binding.layoutTime.tvStartTime.setOnClickListener(View.OnClickListener {
+            DatePickerDialogUtil.showDateTime(
+                    this,
+                    getString(R.string.select_begin_time2),
+                    viewModel.startTime.value,
+                    startTimeListener,
+                    isAllDay = viewModel.allDayLiveData.value == true
+            )
+        })
 
-        val stime=binding.layoutTime.tvStartTime.text
-        val etime=binding.layoutTime.tvEndTime.text
+        binding.layoutTime.tvEndTime.setOnClickListener(View.OnClickListener {
+            DatePickerDialogUtil.showDateTime(
+                    this,
+                    getString(R.string.select_begin_time2),
+                    viewModel.endTime.value,
+                    startTimeListener2,
+                    isAllDay = viewModel.allDayLiveData.value == true
+            )
+        })
         binding.tv1.setOnClickListener(View.OnClickListener {
             val pop = SwitchChirldPop(this,listclassssub)
             pop.setSelectClasses {date: selectParentStudent? ->
@@ -78,28 +111,11 @@ class OperationActivityByParents :
         binding.tv2.setOnClickListener(View.OnClickListener {
 
             if (list2!=null&&list2.size>0){
-                val switchClassAndSubjectPop2 = SwitchClassAndSubjectPop2(this,list2)
-                SwitchClassAndSubjectPop2.SelectDateListener { date1: selectParentStudent.Children?, date2: selectParentStudent.Children? ->
+                val pop = SwitchClassAndSubjectPop2(this,list2)
+                pop.setSSS(this)
 
-                    if (date1!=null&&date2!=null){
-                        Log.e("TAG", "setSelectClasses: "+JSON.toJSONString(date1.name+"==>"+date2.name+"==》") )
-                        binding.tv2.text=date1.name+date2.name
-                        viewModel.subjectId.value=date2.id
-                        viewModel.subjectId.postValue(date2.id)
-//                        viewModel.subjectId.value=date2.id
-
-                    }
-
-                }
             }
-
-
-
         })
-
-
-        viewModel.getStudentDatas()
-
 
 
 
@@ -108,16 +124,23 @@ class OperationActivityByParents :
                 if (it.getOrNull()!=null){
                     val  list=it.getOrNull()
                     listclassssub= list as MutableList<selectParentStudent>
+                    Log.e("TAG", "onCreate: "+JSON.toJSONString(listclassssub) )
                     if (list != null) {
-                        binding.tv1.text=list.get(0).name
+                        binding.tv1.text=listclassssub.get(0).name
+                        viewModel.studentId.value=listclassssub.get(0).id
+                        viewModel.classesId.value=listclassssub.get(0).classesId
+                        Log.e("TAG", "viewModel.name: "+JSON.toJSONString(listclassssub.get(0).name) )
+                        Log.e("TAG", "viewModel.studentId: "+JSON.toJSONString(listclassssub.get(0).id) )
+                        Log.e("TAG", "viewModel.classesId: "+JSON.toJSONString(listclassssub.get(0).classesId) )
+
 
                         list2= listclassssub[0].children as MutableList<selectParentStudent.Children>
                         Log.e("TAG", "setFirstRightData: "+JSON.toJSONString(list2) )
-                        if (list2.size>0){
-                            setFirstRightData(list.get(0).children)
-                        }
-                        viewModel.studentId.value=list.get(0).id
-                        viewModel.classesId.value=list.get(0).classesId
+
+                        setFirstRightData(list2)
+
+
+
                         viewModel.startTime.value=binding.layoutTime.tvStartTime.text.toString()
                         viewModel.endTime.value=binding.layoutTime.tvEndTime.text.toString()
 
@@ -136,8 +159,6 @@ class OperationActivityByParents :
         if (list.get(0).children.size>0){
             sub=list.get(0).children[0].name
             viewModel.subjectId.value=list.get(0).children[0].id
-            Log.e("TAG", "setFirstRightData: "+list.get(0).children[0].id )
-            viewModel.studentId.postValue(list.get(0).children[0].id)
         }
 
         binding.tv2.text=lj+sub
@@ -145,6 +166,28 @@ class OperationActivityByParents :
 
 
 
+    private val startTimeListener =
+            OnDateSetListener { _: TimePickerDialog?, millSeconds: Long ->
+                var startTime = DateUtils.switchTime(Date(millSeconds), requestServerTimeFormat)
+                viewModel.allDayLiveData.value?.let {
+                    if (it) {
+                        startTime =
+                                "${DateUtils.switchTime(Date(millSeconds), allDayTimeFormat)} 00:00:00"
+                    }
+                }
+                viewModel.startTime.value = startTime
+            }
+    private val startTimeListener2 =
+            OnDateSetListener { _: TimePickerDialog?, millSeconds: Long ->
+                var startTime = DateUtils.switchTime(Date(millSeconds), requestServerTimeFormat)
+                viewModel.allDayLiveData.value?.let {
+                    if (it) {
+                        startTime =
+                                "${DateUtils.switchTime(Date(millSeconds), allDayTimeFormat)} 00:00:00"
+                    }
+                }
+                viewModel.endTime.value = startTime
+            }
 
 
 
@@ -241,6 +284,17 @@ class OperationActivityByParents :
 
         override fun getItem(position: Int): Fragment {
             return mFragments.get(position)
+        }
+    }
+
+    override fun setRT(date1: selectParentStudent.Children?, date2: selectParentStudent.Children?) {
+        if (date1!=null&&date2!=null){
+            Log.e("TAG", "setSelectClasses: "+JSON.toJSONString(date1.name+"==>"+date2.name+"==》") )
+            binding.tv2.text=date1.name+date2.name
+            viewModel.subjectId.value=date2.id
+            viewModel.subjectId.postValue(date2.id)
+//                        viewModel.subjectId.value=date2.id
+
         }
     }
 

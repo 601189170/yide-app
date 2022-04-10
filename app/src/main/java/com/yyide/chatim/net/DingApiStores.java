@@ -187,6 +187,12 @@ public interface DingApiStores {
     @POST("/cloud/app/timetable/getWeekTime")
     Observable<SiteTableRsp> listTimeDataByApp(@Body RequestBody info);
 
+
+    //通过班级查询班级课表
+    @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
+    @POST("/cloud/app/timetable/getWeekTime")
+    Observable<SiteTableRsp> getWeekTime(@Body RequestBody info);
+
     //添加用户设备基本信息
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
     @POST("/management/cloud-system/user/equipment/addUserEquipmentInfo")

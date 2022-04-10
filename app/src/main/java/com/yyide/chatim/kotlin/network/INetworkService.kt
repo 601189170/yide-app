@@ -270,7 +270,7 @@ interface INetworkService {
      * 作业-添加
      */
     @POST("/cloud/app/work/create")
-    suspend fun createWork(@Body requestBody: RequestBody): BaseResponse<Boolean>
+    suspend fun createWork(@Body requestBody: RequestBody): BaseResponse<String>
 
     /**
      * 家长学生 信息列表

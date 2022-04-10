@@ -41,6 +41,7 @@ class OperationViewModel : ViewModel() {
 
     val leftData = MutableLiveData<selectBean>()
 
+    val allDayLiveData = MutableLiveData<Boolean>(false)
 
 
     /**

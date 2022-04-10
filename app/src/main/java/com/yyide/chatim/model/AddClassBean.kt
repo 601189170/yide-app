@@ -5,11 +5,11 @@ import com.yyide.chatim.model.schedule.ScheduleData
 
 data class AddClassBean (
         var className: String,
-        val subjectName: String,
+        var subjectName: String,
         var classesId: String,
-        val timetableId: String,
-        val timetableTime: String,
-        val subjectId: String
+        var timetableId: String,
+        var timetableTime: String,
+        var subjectId: String
         )
 
 

@@ -34,24 +34,24 @@ public class SwitchClassAndSubjectPop2 extends PopupWindow {
     Activity context;
     PopupWindow popupWindow;
     Window mWindow;
-    private SelectDateListener mSelectDateListener;
+    private SSSListener mSelectDateListener;
 //    private TimeWheelAdapter hoursWheelAdapter = new TimeWheelAdapter(getHour(0), "时");
 //    private TimeWheelAdapter minuteWheelAdapter = new TimeWheelAdapter(getMinute(-1), "分");
     private int hours;
     private int minute;
     private selectParentStudent.Children date1;
     private selectParentStudent.Children date2;
-    private selectParentStudent.Children date3;
+
     List<selectParentStudent.Children> list;
 
     TimeWheelAdapter ljAdapter, classAdapter,subjectAdapter;
 
-    public void setSelectClasses(SelectDateListener selectClasses) {
+    public void setSSS(SSSListener selectClasses) {
         this.mSelectDateListener = selectClasses;
     }
 
-    public interface SelectDateListener {
-        void onSelectDateListener(selectParentStudent.Children bean1, selectParentStudent.Children bean2);
+    public interface SSSListener {
+        void setRT(selectParentStudent.Children bean1, selectParentStudent.Children bean2);
     }
 
     public SwitchClassAndSubjectPop2(Activity context, List<selectParentStudent.Children> list) {
@@ -59,7 +59,10 @@ public class SwitchClassAndSubjectPop2 extends PopupWindow {
         this.list=list;
         init();
     }
-
+    public SwitchClassAndSubjectPop2(Activity context) {
+        this.context = context;
+        init();
+    }
     private void init() {
         final View mView = LayoutInflater.from(context).inflate(R.layout.layout_top_class_subject_pop2, null);
         TextView confirm = mView.findViewById(R.id.confirm);
@@ -68,12 +71,7 @@ public class SwitchClassAndSubjectPop2 extends PopupWindow {
         WheelView time = mView.findViewById(R.id.time);
         WheelView hour_time = mView.findViewById(R.id.hour_time);
 
-//        time.setLineSpacingMultiplier(3f);
-//        hour_time.setLineSpacingMultiplier(3f);
-//        minute_time.setLineSpacingMultiplier(3f);
-//        time.setTextSize(14f);
-//        hour_time.setTextSize(14f);
-//        minute_time.setTextSize(14f);
+
 
         bg.setOnClickListener(v -> {
             if (popupWindow != null && popupWindow.isShowing()) {
@@ -129,11 +127,10 @@ public class SwitchClassAndSubjectPop2 extends PopupWindow {
 
             subjectAdapter = new TimeWheelAdapter(classAdapter.stringList.get(index).getChildren());
 
-//            minute_time.setAdapter(subjectAdapter);
 
             date2 = (selectParentStudent.Children) classAdapter.stringList.get(index);
 
-//            minute_time.setCurrentItem(0);
+
         });
 
 
@@ -158,7 +155,7 @@ public class SwitchClassAndSubjectPop2 extends PopupWindow {
 
         confirm.setOnClickListener(v -> {
             if (mSelectDateListener != null) {
-                mSelectDateListener.onSelectDateListener(date1,date2);
+                mSelectDateListener.setRT(date1,date2);
             }
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();

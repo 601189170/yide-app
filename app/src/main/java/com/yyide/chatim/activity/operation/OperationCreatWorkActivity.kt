@@ -1,6 +1,10 @@
 package com.yyide.chatim.activity.operation
 
+import android.content.Intent
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -29,8 +33,15 @@ import com.yyide.chatim.utils.GlideUtil
 import com.yyide.chatim.utils.logd
 import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.view.SpacesItemDecoration
+import com.yyide.chatim.widget.WheelView
 import org.joda.time.DateTime
 import java.util.*
+import android.R.attr.data
+import android.widget.Toast
+import com.blankj.utilcode.util.ToastUtils
+import com.yyide.chatim.SpData
+import com.yyide.chatim.activity.table.TableActivity2
+
 
 class OperationCreatWorkActivity :
     KTBaseActivity<ActivityOperationPostWorkBinding>(ActivityOperationPostWorkBinding::inflate) {
@@ -46,11 +57,21 @@ class OperationCreatWorkActivity :
 
     var classListBean: MutableList<CreateWorkBean.ClassesListDTO> = ArrayList()
 
-    private val requestServerTimeFormat = "yyyy-MM-dd HH:mm:ss"
+    private val requestServerTimeFormat = "yyyy-MM-dd"
 
     private val timeFormat = "MM月dd日 HH:mm E"
     private val showAllTimeFormat = "MM月dd日 E"
     private val allDayTimeFormat = "yyyy-MM-dd"
+
+    var RESULT_LOAD_IMAGE=1
+
+    var RESULT_SELECT_SUBJECT=2
+    var kbID:String=""
+
+    var imglist: MutableList<String> = ArrayList()
+
+    var index:Int=-1;
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -59,6 +80,19 @@ class OperationCreatWorkActivity :
         viewModel.getSubject()
 
         viewModel.getClassList()
+
+
+        viewModel.ispost.observe(this){
+            if (it.isSuccess){
+                var  result=it.getOrNull()
+                if (!TextUtils.isEmpty(result)){
+                    ToastUtils.showShort("发布作业成功")
+                    finish()
+                }else{
+                    ToastUtils.showShort("发布作业失败")
+                }
+            }
+        }
         //监听科目
         viewModel.subjectData.observe(this){
             if (it.isSuccess){
@@ -87,8 +121,9 @@ class OperationCreatWorkActivity :
             if (it.isSuccess){
                 if (it.getOrNull()!=null){
                     var  result=it.getOrNull()
+                    Log.e("TAG", "postclassList: "+JSON.toJSONString(result) )
                     postclassList= result as MutableList<getClassList>
-
+                    Log.e("TAG", "postclassList: "+JSON.toJSONString(postclassList) )
                 }
             }
 
@@ -97,53 +132,37 @@ class OperationCreatWorkActivity :
 
         // 监听开始时间变化
         viewModel.startTimeLiveData.observe(this) {
-            binding.feedbackEndTime.setText(
-                    DateUtils.formatTime(
-                            it,
-                            requestServerTimeFormat,
-                            if (viewModel.allDayLiveData.value == true) showAllTimeFormat else timeFormat
-                    )
-            )
+            binding.feedbackEndTime.text=it
         }
 
 
         // 监听结束时间变化
         viewModel.endTimeLiveData.observe(this) {
-            binding.releaseTime.setText(
-                    DateUtils.formatTime(
-                            it,
-                            requestServerTimeFormat,
-                            if (viewModel.allDayLiveData.value == true) showAllTimeFormat else timeFormat
-                    )
-            )
+            binding.releaseTime.text=it
+
         }
 
 
         binding.timelayout.setOnClickListener {
             DatePickerDialogUtil.showDateTime(
                     this,
-                    getString(R.string.select_begin_time),
+                    getString(R.string.select_begin_time2),
                     viewModel.startTimeLiveData.value,
                     startTimeListener,
                     isAllDay = viewModel.allDayLiveData.value == true
             )
-            /*val timeDialog = TimeSelectDialog(viewModel.startTimeLiveData.value ?: "")
-            timeDialog.setSelectTimeCallBack(startTimeCallBack)
-            timeDialog.show(supportFragmentManager, "timeSelect")*/
+
         }
 
 
         binding.timelayout2.setOnClickListener {
             DatePickerDialogUtil.showDateTime(
                     this,
-                    getString(R.string.select_begin_time),
+                    getString(R.string.select_begin_time2),
                     viewModel.startTimeLiveData.value,
-                    startTimeListener,
+                    startTimeListener2,
                     isAllDay = viewModel.allDayLiveData.value == true
             )
-            /*val timeDialog = TimeSelectDialog(viewModel.startTimeLiveData.value ?: "")
-            timeDialog.setSelectTimeCallBack(startTimeCallBack)
-            timeDialog.show(supportFragmentManager, "timeSelect")*/
         }
     }
     private val startTimeListener =
@@ -155,22 +174,20 @@ class OperationCreatWorkActivity :
                                 "${DateUtils.switchTime(Date(millSeconds), allDayTimeFormat)} 00:00:00"
                     }
                 }
-                logd("startTimeListener: $startTime")
                 viewModel.startTimeLiveData.value = startTime
             }
-
-    private val endTimeListener =
+    private val startTimeListener2 =
             OnDateSetListener { _: TimePickerDialog?, millSeconds: Long ->
-                var endTime = DateUtils.switchTime(Date(millSeconds), requestServerTimeFormat)
+                var startTime = DateUtils.switchTime(Date(millSeconds), requestServerTimeFormat)
                 viewModel.allDayLiveData.value?.let {
                     if (it) {
-                        endTime =
-                                "${DateUtils.switchTime(Date(millSeconds), allDayTimeFormat)} 23:59:59"
+                        startTime =
+                                "${DateUtils.switchTime(Date(millSeconds), allDayTimeFormat)} 00:00:00"
                     }
                 }
-                logd("endTimeListener: $endTime")
-                viewModel.endTimeLiveData.value = endTime
+                viewModel.endTimeLiveData.value = startTime
             }
+
 
     override fun initView() {
         binding.top.title.text = getString(R.string.operation_post_work_title)
@@ -198,27 +215,51 @@ class OperationCreatWorkActivity :
             DialogUtil.showWorkTypeWorkSelect2(this, DialogUtil.OnPostSubListener {
                 binding.subjectName.text=it.name
                 viewModel.subjectId.value=it.id
+                var  date = DateTime.now()
+                val dateTimes = defaultTwoTimeListOfDateTime(date)
+                val time1 = dateTimes[0]
+                val toptime = time1.toStringTime("MM/dd")
+                binding.workname.text=toptime+it.name+"作业"
             },postsubjectList,viewModel.subjectId.value)
+        })
+
+        binding.img.setOnClickListener(View.OnClickListener {
+            val i = Intent(
+                    Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+
+            startActivityForResult(i, RESULT_LOAD_IMAGE)
         })
         binding.btnCommit.setOnClickListener(View.OnClickListener {
             //提交
-
-            var  bean:CreateWorkBean= CreateWorkBean()
-            getclassesList();
-            bean.title=binding.workname.text.toString()
-            bean.content=binding.edit.text.toString()
-            //图片地址
-            bean.imgPaths=""
-            bean.feedbackEndTime="2022-04-09 00:04"
-            bean.releaseTime="2022-05-09 00:04"
-            bean.subjectId=viewModel.subjectId.value
-            bean.classesList=classListBean
-            Log.e("TAG", "btnCommit: "+ JSON.toJSONString(bean))
-            viewModel.createWork(bean)
+            commit()
         })
 
 
     }
+
+    fun commit(){
+        if(TextUtils.isEmpty(binding.workname.text.toString())){
+            ToastUtils.showShort("请输入作业标题")
+            return
+        }
+        if(TextUtils.isEmpty(binding.edit.text.toString())){
+            ToastUtils.showShort("请输入作业内容")
+            return
+        }
+
+        var  bean= CreateWorkBean()
+        getclassesList();
+        bean.title=binding.workname.text.toString()
+        bean.content=binding.edit.text.toString()
+        //图片地址
+//        bean.imgPaths=imglist.toString()
+        bean.feedbackEndTime=binding.feedbackEndTime.text.toString()
+        bean.releaseTime=binding.releaseTime.text.toString()
+        bean.subjectId=viewModel.subjectId.value
+        bean.classesList=classListBean
+        viewModel.createWork(bean)
+    }
+
 
     private val mAdapterimg =
             object :
@@ -259,15 +300,33 @@ class OperationCreatWorkActivity :
 //                        item.subjectId=
 //                        item.timetableId=
 //                        item.timetableTime=
+                        if(!TextUtils.isEmpty(item.classesId)){
+                            val intent = Intent(this@OperationCreatWorkActivity, TableActivity2::class.java)
+                            intent.putExtra("classesId",item.classesId)
+
+                            var teacherids= SpData.getIdentityInfo().id.toString()
+                            intent.putExtra("teacherIds",teacherids)
+                            intent.putExtra("subjectId",viewModel.subjectId.value)
+                            intent.putExtra("className",item.className)
+                            index=getItemPosition(item)
+                            startActivityForResult(intent,RESULT_SELECT_SUBJECT)
+                        }else {
+                            ToastUtils.showShort("请选择班级")
+                        }
+
+//                        val i = Intent(
+//                                Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+//
+//                        startActivityForResult(i, RESULT_LOAD_IMAGE)
                     })
                     //刪除
                     viewBind.delete.setOnClickListener(View.OnClickListener {
                         val pop=deletePop(this@OperationCreatWorkActivity)
-                        pop.setSelectClasses { deletePop.SelectDateListener {
+                        pop.setSelectClasses {
+                            Log.e("TAG", "setSelectClasses: " )
+                            delete(item)
+                        }
 
-                                delete(item)
-
-                        } }
 
                     })
                 }
@@ -295,10 +354,60 @@ class OperationCreatWorkActivity :
                 bean.timetableTime=it.timetableTime
                 bean2list.add(bean)
                 classListBean=bean2list
+            }else{
+                ToastUtils.showShort("请关联班级或科目")
+                return
             }
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            val selectedImage: Uri? = data.data
+            val filePathColumn = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? = selectedImage?.let {
+                contentResolver.query(it,
+                        filePathColumn, null, null, null)
+            }
+            if (cursor != null) {
+                cursor.moveToFirst()
+                val columnIndex: Int = cursor.getColumnIndex(filePathColumn[0])
+                val picturePath: String = cursor.getString(columnIndex)
+                Log.e("TAG", "onActivityResult: "+picturePath )
+                imglist.add(picturePath)
+                mAdapterimg.setList(imglist)
+                cursor.close()
+            }
+
+
+
+        }else if (requestCode == RESULT_SELECT_SUBJECT && resultCode == RESULT_OK && null != data){
+
+            val timetableId: String = data.getStringExtra("timetableId")
+            val timetableTime: String = data.getStringExtra("timetableTime")
+            val timetableName: String = data.getStringExtra("timetableName")
+            Log.e("TAG", "onActivityResult: "+JSON.toJSONString(timetableName) )
+            Log.e("TAG", "onActivityResult: "+JSON.toJSONString(timetableTime) )
+            Log.e("TAG", "onActivityResult: "+JSON.toJSONString(timetableId) )
+            if (index!=-1){
+                for (i in mAdapter.data.indices) {
+                    mAdapter.data[index].timetableId=timetableId
+                    mAdapter.data[index].subjectName=timetableName
+                    mAdapter.data[index].timetableTime=timetableTime
+                }
+            }
+            Log.e("TAG", "mAdapterDATA==》: "+JSON.toJSONString(mAdapter.data) )
+
+            mAdapter.setList(mAdapter.data)
+
+
+
+
+
+
+        }
+    }
 
 }

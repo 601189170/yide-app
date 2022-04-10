@@ -42,11 +42,13 @@ public class postClassDataPop extends PopupWindow {
 //    private TimeWheelAdapter minuteWheelAdapter = new TimeWheelAdapter(getMinute(-1), "分");
     private int hours;
     private int minute;
-    private getClassList date1,date2;
+    private getClassList date1;
+    private getClassList.Children date2;
 
     List<getClassList> list;
 
-    TimeWheelAdapter  classAdapter,subjectAdatper;
+    TimeWheelAdapter  classAdapter;
+    TimeWheelAdapter2  subjectAdatper;
 
     public void setJK(SelectDateListener selectClasses) {
         this.mSelectDateListener = selectClasses;
@@ -103,18 +105,16 @@ public class postClassDataPop extends PopupWindow {
         time2.setTextColorCenter(context.getResources().getColor(R.color.text_333333));
         time2.setTextColorOut(context.getResources().getColor(R.color.text_999999));
         if (getData().size()>0){
-            subjectAdatper = new TimeWheelAdapter(getData());
+//            subjectAdatper = new TimeWheelAdapter(getData());
+            subjectAdatper = new TimeWheelAdapter2(getsubjectData(classAdapter.stringList.get(0).getChildren()));
             time2.setAdapter(subjectAdatper);
-            date2 = (getClassList) subjectAdatper.stringList.get(0);
+            date2 = (getClassList.Children) subjectAdatper.stringList.get(0);
         }
 
-        PostWorkBean bean=new PostWorkBean();
-        bean.ljname=date1.getName();
-        bean.classId=date2.getId();
-        bean.className=date2.getName();
+
 
         time2.setOnItemSelectedListener(index -> {
-            date2 = (getClassList) subjectAdatper.stringList.get(index);
+            date2 = (getClassList.Children) subjectAdatper.stringList.get(index);
         });
 
         popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
@@ -138,6 +138,10 @@ public class postClassDataPop extends PopupWindow {
 
         confirm.setOnClickListener(v -> {
             if (mSelectDateListener != null) {
+                PostWorkBean bean=new PostWorkBean();
+                bean.ljname=date1.getName();
+                bean.classId=date2.getId();
+                bean.className=date2.getName();
                 mSelectDateListener.onSelectDateListener(bean);
             }
             if (popupWindow != null && popupWindow.isShowing()) {
@@ -204,7 +208,39 @@ public class postClassDataPop extends PopupWindow {
             this.stringList=stringList;
         }
     }
+    public class TimeWheelAdapter2 implements WheelAdapter {
+        List<getClassList.Children> stringList = new ArrayList<>();
 
+        public int index;
+        public TimeWheelAdapter2(List<getClassList.Children> list) {
+            this.stringList = list;
+        }
+        public TimeWheelAdapter2() {
+
+        }
+        public int getItemValue(int index) {
+            return Integer.parseInt(String.valueOf(stringList.get(index)));
+        }
+
+        @Override
+        public int getItemsCount() {
+            return stringList != null ? stringList.size() : 0;
+        }
+
+        @Override
+        public String getItem(int index) {
+            return stringList.get(index).getName();
+        }
+
+        @Override
+        public int indexOf(Object o) {
+            return stringList.indexOf(o);
+        }
+
+        public void setData(List<getClassList.Children> stringList){
+            this.stringList=stringList;
+        }
+    }
     private String getDateTime(String date, int hours, int minute) {
         Log.d("SwitchNoticeTimePop", "hours-->>>:" + hours + "   minute-->>>：" + minute);
         Calendar c = Calendar.getInstance();
@@ -227,6 +263,13 @@ public class postClassDataPop extends PopupWindow {
         }
         return stringList;
     }
+    private List<getClassList.Children> getsubjectData(List<getClassList.Children> listdata) {
+        List<getClassList.Children> stringList = new ArrayList<>();
+        for (getClassList.Children listdatum : listdata) {
+            stringList.add(listdatum);
+        }
 
+        return stringList;
+    }
 
 }

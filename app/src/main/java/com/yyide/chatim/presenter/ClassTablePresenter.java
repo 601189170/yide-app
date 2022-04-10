@@ -78,6 +78,36 @@ public class ClassTablePresenter extends BasePresenter<ClassTableView> {
         });
     }
 
+
+    public void getWeekTime(String classId,String weekTime,String teacherIds,String subjectId) {
+        mvpView.showLoading();
+//        TableJSON info = new TableJSON(classid);
+        final HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("type","1");
+        hashMap.put("typeId",classId);
+        hashMap.put("teacherIds",teacherIds);
+        hashMap.put("subjectId",subjectId);
+        if (weekTime != null) {
+            hashMap.put("weekTime", weekTime);
+        }
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(hashMap));
+        addSubscription(dingApiStores.getWeekTime(body), new ApiCallback<SiteTableRsp>() {
+            @Override
+            public void onSuccess(SiteTableRsp model) {
+                mvpView.listTimeDataByApp(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.listTimeDataByAppFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
     //大学组织结构
     public void selectClassByAllSchool() {
         mvpView.showLoading();

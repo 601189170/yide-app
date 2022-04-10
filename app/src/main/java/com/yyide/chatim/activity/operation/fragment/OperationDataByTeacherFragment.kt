@@ -59,7 +59,13 @@ class OperationDataByTeacherFragment : Fragment() , SwipeRefreshLayout.OnRefresh
             getTeacherData(pageNum,pageSize)
         }
 
-
+// 监听开始时间变化
+        viewModel.startTime.observe(viewLifecycleOwner) {
+            getTeacherData(pageNum,pageSize)
+        }
+        viewModel.endTime.observe(viewLifecycleOwner) {
+            getTeacherData(pageNum,pageSize)
+        }
 
     }
     fun getTeacherData(pageNo: Int,pageSize:Int ){

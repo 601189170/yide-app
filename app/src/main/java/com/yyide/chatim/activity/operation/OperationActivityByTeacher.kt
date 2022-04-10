@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.alibaba.fastjson.JSON
 import com.flyco.tablayout.listener.OnTabSelectListener
+import com.jzxiang.pickerview.TimePickerDialog
+import com.jzxiang.pickerview.listener.OnDateSetListener
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.operation.fragment.OperationChartFragment
 import com.yyide.chatim.activity.operation.fragment.OperationDataByTeacherFragment
@@ -22,7 +24,11 @@ import com.yyide.chatim.model.SubjectBean
 import com.yyide.chatim.model.getClassSubjectListRsp
 import com.yyide.chatim.model.rightData
 import com.yyide.chatim.model.selectBean
+import com.yyide.chatim.utils.DatePickerDialogUtil
+import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.view.DialogUtil
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * @Desc 作业首页
@@ -44,6 +50,8 @@ class OperationActivityByTeacher :
     private var listclassssub = mutableListOf<getClassSubjectListRsp>()
     private var pageNum = 1
     private var pageSize = 20
+    private val requestServerTimeFormat = "yyyy-MM-dd HH:mm"
+    private val allDayTimeFormat = "yyyy-MM-dd"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,17 +61,41 @@ class OperationActivityByTeacher :
 
         tl_3()
         initData()
-        // 请求数据
-//        viewModel.getTecherWorkList("0","","","","","","")
-        val stime=binding.layoutTime.tvStartTime.text
-        val etime=binding.layoutTime.tvEndTime.text
+
+
+        // 监听开始时间变化
+        viewModel.startTime.observe(this) {
+            binding.layoutTime.tvStartTime.text=it
+        }
+        viewModel.endTime.observe(this) {
+            binding.layoutTime.tvEndTime.text=it
+        }
+        binding.layoutTime.tvStartTime.setOnClickListener(View.OnClickListener {
+            DatePickerDialogUtil.showDateTime(
+                    this,
+                    getString(R.string.select_begin_time2),
+                    viewModel.startTime.value,
+                    startTimeListener,
+                    isAllDay = viewModel.allDayLiveData.value == true
+            )
+        })
+
+        binding.layoutTime.tvEndTime.setOnClickListener(View.OnClickListener {
+            DatePickerDialogUtil.showDateTime(
+                    this,
+                    getString(R.string.select_begin_time2),
+                    viewModel.endTime.value,
+                    startTimeListener2,
+                    isAllDay = viewModel.allDayLiveData.value == true
+            )
+        })
+
+
         binding.tv1.setOnClickListener(View.OnClickListener {
             DialogUtil.showWorkTypeWorkSelect(this, DialogUtil.OnClassListener {
                 Log.e("TAG", "OnClassListener: "+JSON.toJSONString(it) )
                 binding.tv1.text=it.name
                 viewModel.leftData.value=it
-
-
             },viewModel)
         })
         binding.tv2.setOnClickListener(View.OnClickListener {
@@ -136,7 +168,28 @@ class OperationActivityByTeacher :
 
     }
 
-
+    private val startTimeListener =
+            OnDateSetListener { _: TimePickerDialog?, millSeconds: Long ->
+                var startTime = DateUtils.switchTime(Date(millSeconds), requestServerTimeFormat)
+                viewModel.allDayLiveData.value?.let {
+                    if (it) {
+                        startTime =
+                                "${DateUtils.switchTime(Date(millSeconds), allDayTimeFormat)} 00:00:00"
+                    }
+                }
+                viewModel.startTime.value = startTime
+            }
+    private val startTimeListener2 =
+            OnDateSetListener { _: TimePickerDialog?, millSeconds: Long ->
+                var startTime = DateUtils.switchTime(Date(millSeconds), requestServerTimeFormat)
+                viewModel.allDayLiveData.value?.let {
+                    if (it) {
+                        startTime =
+                                "${DateUtils.switchTime(Date(millSeconds), allDayTimeFormat)} 00:00:00"
+                    }
+                }
+                viewModel.endTime.value = startTime
+            }
 
 
 

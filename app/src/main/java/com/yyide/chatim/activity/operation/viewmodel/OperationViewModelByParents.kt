@@ -31,6 +31,7 @@ class OperationViewModelByParents : ViewModel() {
 
     val endTime = MutableLiveData<String>()
 
+    val allDayLiveData = MutableLiveData<Boolean>(false)
 
     fun getStudentDatas(){
         viewModelScope.launch {
