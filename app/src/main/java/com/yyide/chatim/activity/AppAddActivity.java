@@ -111,7 +111,7 @@ public class AppAddActivity extends BaseMvpActivity<AppAddPresenter> implements 
 
     @Override
     public void addAppSuccess(ResultBean model) {
-        ToastUtils.showShort(model.getMsg());
+        ToastUtils.showShort(model.getMessage());
         if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
             if (recordsBean != null) {
                 recordsBean.setIsAdd(true);

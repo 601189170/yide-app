@@ -1,20 +1,12 @@
 package com.yyide.chatim.model;
 
+import java.util.List;
+
 public class UploadRep {
-    //{"code":200,"message":"操作成功","url":"http://cloud-yide.oss-cn-shenzhen.aliyuncs.com/524_1984/school-user/a494574b8a4542d5bfa9daa97ada4101-fileName.jpg"}
+
     private int code;
+    private List<DataBean> data;
     private String message;
-    private String url;
-    private String data;
-
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
 
     public int getCode() {
         return code;
@@ -22,6 +14,14 @@ public class UploadRep {
 
     public void setCode(int code) {
         this.code = code;
+    }
+
+    public List<DataBean> getData() {
+        return data;
+    }
+
+    public void setData(List<DataBean> data) {
+        this.data = data;
     }
 
     public String getMessage() {
@@ -32,11 +32,33 @@ public class UploadRep {
         this.message = message;
     }
 
-    public String getUrl() {
-        return url;
-    }
+    public static class DataBean {
+        private String name;
+        private int status;
+        private String url;
 
-    public void setUrl(String url) {
-        this.url = url;
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
     }
 }

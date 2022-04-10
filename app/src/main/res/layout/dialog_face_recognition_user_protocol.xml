@@ -57,6 +57,8 @@
                 android:id="@+id/tv_protocol"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_4"
+                android:gravity="center"
                 android:textColor="#999999"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/checkBox"

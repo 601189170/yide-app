@@ -46,11 +46,8 @@ public class GlideUtil {
     }
 
     public static void loadImageHead(Context context, String url, ImageView imageView) {
-        RequestOptions roundOptions = new RequestOptions()
-                .transform(new RoundedCorners(6));
         Glide.with(context).load(url)
                 .centerCrop()
-                .apply(roundOptions)
                 .placeholder(R.drawable.default_head)
                 .error(R.drawable.default_head)
                 .into(imageView);
@@ -60,8 +57,8 @@ public class GlideUtil {
     public static void loadCircleImage(Context context, String url, ImageView imageView) {
         Glide.with(context).load(url)
                 .circleCrop()
-                .placeholder(R.drawable.bg_corners_blue100)
-                .error(R.drawable.bg_corners_blue100)
+                .placeholder(R.drawable.default_head)
+                .error(R.drawable.default_head)
                 .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                 .into(imageView);
     }

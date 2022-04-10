@@ -39,6 +39,7 @@ interface INetworkService {
     @POST("/auth/oauth/token")
     suspend fun refreshToken(@Body requestBody: RequestBody): BaseResponse<LoginRsp>
 
+
     /**
      * 获取学校信息
      */
@@ -193,7 +194,6 @@ interface INetworkService {
     @GET("/cloud/app/work/selectSubjectByUserId")
     suspend fun requestselectSubjectByUserId(): BaseResponse<List<SubjectBean>>
 
-
     /**
      * 获取年级班级科目联动数据
      */
@@ -211,7 +211,6 @@ interface INetworkService {
      */
     @GET("/cloud/appCenter/list")
     suspend fun getAppList(): BaseResponse<MutableList<NewAppRspJ>>
-
 
     /**
      * 作业-撤销
@@ -243,7 +242,6 @@ interface INetworkService {
     @GET("/cloud/app/work/getSchoolWorkFeedback")
     suspend fun getSchoolWorkFeedback(@Query("id") id: String): BaseResponse<getSchoolWorkFeedback>
 
-
     /**
      * 家长-提交反馈
      */
@@ -262,7 +260,6 @@ interface INetworkService {
     @GET("/cloud/app/work/selectSubjectByUserId")
     suspend fun selectSubjectByUserId(): BaseResponse<List<selectSubjectByUserIdRsp>>
 
-
     /**
      * 作业添加-获取班级
      */
@@ -274,5 +271,11 @@ interface INetworkService {
      */
     @POST("/cloud/app/work/create")
     suspend fun createWork(@Body requestBody: RequestBody): BaseResponse<Boolean>
+
+    /**
+     * 家长学生 信息列表
+     */
+    @GET("/cloud/student/getFaceList")
+    suspend fun getFaceList(@Query("identityId") identityId: String): BaseResponse<List<FaceStudentBean>>
 }
 

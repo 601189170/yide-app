@@ -445,7 +445,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             new BaseQuickAdapter<LeaveApprovalBean.LeaveCommitBean, BaseViewHolder>(R.layout.item_approver_head) {
                 @Override
                 protected void convert(@NonNull BaseViewHolder holder, LeaveApprovalBean.LeaveCommitBean approver) {
-                    holder.setText(R.id.tv_approver_name, approver.getApproverName());
+                    holder.setText(R.id.tvDesc, approver.getApproverName());
                     if (mAdapter.getItemPosition(approver) == 0) {
                         holder.getView(R.id.viewTop).setVisibility(View.INVISIBLE);
                     } else if (mAdapter.getItemPosition(approver) == mAdapter.getData().size() - 1) {
@@ -610,11 +610,13 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             if (!TextUtils.isEmpty(ccList)) {
                 //抄送人
                 final List<ParticipantRsp.DataBean.ParticipantListBean> dataBeans = JSON.parseArray(ccList, ParticipantRsp.DataBean.ParticipantListBean.class);
-                mCCAdapter.setList(dataBeans);
+                if(dataBeans != null && dataBeans.size() > 0){
+                    mCCAdapter.setList(dataBeans);
+                }
             } else if (!TextUtils.isEmpty(approverList)) {
                 //审批人
                 LeaveApprovalBean.Branappr branapprBean = JSON.parseObject(approverList, LeaveApprovalBean.Branappr.class);
-                if (branapprBean != null) {
+                if (branapprBean != null && !TextUtils.isEmpty(branapprBean.getId())) {
                     LeaveApprovalBean.LeaveCommitBean leaveCommitBean = mAdapter.getData().get(appPosotion);
                     leaveCommitBean.setUserId(branapprBean.getId());
                     leaveCommitBean.setApproverName(branapprBean.getName());

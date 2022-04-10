@@ -2,6 +2,7 @@ package com.yyide.chatim.presenter;
 
 
 import com.alibaba.fastjson.JSON;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.net.ApiCallback;
@@ -31,9 +32,9 @@ public class ResetPasswordPresenter extends BasePresenter<ResetPasswordView> {
             @Override
             public void onSuccess(ResultBean model) {
                 if (model.isSuccess()) {
-                    mvpView.getSmsSuccess(model.getMsg());
+                    mvpView.getSmsSuccess(model.getMessage());
                 } else {
-                    mvpView.getSmsFail(model.getMsg());
+                    mvpView.getSmsFail(model.getMessage());
                 }
             }
 
@@ -49,20 +50,20 @@ public class ResetPasswordPresenter extends BasePresenter<ResetPasswordView> {
         });
     }
 
-    public void updatePwd(String mobile, String code, String newPassword) {
+    public void updatePwd(String oldPwd, String newPassword, String confirmPwd) {
         mvpView.showLoading();
         Map<String, String> paramMap = new HashMap<>();
-        paramMap.put("mobileNumber", mobile);
-        paramMap.put("validateCode", code);
-        paramMap.put("newPassword", newPassword);
+        paramMap.put("oldPwd", oldPwd);
+        paramMap.put("newPwd", newPassword);
+        paramMap.put("confirmPwd", confirmPwd);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(paramMap));
         addSubscription(dingApiStores.forgotPwd(body), new ApiCallback<ResultBean>() {
             @Override
             public void onSuccess(ResultBean model) {
-                if (model.isSuccess()) {
-                    mvpView.updateSuccess(model.getMsg());
+                if (model.getCode() == BaseConstant.REQUEST_SUCCESS2) {
+                    mvpView.updateSuccess(model.getMessage());
                 } else {
-                    mvpView.updateFail(model.getMsg());
+                    mvpView.updateFail(model.getMessage());
                 }
 
             }

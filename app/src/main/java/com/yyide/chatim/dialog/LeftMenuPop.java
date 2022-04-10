@@ -32,6 +32,7 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.PowerActivity;
 import com.yyide.chatim.activity.PushSettingActivity;
+import com.yyide.chatim.activity.face.FaceMultipleActivity;
 import com.yyide.chatim.activity.user.ResetPassWordActivity;
 import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.activity.WebViewActivity;
@@ -188,12 +189,14 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 } else {
                     user_class.setText("无");
                 }
+                layoutStu.setVisibility(View.VISIBLE);
             } else {
+                layoutStu.setVisibility(View.GONE);
                 user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "无");
             }
             setIdentity();
             head_name.setText(SpData.getIdentityInfo() != null ? SpData.getUser().getUsername() : "");
-            GlideUtil.loadImageHead(context, SpData.getUser().getAvatar(), head_img);
+            GlideUtil.loadCircleImage(context, SpData.getUser().getAvatar(), head_img);
         });
     }
 
@@ -263,6 +266,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 context.startActivity(new Intent(context, UserActivity.class));
                 break;
             case R.id.layoutStu:
+                context.startActivity(new Intent(context, FaceMultipleActivity.class));
                 break;
             case R.id.layout4://修改密码
                 context.startActivity(new Intent(context, ResetPassWordActivity.class));

@@ -1,15 +1,19 @@
 package com.yyide.chatim.presenter;
 
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
+import com.yyide.chatim.kotlin.network.base.BaseResponse;
 import com.yyide.chatim.model.FaceOssBean;
+import com.yyide.chatim.model.MyUserInfo;
 import com.yyide.chatim.model.UpdateUserInfo;
 import com.yyide.chatim.model.UploadRep;
+import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.UserView;
 
@@ -31,12 +35,12 @@ public class UserPresenter extends BasePresenter<UserView> {
         attachView(view);
     }
 
-    public void update(String id, String sex, String birthday, String email) {
+    public void update(String id, String avatar, String email) {
         mvpView.showLoading();
         Map<String, String> map = new HashMap<>();
         map.put("id", id);
-        map.put("sex", sex);
-        map.put("birthdayDate", birthday);
+//        map.put("sex", sex);
+        map.put("avatar", avatar);
         map.put("email", email);
         RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
         addSubscription(dingApiStores.updateUserInfo(body), new ApiCallback<UpdateUserInfo>() {
@@ -44,7 +48,7 @@ public class UserPresenter extends BasePresenter<UserView> {
             @Override
             public void onSuccess(UpdateUserInfo model) {
                 mvpView.hideLoading();
-                if (model.getCode() == -1) {
+                if (model.getCode() != BaseConstant.REQUEST_SUCCESS2) {
                     mvpView.updateFail(model.getMsg());
                 } else {
                     mvpView.updateSuccess(model.getMsg());
@@ -70,7 +74,7 @@ public class UserPresenter extends BasePresenter<UserView> {
      * @param file
      * @param
      */
-    public void uploadFile(File file, Long studentId) {
+    public void uploadFile(File file) {
         if (file == null) {
             return;
         }
@@ -80,11 +84,16 @@ public class UserPresenter extends BasePresenter<UserView> {
         // 创建MultipartBody.Part，用于封装文件数据
         MultipartBody.Part requestImgPart =
                 MultipartBody.Part.createFormData("file", "fileName.jpg", fileRequestBody);
-        addSubscription(dingApiStores.uploadImg(requestImgPart, studentId), new ApiCallback<UploadRep>() {
+        addSubscription(dingApiStores.uploadImg(requestImgPart), new ApiCallback<UploadRep>() {
             @Override
             public void onSuccess(UploadRep model) {
-                if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
-                    mvpView.uploadFileSuccess(model.getData());
+                if (model.getCode() == BaseConstant.REQUEST_SUCCESS2) {
+                    if (model.getData() != null && model.getData().size() > 0 && model.getData().get(0) != null
+                            && !TextUtils.isEmpty(model.getData().get(0).getUrl())) {
+                        mvpView.uploadFileSuccess(model.getData().get(0).getUrl());
+                    } else {
+                        mvpView.uploadFileFail(model.getMessage());
+                    }
                 } else {
                     mvpView.uploadFileFail(model.getMessage());
                 }
@@ -93,6 +102,29 @@ public class UserPresenter extends BasePresenter<UserView> {
             @Override
             public void onFailure(String msg) {
                 mvpView.uploadFileFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    public void getUserInfo() {
+        mvpView.showLoading();
+        //类型 学生：1、老师：2
+        addSubscription(dingApiStores.userInfo(), new ApiCallback<BaseResponse<UserInfo>>() {
+            @Override
+            public void onSuccess(BaseResponse<UserInfo> model) {
+                if (model.getCode() == BaseConstant.REQUEST_SUCCESS2) {
+                    mvpView.getUserInfoSuccess(model.getData());
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.getFaceDataFail(msg);
             }
 
             @Override

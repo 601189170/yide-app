@@ -6,11 +6,9 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ToastUtils
-import com.tencent.mmkv.MMKV
 import com.yyide.chatim.R
 import com.yyide.chatim.adapter.PushSettingAdapter
 import com.yyide.chatim.base.BaseActivity
-import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.databinding.ActivityPushSettingBinding
 import com.yyide.chatim.model.PushSettingBean
 import com.yyide.chatim.model.gate.Result
@@ -81,7 +79,7 @@ class PushSettingActivity : BaseActivity() {
         //	类型 1 闸机推送（出入校） 2 考勤 3 考勤周报 4 通知公告 5 请假【目前只有1和3】
         val adapter = PushSettingAdapter(this, dataList) { position, isChecked ->
             val pushSettingBean = dataList[position]
-            updatePushSetting(pushSettingBean.id, isChecked, pushSettingBean.switchKey)
+            updatePushSetting(pushSettingBean.moduleId, if (isChecked) 0 else 1);
         }
         viewBinding.recyclerView.layoutManager = LinearLayoutManager(this)
         viewBinding.recyclerView.addItemDecoration(
@@ -102,9 +100,7 @@ class PushSettingActivity : BaseActivity() {
     /**
      * 更新推送配置
      */
-    private fun updatePushSetting(id: String?, onOff: Boolean, switchKey: String?) {
-        val list = mutableListOf<PushSettingBean>()
-        list.add(PushSettingBean(id, onOff, switchKey = switchKey))
-        pushSettingViewModel.updateUserNoticeOnOffByUserIdAndType(list)
+    private fun updatePushSetting(moduleId: String?, switchKey: Int) {
+        pushSettingViewModel.updateUserNoticeOnOffByUserIdAndType(moduleId, "$switchKey")
     }
 }

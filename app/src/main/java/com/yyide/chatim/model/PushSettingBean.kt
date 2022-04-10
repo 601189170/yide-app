@@ -13,10 +13,7 @@ data class PushSettingBean(
     //"switchKey": "barrier",
     //"delInd": false
     //}
-    var id: String? = null,
-    var onOff: Boolean = true,
-    var sort: Int = 1,
-    var name: String? = null,
-    var switchKey: String? = null,
-    var delInd: Boolean = false
+    var moduleId: String? = null,
+    var moduleName: String = "",
+    var msgControl: String = ""//控制开关 0开1关
 )

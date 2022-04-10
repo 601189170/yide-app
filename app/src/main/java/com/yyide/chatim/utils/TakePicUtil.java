@@ -172,7 +172,7 @@ public class TakePicUtil {
         return list.size() > 0;
     }
 
-    private static Uri getUriForFile(Context context, File file) {
+    public static Uri getUriForFile(Context context, File file) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".FileProvider", file);
         }

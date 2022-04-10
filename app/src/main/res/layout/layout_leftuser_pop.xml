@@ -48,7 +48,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <org.raphets.roundimageview.RoundImageView
+            <ImageView
                 android:id="@+id/head_img"
                 android:layout_width="50dp"
                 android:layout_height="50dp"

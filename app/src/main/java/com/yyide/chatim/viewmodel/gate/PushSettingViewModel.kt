@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import okhttp3.RequestBody
 import java.lang.Exception
+import java.util.*
 
 /**
  *
@@ -67,11 +68,11 @@ class PushSettingViewModel : BaseViewModel() {
     /**
      * 更新用户开关
      */
-    fun updateUserNoticeOnOffByUserIdAndType(data: List<PushSettingBean>) {
-        if (data.isEmpty()) {
-            return
-        }
-        val toJSONString = JSON.toJSONString(data)
+    fun updateUserNoticeOnOffByUserIdAndType(moduleId: String?, msgControl: String?) {
+        val map = mutableMapOf<String, String>()
+        map["moduleId"] = moduleId!!
+        map["msgControl"] = "$msgControl"
+        val toJSONString = JSON.toJSONString(map)
         loge("更新用户开关:$toJSONString")
         requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)
         viewModelScope.launch {

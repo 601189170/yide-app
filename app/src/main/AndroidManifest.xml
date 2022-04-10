@@ -107,6 +107,9 @@
             android:name=".login.IdentitySelectActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.face.FaceMultipleActivity"
+            android:exported="false" />
+        <activity
             android:name=".login.NewLoginActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize|stateHidden" />

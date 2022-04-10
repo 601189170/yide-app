@@ -378,7 +378,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     fun Event(messageEvent: EventMessage) {
         Log.e(TAG, "Event: " + messageEvent.code)
         if (BaseConstant.TYPE_CHECK_HELP_CENTER == messageEvent.code) {
-            showFragment(SCHEDULE_TYPE, scheduleFragment)
+            showFragment(HELP_TYPE, helpFragment)
         } else if (BaseConstant.TYPE_SELECT_MESSAGE_TODO == messageEvent.code) {
             ActivityUtils.finishToActivity(NewMainActivity::class.java, false)
 //            setTab(1, 1)

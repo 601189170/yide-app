@@ -50,41 +50,32 @@ public class FaceOssBean {
     }
 
     public static class DataBean {
-        private String status;
-        private String path;
+        private String userId;
+        private String imgPath;
+        private String type;
 
-        public String getStatus() {
-            return status;
+        public String getUserId() {
+            return userId;
         }
 
-        public void setStatus(String status) {
-            this.status = status;
+        public void setUserId(String userId) {
+            this.userId = userId;
         }
 
-        public String getPath() {
-            return path;
+        public String getType() {
+            return type;
         }
 
-        public void setPath(String path) {
-            this.path = path;
+        public void setType(String type) {
+            this.type = type;
         }
 
-        @Override
-        public String toString() {
-            return "DataBean{" +
-                    "status='" + status + '\'' +
-                    ", path='" + path + '\'' +
-                    '}';
+        public String getImgPath() {
+            return imgPath;
         }
-    }
 
-    @Override
-    public String toString() {
-        return "FaceOssBean{" +
-                "code=" + code +
-                ", success=" + success +
-                ", msg='" + msg + '\'' +
-                ", data=" + data +
-                '}';
+        public void setImgPath(String imgPath) {
+            this.imgPath = imgPath;
+        }
     }
 }

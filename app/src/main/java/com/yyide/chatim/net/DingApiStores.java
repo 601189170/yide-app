@@ -42,6 +42,7 @@ import com.yyide.chatim.model.LoginAccountBean;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.MessageNumberRsp;
 import com.yyide.chatim.model.MyAppListRsp;
+import com.yyide.chatim.model.MyUserInfo;
 import com.yyide.chatim.model.NoticeBrandBean;
 import com.yyide.chatim.model.NoticeDetailRsp;
 import com.yyide.chatim.model.NoticeHomeRsp;
@@ -59,6 +60,7 @@ import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
 import com.yyide.chatim.model.TeacherWorkListRsp;
+import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.model.address.ScheduleAddressBean;
 import com.yyide.chatim.model.attendance.StudentAttendanceDayRsp;
 import com.yyide.chatim.model.StudentHonorRsp;
@@ -232,7 +234,12 @@ public interface DingApiStores {
 
     //更新用户信息
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
-    @POST("/management/cloud-system/user/updateUserInformation")
+    @GET("/cloud/app/user/getCurrentUser")
+    Observable<BaseResponse<UserInfo>> userInfo();
+
+    //更新用户信息
+    @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
+    @POST("/cloud/app/user/updateCurrentUser")
     Observable<UpdateUserInfo> updateUserInfo(@Body RequestBody info);
 
     //获取忘记密码手机短信
@@ -242,7 +249,7 @@ public interface DingApiStores {
 
     //修改密码
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
-    @POST("/management/cloud-system/app/user/updatepwd")
+    @POST("/cloud/user/updatePassword")
     Observable<ResultBean> forgotPwd(@Body RequestBody info);
 
     //教职工列表接口
@@ -252,8 +259,8 @@ public interface DingApiStores {
 
     //用户头像上传
     @Multipart
-    @POST("/management/cloud-system/user/uploadPic")
-    Observable<UploadRep> uploadImg(@Part MultipartBody.Part info, @Part("studentId") Long studentId);
+    @POST("/cloud/file/upload")
+    Observable<UploadRep> uploadImg(@Part MultipartBody.Part info);
 
     //扫码登录
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
@@ -476,22 +483,16 @@ public interface DingApiStores {
     @POST("/cloud/app/procAppr/pageTask")
     Observable<BaseResponse<TodoRsp>> getMessageTransaction(@Body RequestBody requestBody);
 
-    //https://api.uat.edu.1d1j.net/face/cloud-face/face/toStudentOss
-    //上传学生face
-    @Multipart
-    @POST("/face/cloud-face/face/toStudentOss/{studentId}")
-    Observable<BaseRsp> toStudentOss(@Path("studentId") String studentId, @Part MultipartBody.Part file);
-
     //https://api.uat.edu.1d1j.net/face/cloud-face/teacher/face/toTeacherOss
     //上传教师face
-    @Multipart
-    @POST("/face/cloud-face/teacher/face/toTeacherOss")
-    Observable<BaseRsp> toTeacherOss(@PartMap Map<String, RequestBody> map, @Part MultipartBody.Part file);
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/cloud/app/face/collectFace")
+    Observable<BaseRsp> updateFace(@Body RequestBody requestBody);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/face/getStudentOss
     //查询人脸采集头像
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/cloud/app/face/get/{studentId}")
+    @POST("/cloud/app/face/get")
     Observable<FaceOssBean> getFaceOss(@Body RequestBody requestBody);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/teacher/face/getTeacherOss
@@ -915,15 +916,12 @@ public interface DingApiStores {
      * 获取【家长/学生】人员信息
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getParticipant
      *
-     * @param type  类型【0：学校名称及学段，1：年级】
-     * @param scope 范围【1：家长，2：学生】
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
 //    @POST("/management/cloud-system/app/schedule/getParticipant")
     @POST("/cloud/selectPerson/getRollPerson")
 //    Call<StudentGuardianRsp> getParticipant(@Query("id") String id, @Query("type") String type, @Query("scope") String scope);
     Call<StudentGuardianRsp> getParticipant(@Body RequestBody requestBody);
-
 
     /**
      * 搜索参与人

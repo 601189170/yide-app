@@ -143,7 +143,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         mSwipeRefreshLayout.setRefreshing(false);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         replaceFragment();
-        setSchoolInfo();
         initBanner();
         initView();
         viewModel.requestAcceptMessage();
@@ -159,7 +158,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         viewModel.getAcceptMessage().observe(requireActivity(), acceptMessageBean -> {
             if (!acceptMessageBean.getAcceptMessage().isEmpty()) {
                 bannerAdapter.setDatas(acceptMessageBean.getAcceptMessage());
-            }else {
+            } else {
                 List<AcceptMessageItem> noDataList = new ArrayList<>();
                 AcceptMessageItem noData = new AcceptMessageItem();
                 noData.setTitle("暂无通知公告");
@@ -176,7 +175,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 ToastUtils.showLong("确认失败");
                 return;
             }
-            Log.d("ss","aa" + result);
+            Log.d("ss", "aa" + result);
             closeDialog();
         });
 
@@ -201,7 +200,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 NoticeContentActivity.Companion.startGo(requireContext(), data);
             }
         });
-
 
 
     }
@@ -304,7 +302,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             case R.id.school_name:
                 if (SpData.getIdentityInfo().staffIdentity()) {
                     startActivity(new Intent(getActivity(), OperationActivityByTeacher.class));
-                }else {
+                } else {
                     startActivity(new Intent(getActivity(), OperationActivityByParents.class));
                 }
 //                startActivity(new Intent(getActivity(), SchoolCalendarActivity.class));
@@ -333,6 +331,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public void onResume() {
         super.onResume();
+        setSchoolInfo();
     }
 
     @Override
@@ -457,24 +456,19 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         }
         if (SpData.getUser() != null) {
             UserBean userBean = SpData.getUser();
-            GlideUtil.loadImageHead(getActivity(), userBean.getAvatar(), head_img);
+            GlideUtil.loadCircleImage(getActivity(), userBean.getAvatar(), head_img);
             //SPUtils.getInstance().put(SpData.USERNAME, identityInfo.realname);
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
-        if (BaseConstant.TYPE_UPDATE_IMG.equals(messageEvent.getCode())) {
-            if (!TextUtils.isEmpty(messageEvent.getMessage())) {
-                GlideUtil.loadImageHead(getActivity(), messageEvent.getMessage(), head_img);
-            }
-        } else if (BaseConstant.TYPE_SELECT_MESSAGE_TODO.equals(messageEvent.getCode())) {
+        if (BaseConstant.TYPE_SELECT_MESSAGE_TODO.equals(messageEvent.getCode())) {
             //关闭所有的Activity  MainActivity除外
             if (mLeftMenuPop != null && mLeftMenuPop.isShow()) {
                 mLeftMenuPop.hide();
             }
         } else if (BaseConstant.TYPE_HOME_CHECK_IDENTITY.equals(messageEvent.getCode())) {
-            setSchoolInfo();
             replaceFragment();
         }
     }

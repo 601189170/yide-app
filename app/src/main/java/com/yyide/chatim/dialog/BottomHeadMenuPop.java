@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -39,11 +40,17 @@ public class BottomHeadMenuPop extends PopupWindow {
     Activity context;
     PopupWindow popupWindow;
     Window mWindow;
-
+    private String title;
     OkHttpClient mOkHttpClient = new OkHttpClient();
 
     public BottomHeadMenuPop(Activity context) {
         this.context = context;
+        init();
+    }
+
+    public BottomHeadMenuPop(Activity context, String title) {
+        this.context = context;
+        this.title = title;
         init();
     }
 
@@ -59,7 +66,10 @@ public class BottomHeadMenuPop extends PopupWindow {
         FrameLayout bg = (FrameLayout) mView.findViewById(R.id.bg);
         TextView s1 = (TextView) mView.findViewById(R.id.s1);
         TextView s2 = (TextView) mView.findViewById(R.id.s2);
-        TextView s3 = (TextView) mView.findViewById(R.id.s3);
+        TextView tvTitle = (TextView) mView.findViewById(R.id.tvTitle);
+        if (!TextUtils.isEmpty(title)) {
+            tvTitle.setText(title);
+        }
         s1.setOnClickListener(v -> {
             selectFromTake();
             if (popupWindow != null && popupWindow.isShowing()) {
@@ -80,7 +90,7 @@ public class BottomHeadMenuPop extends PopupWindow {
             }
         });
 
-        s3.setOnClickListener(v -> {
+        tvTitle.setOnClickListener(v -> {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
             }

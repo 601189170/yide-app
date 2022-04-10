@@ -19,10 +19,6 @@ class OperationTearcherViewModel : ViewModel() {
     val deleteWorkResult = MutableLiveData<Result<Boolean>>()
     val updateRemindResult = MutableLiveData<Result<Boolean>>()
 
-
-
-
-
     fun getSchoolWorkData(isWhole:String){
     viewModelScope.launch {
         val result = NetworkApi.getSchoolWorkData(isWhole)

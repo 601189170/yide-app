@@ -7,6 +7,7 @@ import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.utils.Constants;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class UserInfo implements Serializable {
 
@@ -22,6 +23,11 @@ public class UserInfo implements Serializable {
     private String name;
     private String avatar;
     private boolean autoLogin;
+    private String email;
+    private String gender;
+    private String id;
+    private int status;
+    private String username;
 
     public synchronized static UserInfo getInstance() {
         if (sUserInfo == null) {
@@ -48,6 +54,58 @@ public class UserInfo implements Serializable {
 
     public String getUserSig() {
         return this.userSig;
+    }
+
+    public static String getPerUserModel() {
+        return PER_USER_MODEL;
+    }
+
+    public static UserInfo getsUserInfo() {
+        return sUserInfo;
+    }
+
+    public static void setsUserInfo(UserInfo sUserInfo) {
+        UserInfo.sUserInfo = sUserInfo;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setUserSig(String userSig) {
