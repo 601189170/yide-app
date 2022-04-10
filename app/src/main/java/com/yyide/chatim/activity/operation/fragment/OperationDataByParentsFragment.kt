@@ -23,6 +23,7 @@ import com.yyide.chatim.activity.operation.viewmodel.OperationViewModel
 import com.yyide.chatim.activity.operation.viewmodel.OperationViewModelByParents
 import com.yyide.chatim.databinding.ItemOperationBkBinding
 import com.yyide.chatim.databinding.OperationDataFragmentBinding
+import com.yyide.chatim.model.ParentWorkList
 import com.yyide.chatim.model.TeacherWorkListRsp
 import com.yyide.chatim.model.getClassSubjectListRsp
 
@@ -70,13 +71,13 @@ class OperationDataByParentsFragment : Fragment() , SwipeRefreshLayout.OnRefresh
             if (it.isSuccess){
                 val result = it.getOrNull()
                 if (result!=null){
-//                    mAdapter.setList(result.list);
-//                    if (pageNum == 1) {
-//                            mAdapter.setList(result.list)
-//                    } else {
-//                        mAdapter.addData(result.list)
-//
-//                    }
+                    mAdapter.setList(result.list);
+                    if (pageNum == 1) {
+                            mAdapter.setList(result.list)
+                    } else {
+                        mAdapter.addData(result.list)
+
+                    }
                 }
             }
         }
@@ -127,8 +128,8 @@ class OperationDataByParentsFragment : Fragment() , SwipeRefreshLayout.OnRefresh
 
     private val mAdapter =
         object :
-            BaseQuickAdapter<TeacherWorkListRsp.WorkInfo, BaseViewHolder>(R.layout.item_operation_bk), LoadMoreModule {
-            override fun convert(holder: BaseViewHolder, item: TeacherWorkListRsp.WorkInfo) {
+            BaseQuickAdapter<ParentWorkList.DD, BaseViewHolder>(R.layout.item_operation_bk), LoadMoreModule {
+            override fun convert(holder: BaseViewHolder, item: ParentWorkList.DD) {
                 val viewBind = ItemOperationBkBinding.bind(holder.itemView)
 
 

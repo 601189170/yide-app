@@ -51,7 +51,7 @@ class OperationActivityByParents :
     private var list2 = mutableListOf<selectParentStudent.Children>()
     var index:Int?=0
 
-    private val requestServerTimeFormat = "yyyy-MM-dd HH:mm"
+    private val requestServerTimeFormat = "yyyy-MM-dd"
     private val allDayTimeFormat = "yyyy-MM-dd"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

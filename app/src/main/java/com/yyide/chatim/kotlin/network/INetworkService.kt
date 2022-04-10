@@ -234,7 +234,7 @@ interface INetworkService {
      * 家长列表获取学生数据
      */
     @POST("/cloud/app/work/selectParentPage")
-    suspend fun selectParentPage(@Body requestBody: RequestBody): BaseResponse<List<selectParentStudent>>
+    suspend fun selectParentPage(@Body requestBody: RequestBody): BaseResponse<ParentWorkList>
 
     /**
      * 家长查看作业详情

@@ -16,7 +16,7 @@ class OperationViewModelByParents : ViewModel() {
 
     val StudentDatasList = MutableLiveData<Result<List<selectParentStudent>>>()
 
-    val ParentsWorkDatasList = MutableLiveData<Result<List<selectParentStudent>>>()
+    val ParentsWorkDatasList = MutableLiveData<Result<ParentWorkList>>()
 
     val rightData = MutableLiveData<rightData>()
 
