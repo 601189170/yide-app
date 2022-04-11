@@ -139,8 +139,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         EventBus.getDefault().register(this);
         childFragmentManager = getChildFragmentManager();
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
-        mSwipeRefreshLayout.setRefreshing(true);
-        mSwipeRefreshLayout.setRefreshing(false);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         replaceFragment();
         initBanner();
@@ -169,6 +167,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
 
         viewModel.getConfirmInfo().observe(requireActivity(), result -> {
+            mSwipeRefreshLayout.setRefreshing(false);
             isClose = false;
             dismiss();
             if (!result) {
@@ -180,6 +179,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         });
 
         viewModel.getDialogInfo().observe(requireActivity(), noticeMessage -> {
+            mSwipeRefreshLayout.setRefreshing(false);
             if (noticeMessage.getId() != 0) {
                 showNotice(noticeMessage);
             }
@@ -208,6 +208,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void onRefresh() {
         EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
 //        mvpPresenter.getUserSchool();
+        viewModel.requestAcceptMessage();
+        viewModel.showDialogMessage();
     }
 
     private Dialog dialog;

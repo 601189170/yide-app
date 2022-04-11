@@ -48,7 +48,7 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
 
     var saveLocationInfo: AMapLocation? = null
 
-    var wifiInfo: WifiInfo? = null
+    private var wifiInfo: WifiInfo? = null
 
     /**
      * 判断考勤方式
@@ -62,6 +62,7 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
             return
         }
 
+        // 默认不可以打卡
         val info = PunchInfoBean()
 
         punchMessage.value?.getOrNull()?.let {
@@ -69,7 +70,6 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
             if (it.canSignByWifi) {
                 val wifi = WifiTool.getConnectedWifiInfo(getApplication())
                 if (wifi != null) {
-                    var isFindWifi = false
                     for (wifiItem in it.wifiList) {
                         if (wifi.bssid.equals(wifiItem.wifiMac)) {
                             info.showContent = String.format(
@@ -78,13 +78,10 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
                             )
                             info.type = punchTypeWifi
                             wifiInfo = wifi
-                            isFindWifi = true
-                            break
+                            return@let
                         }
                     }
-                    if (!isFindWifi) {
-                        wifiInfo = null
-                    }
+                    wifiInfo = null
                 }
             }
 
@@ -98,37 +95,45 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
                     val endLatlng = DPoint()
                     endLatlng.latitude = addressItem.lat
                     endLatlng.longitude = addressItem.geo
-                    val currentDis =
-                        CoordinateConverter.calculateLineDistance(startLatlng, endLatlng)
+                    val currentDis = CoordinateConverter.calculateLineDistance(startLatlng, endLatlng)
                     if (currentDis <= addressItem.effectiveRange) {
                         info.showContent = String.format(
                             getApplication<Application>().resources.getString(R.string.attendance_in_range),
                             addressItem.addressName
                         )
                         info.type = punchTypeAddress
-                        break
+                        return@let
+                    }
+                }
+            }
+
+            // 不能打卡
+            if (info.type == punchTypeNOT){
+                when {
+                    // WiFi 定位都不能打卡 判断是否能够外勤打卡
+                    it.canSignInOutside ->{
+                        info.type = punchTypeFieldwork
+                        info.showContent = locationInfo.address
+                    }
+                    it.canSignByWifi -> {
+                        info.showContent = getApplication<Application>().resources.getString(R.string.warn_out_of_wifi)
+                    }
+                    it.canSignByAddress -> {
+                        info.showContent = getApplication<Application>().resources.getString(R.string.warn_out_of_range)
+                    }
+                    else -> {
+                        info.showContent = getApplication<Application>().resources.getString(R.string.warn_not_in)
                     }
                 }
             }
 
 
-            if (info.type == punchTypeNOT && it.canSignInOutside) {
-                info.type = punchTypeFieldwork
-                info.showContent = locationInfo.address
-            }
-
-            if (info.type == punchTypeNOT && it.canSignByWifi) {
-                info.showContent = getApplication<Application>().resources.getString(R.string.warn_out_of_wifi)
-            }
         }
 
 
-        // 打卡类型变化了
-        if (info.type != punchInfo.value?.type ||
-            // 如果是外勤打卡并且描述是不一样的
-            (info.type == punchTypeFieldwork && info.showContent != punchInfo.value?.showContent)
-        ) {
-            punchInfoLivaData.value = info
+        // 打卡类型变化了或者描述变化了
+        if (info.type != punchInfo.value?.type || info.showContent != punchInfo.value?.showContent) {
+            setPunchInfo(info)
         }
 
     }

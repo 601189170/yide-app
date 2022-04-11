@@ -66,6 +66,8 @@ class TeacherStatisticsActivity :
         viewModel.setDate(currentBean)
         timePopUp.setMillisecond(date.timeInMillis)
 
+        binding.calendarView.setWeekStarWithMon()
+
 
         punchAdapter = object :
             BaseQuickAdapter<SignTimeItem, BaseViewHolder>(R.layout.item_punch_list) {
@@ -77,29 +79,35 @@ class TeacherStatisticsActivity :
                 if (holder.absoluteAdapterPosition == punchAdapter.data.size - 1) {
                     viewBind.lineBottom.hide()
                 }
-                val signStr =
-                    if (item.signResult == "未打卡") getString(R.string.not_punched) else "已打卡"
+                val signType = if (item.signType == 0) getString(R.string.sign_in) else getString(R.string.sign_out)
+                val signStr = if (item.signResult == "未打卡") "$signType${getString(R.string.not_punched)}" else "已打卡"
                 viewBind.tvItemPunchTitle.text = "${item.signTime} $signStr"
 
-                if (item.signInOutside) {
-                    viewBind.tvItemPunchState.text = "外勤"
-                    viewBind.tvItemPunchState.setTextColor(R.color.white.asColor())
-                    viewBind.tvItemPunchState.setBackgroundResource(R.mipmap.attendance_outside_bg)
-                } else if (item.signResult == "迟到") {
-                    viewBind.tvItemPunchState.text = "迟到"
-                    viewBind.tvItemPunchState.setTextColor(R.color.late.asColor())
-                    viewBind.tvItemPunchState.setBackgroundResource(R.drawable.bg_yellow_2)
-                } else if (item.signResult == "早退") {
-                    viewBind.tvItemPunchState.text = "早退"
-                    viewBind.tvItemPunchState.setTextColor(R.color.leave_early.asColor())
-                    viewBind.tvItemPunchState.setBackgroundResource(R.drawable.bg_rad_2)
-                } else if (item.signResult == "未打卡") {
-                    viewBind.tvItemPunchState.text = "未打卡"
-                    viewBind.tvItemPunchState.setTextColor(R.color.not_punch_color.asColor())
-                    viewBind.tvItemPunchState.setBackgroundResource(R.drawable.bg_black_2)
-                } else {
-                    viewBind.tvItemPunchState.text = ""
-                    viewBind.tvItemPunchState.background = null
+                when {
+                    item.signResult == "迟到" || item.signResult == "早退" -> {
+                        viewBind.tvItemPunchState.text = "迟到"
+                        viewBind.tvItemPunchState.setTextColor(R.color.late.asColor())
+                        viewBind.tvItemPunchState.setBackgroundResource(R.drawable.bg_yellow_2)
+                    }
+                    item.signInOutside -> {
+                        viewBind.tvItemPunchState.text = "外勤"
+                        viewBind.tvItemPunchState.setTextColor(R.color.white.asColor())
+                        viewBind.tvItemPunchState.setBackgroundResource(R.mipmap.attendance_outside_bg)
+                    }
+                    /*item.signResult == "早退" -> {
+                        viewBind.tvItemPunchState.text = "早退"
+                        viewBind.tvItemPunchState.setTextColor(R.color.leave_early.asColor())
+                        viewBind.tvItemPunchState.setBackgroundResource(R.drawable.bg_rad_2)
+                    }*/
+                    item.signResult == "未打卡" -> {
+                        viewBind.tvItemPunchState.text = "未打卡"
+                        viewBind.tvItemPunchState.setTextColor(R.color.not_punch_color.asColor())
+                        viewBind.tvItemPunchState.setBackgroundResource(R.drawable.bg_black_2)
+                    }
+                    else -> {
+                        viewBind.tvItemPunchState.text = ""
+                        viewBind.tvItemPunchState.background = null
+                    }
                 }
 
                 if (item.address.isNotEmpty()) {
@@ -140,9 +148,8 @@ class TeacherStatisticsActivity :
                 val monthStr = DateUtils.judgeIsNeedAddZero(bean.month.toString())
                 val dayStr = DateUtils.judgeIsNeedAddZero(bean.day.toString())
                 val requestStr = "${bean.year}-${monthStr}-${dayStr}"
-                val todayRecord =
-                    monthData.dailyRecord.find { recordItem -> recordItem.aboutDate == requestStr }
-
+                val todayRecord = monthData.dailyRecord.find { recordItem -> recordItem.aboutDate == requestStr }
+                binding.teacherAttendanceEmpty.tvDesc.setTextColor(R.color.text_A60.asColor())
                 if (todayRecord == null) {
                     binding.rvTeacherAttendancePunchList.hide()
                     binding.teacherAttendanceEmpty.root.show()
@@ -181,6 +188,7 @@ class TeacherStatisticsActivity :
 
         viewModel.dayRecordData.observe(this) {
             val dayData = it.getOrNull()
+            binding.teacherAttendanceEmpty.tvDesc.setTextColor(R.color.text_A60.asColor())
             if (dayData == null) {
                 binding.rvTeacherAttendancePunchList.hide()
                 binding.teacherAttendanceEmpty.root.show()
@@ -306,8 +314,8 @@ class TeacherStatisticsActivity :
                         val monthStr = DateUtils.judgeIsNeedAddZero(calendar.month.toString())
                         val dayStr = DateUtils.judgeIsNeedAddZero(calendar.day.toString())
                         val requestStr = "${calendar.year}-${monthStr}-${dayStr}"
-                        val todayRecord =
-                            viewModel.dailyRecordList.find { recordItem -> recordItem.aboutDate == requestStr }
+                        val todayRecord = viewModel.dailyRecordList.find { recordItem -> recordItem.aboutDate == requestStr }
+                        binding.teacherAttendanceEmpty.tvDesc.setTextColor(R.color.text_A60.asColor())
                         if (todayRecord == null) {
                             binding.rvTeacherAttendancePunchList.hide()
                             binding.teacherAttendanceEmpty.root.show()

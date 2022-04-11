@@ -14,6 +14,7 @@
         android:layout_marginStart="10dp"
         android:text="签到未打卡"
         android:textColor="#ff333333"
+        android:textFontWeight="500"
         android:textSize="14sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_item_punch_circle_logo"/>
