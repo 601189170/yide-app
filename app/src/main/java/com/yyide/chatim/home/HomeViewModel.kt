@@ -47,7 +47,9 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-
+    /**
+     * 请求首页弹窗
+     */
     fun showDialogMessage(){
         viewModelScope.launch {
             val result = MessagePushNetWork.showHomeDialog()
@@ -59,6 +61,10 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    /**
+     * 确认弹窗消息
+     * @param rId Int
+     */
     fun confirmDetail(rId: Int){
         viewModelScope.launch {
             val map = mutableMapOf<String, Any>()

@@ -174,7 +174,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 ToastUtils.showLong("确认失败");
                 return;
             }
-            Log.d("ss", "aa" + result);
             closeDialog();
         });
 
@@ -234,7 +233,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             previewBinding.cardView.setLayoutParams(layoutParams);*/
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             dialog.setOnDismissListener(dialog -> {
-
+                previewBinding.dialogHomeShowMv.destroy();
             });
             previewBinding.icClose.setOnClickListener(v -> closeDialog());
             if (model.getContentType() == 0) {
