@@ -30,13 +30,15 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
                 android:text="郭老师发布于2020-08-06 14:47"
+                android:maxLines="1"
                 android:textColor="#ff666666"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.5" />
+                app:layout_constraintEnd_toStartOf="@id/publish_content_subEnd_iv"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/publish_content_subEnd_iv"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@drawable/eye"
@@ -106,6 +108,7 @@
                     android:textColor="#ff999999"
                     android:textSize="14sp"
                     android:maxLines="1"
+                    android:gravity="end"
                     android:layout_marginStart="3dp"
                     app:layout_constraintStart_toEndOf="@id/publish_content_notify_range_tv"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -148,6 +151,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="#ff999999"
                     android:textSize="14sp"
+                    android:gravity="end"
                     android:layout_marginStart="3dp"
                     app:layout_constraintStart_toEndOf="@id/publish_content_notify_people_tv"
                     app:layout_constraintEnd_toEndOf="parent"
