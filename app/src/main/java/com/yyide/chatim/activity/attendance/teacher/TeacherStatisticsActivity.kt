@@ -85,7 +85,7 @@ class TeacherStatisticsActivity :
 
                 when {
                     item.signResult == "迟到" || item.signResult == "早退" -> {
-                        viewBind.tvItemPunchState.text = "迟到"
+                        viewBind.tvItemPunchState.text = item.signResult
                         viewBind.tvItemPunchState.setTextColor(R.color.late.asColor())
                         viewBind.tvItemPunchState.setBackgroundResource(R.drawable.bg_yellow_2)
                     }
