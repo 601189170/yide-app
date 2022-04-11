@@ -53,10 +53,12 @@ class PhotoViewActivity : Activity() {
     private fun initView() {
         val path = intent.getStringExtra("path")
         if (intent.getStringArrayListExtra("paths") != null) {
-            imgList = intent.getStringArrayListExtra("paths")
+            imgList = intent.getStringArrayListExtra("paths") as MutableList<String>
         }
         if (!TextUtils.isEmpty(path)) {
-            imgList.add(path)
+            if (path != null) {
+                imgList.add(path)
+            }
         }
         //如果有多个图片就显示数量标
         if (imgList.isNotEmpty() && imgList.size > 1) {

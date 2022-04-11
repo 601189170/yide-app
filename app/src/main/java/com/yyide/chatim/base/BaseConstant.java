@@ -72,6 +72,13 @@ public class BaseConstant {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+    //考勤
+    public static final String ATTENDANCE_HTML = "http://192.168.3.158:8007/#/attendance";
+    //周报
+    public static final String WEEKLY_HTML = "http://192.168.3.158:8007/#/weekly";
+    //通行
+    public static final String CURRENT_HTML = "http://192.168.3.158:8007/#/current";
+
     //通知公告模板地址
 //    public static final String TEMPLATE_URL_DEV = "http://192.168.3.147:8005/#/notice/edit/";
     public static final String TEMPLATE_URL_RELEASE = "https://wap.edu.1d1j.cn/#/notice/edit/";

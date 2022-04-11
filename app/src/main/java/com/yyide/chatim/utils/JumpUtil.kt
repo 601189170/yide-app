@@ -25,7 +25,7 @@ import org.greenrobot.eventbus.EventBus
 object JumpUtil {
 
     @JvmStatic
-    fun appOpen(mActivity: Context, type: String, url: String?) {
+    fun appOpen(mActivity: Context, type: String, url: String?, title : String) {
         when (type) {
             "编辑" -> {
                 val intent = Intent(mActivity, AppManagerActivity::class.java)
@@ -43,19 +43,6 @@ object JumpUtil {
                 val intent = Intent(mActivity, TableActivity::class.java)
                 mActivity.startActivity(intent)
             }
-            "考勤" -> {
-                if (SpData.getClassInfo() != null) {
-                    if (!SpData.getIdentityInfo().staffIdentity()) {
-                        val intent = Intent(mActivity, StatisticsActivity::class.java)
-                        mActivity.startActivity(intent)
-                    } else {
-                        val intent = Intent(mActivity, AttendanceActivity::class.java)
-                        mActivity.startActivity(intent)
-                    }
-                } else {
-                    ToastUtils.showShort("名下无班级考勤");
-                }
-            }
             "待办" -> {
                 EventBus.getDefault()
                     .post(EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1))
@@ -70,49 +57,31 @@ object JumpUtil {
             "校历" -> {
                 mActivity.startActivity(Intent(mActivity, SchoolCalendarActivity::class.java))
             }
+            "学生考勤" -> {
+                WebViewActivity.startTitle(mActivity, getHttpUrl(BaseConstant.ATTENDANCE_HTML), title)
+            }
+            "教师考勤" -> {
+                WebViewActivity.startTitle(mActivity, getHttpUrl(BaseConstant.ATTENDANCE_HTML), title)
+            }
             "通行统计" -> {
-                //0全部 1学生 2教职工 3没有权限
-                val permission =
-                    MMKV.defaultMMKV().decodeString(MMKVConstant.YD_GATE_DATA_ACCESS_PERMISSION)
-                when (permission) {
-                    "0" -> {
-                        mActivity.startActivity(
-                            Intent(
-                                mActivity,
-                                GateStudentStaffActivity::class.java
-                            )
-                        )
-                    }
-                    "1" -> {
-                        if (SpData.getIdentityInfo().staffIdentity()) {
-                            mActivity.startActivity(
-                                Intent(
-                                    mActivity,
-                                    GateClassTeacherActivity::class.java
-                                )
-                            )
-                        } else {
-                            mActivity.startActivity(
-                                Intent(
-                                    mActivity,
-                                    GateDetailInfoActivity::class.java
-                                )
-                            )
-                        }
-                    }
-                    else -> {
-                        ToastUtils.showShort("没有权限")
-                    }
-                }
+                WebViewActivity.startTitle(mActivity, getHttpUrl(BaseConstant.CURRENT_HTML), title)
+            }
+            "周报" -> {
+                WebViewActivity.startTitle(mActivity, getHttpUrl(BaseConstant.WEEKLY_HTML), title)
             }
             else -> if ("#" == url) {
                 ToastUtils.showShort("暂无权限")
             } else {
-                val intent = Intent(mActivity, WebViewActivity::class.java)
-                intent.putExtra("url", url + Base64Utils.getData())
-                mActivity.startActivity(intent)
-//                ToastUtils.showShort("当前版本不支持该功能")
+                WebViewActivity.startTitle(mActivity, url + Base64Utils.getData(), title)
             }
+        }
+    }
+
+    private fun getHttpUrl(url: String): String {
+        return if (SpData.getIdentityInfo().staffIdentity()) {
+            "$url?identity=tea"
+        } else {
+            "$url?identity=par"
         }
     }
 }

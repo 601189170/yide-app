@@ -86,7 +86,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         myRecyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view1, position) -> {
             final MyAppListRsp.DataBean item = (MyAppListRsp.DataBean) adapter.getItem(position);
-            JumpUtil.appOpen(requireContext(), item.getName(), item.getPath());
+            JumpUtil.appOpen(requireContext(), item.getName(), item.getPath(), item.getName());
         });
 
         //菜单列表

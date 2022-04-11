@@ -53,6 +53,17 @@ public class GlideUtil {
                 .into(imageView);
     }
 
+    public static void loadImageHead(Context context, String url, ImageView imageView, int radius) {
+        RequestOptions roundOptions = new RequestOptions()
+                .transform(new RoundedCorners(radius));
+        Glide.with(context).load(url)
+                .centerCrop()
+                .apply(roundOptions)
+                .placeholder(R.drawable.default_head)
+                .error(R.drawable.default_head)
+                .into(imageView);
+    }
+
     //圆图
     public static void loadCircleImage(Context context, String url, ImageView imageView) {
         Glide.with(context).load(url)

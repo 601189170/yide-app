@@ -139,6 +139,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         EventBus.getDefault().register(this);
         childFragmentManager = getChildFragmentManager();
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
+        mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         replaceFragment();
         initBanner();
@@ -199,7 +200,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 NoticeContentActivity.Companion.startGo(requireContext(), data);
             }
         });
-
 
     }
 

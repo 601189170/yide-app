@@ -43,13 +43,13 @@ public class AliasUtil {
 
     private static void addAlias(CloudPushService mPushService, String alias) {
         final String deviceId = mPushService.getDeviceId();
-        Log.e(TAG, "addAlias: add alias "+alias + " deviceId "+deviceId);
+        Log.e(TAG, "addAlias: add alias " + alias + " deviceId " + deviceId);
         mPushService.addAlias(alias, new CommonCallback() {
             @Override
             public void onSuccess(String s) {
                 Log.e(TAG, "onSuccess: add alias " + alias + " success. " + s);
                 //添加设备到服务器
-                addUserEquipmentInfo(deviceId,alias);
+                addUserEquipmentInfo(deviceId, alias);
             }
 
             @Override
@@ -67,11 +67,12 @@ public class AliasUtil {
      * @param alias
      */
     private static void delAlias(CloudPushService mPushService, String alias) {
-        Log.e(TAG, "delAlias: remove alias "+alias);
+        Log.e(TAG, "delAlias: remove alias " + alias);
         mPushService.removeAlias(alias, new CommonCallback() {
             @Override
             public void onSuccess(String s) {
                 Log.e(TAG, "remove alias " + alias + " success\n");
+                //ddAlias(mPushService, alias);
             }
 
             @Override
@@ -88,9 +89,9 @@ public class AliasUtil {
     public static void syncAliases() {
         CloudPushService mPushService = PushServiceFactory.getCloudPushService();
         //保证当前账号的当前身份
-        final String userid = String.valueOf(SpData.getIdentityInfo().getId());
+        final String userid = SpData.getUser().getIdentityUserId();
         final String deviceId = mPushService.getDeviceId();
-        Log.e(TAG, "userid: " + userid+",deviceId："+deviceId);
+        Log.e(TAG, "userid: " + userid + ",deviceId：" + deviceId);
         mPushService.listAliases(new CommonCallback() {
             @Override
             public void onSuccess(String response) {
@@ -103,6 +104,8 @@ public class AliasUtil {
                         Log.e(TAG, "syncAliases， aliases contains userid " + contains);
                         if (!contains) {
                             addAlias(mPushService, userid);
+                        } else {
+                            delAlias(mPushService, userid);
                         }
                     }
 
@@ -137,8 +140,9 @@ public class AliasUtil {
 
     /**
      * 添加设备
+     *
      * @param registrationId 设备id
-     * @param alias 别名 userid
+     * @param alias          别名 userid
      */
     private static void addUserEquipmentInfo(String registrationId, String alias) {
         DingApiStores mDingApiStores = AppClient.getDingRetrofit().create(DingApiStores.class);
@@ -162,10 +166,11 @@ public class AliasUtil {
 
     /**
      * 删除设备
+     *
      * @param id userid
      */
     private static void delUserEquipmentInfo(String id) {
-        Log.d(TAG, "delUserEquipmentInfo: "+id );
+        Log.d(TAG, "delUserEquipmentInfo: " + id);
         DingApiStores mDingApiStores = AppClient.getDingRetrofit().create(DingApiStores.class);
         mDingApiStores.delUserEquipmentInfo(id).enqueue(new Callback<ResultBean>() {
             @Override
@@ -182,6 +187,7 @@ public class AliasUtil {
 
     /**
      * 获取用户设备列表分页
+     *
      * @param id
      */
     private static void getUserEquipmentInfoPage(String id) {

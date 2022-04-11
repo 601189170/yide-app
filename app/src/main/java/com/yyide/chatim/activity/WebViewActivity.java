@@ -100,7 +100,7 @@ public class WebViewActivity extends BaseActivity {
         pb_webview = findViewById(R.id.pb_webview);
         tvTitle = findViewById(R.id.title);
         imageView = findViewById(R.id.back_layout);
-        if (currentUrl.contains("/classcardapp/") || currentUrl.contains("canteenReservation/home")) {
+        if (currentUrl.contains("?identity=") || currentUrl.contains("/classcardapp/") || currentUrl.contains("canteenReservation/home")) {
             view.setVisibility(View.GONE);
         } else {
             view.setVisibility(View.VISIBLE);
@@ -192,7 +192,6 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-
                 if (SpData.getLogin() != null) {
                     Log.d("onPageFinished", "SpData.User().getToken(:" + SpData.getLogin().accessToken);
                     mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.getLogin().accessToken + "')");

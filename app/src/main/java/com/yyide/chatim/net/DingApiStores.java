@@ -195,7 +195,7 @@ public interface DingApiStores {
 
     //添加用户设备基本信息
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
-    @POST("/management/cloud-system/user/equipment/addUserEquipmentInfo")
+    @POST("cloud/v2/machine/createUserEquipmentInfo")
     Call<ResultBean> addUserEquipmentInfo(@Body RequestBody info);
 
     /**
@@ -206,7 +206,7 @@ public interface DingApiStores {
      * @return call
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/management/cloud-system/user/equipment/delUserEquipmentInfo")
+    @GET("cloud/v2/machine/deleteUserEquipmentInfo")
     Call<ResultBean> delUserEquipmentInfo(@Query("id") String id);
 
     /**
@@ -921,7 +921,6 @@ public interface DingApiStores {
     /**
      * 获取【家长/学生】人员信息
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getParticipant
-     *
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
 //    @POST("/management/cloud-system/app/schedule/getParticipant")

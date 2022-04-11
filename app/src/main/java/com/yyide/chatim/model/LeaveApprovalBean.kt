@@ -31,12 +31,9 @@ data class LeaveApprovalBean(
     )
 
     data class LeaveCommitBean(
-        @JSONField(name = "id")
         var id: String = "",
-        @JSONField(name = "name")
         var name: String = "",
         var approverName: String = "",
-        @JSONField(name = "userId")
         var userId: String = "",
         var avatar: String = "",
         var branapprList: List<Branappr>? = null,
@@ -68,6 +65,7 @@ data class LeaveApprovalBean(
         var name: String = "",
         @JSONField(name = "procApprId")
         var procApprId: String = "",
+        var isCheck: Boolean = false,
         @JSONField(name = "avatar")
         var avatar: String = ""
     ) : Serializable

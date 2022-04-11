@@ -33,7 +33,7 @@ public class AppAdapter extends BaseQuickAdapter<AppItemBean.DataBean.RecordsBea
         }
         grid.setOnItemClickListener((parent, view1, position1, id) -> {
             AppItemBean.DataBean.RecordsBean.ListBean item = adapter.getItem(position1);
-            JumpUtil.appOpen(getContext(), item.getName(), item.getPath());
+            JumpUtil.appOpen(getContext(), item.getName(), item.getPath(), item.getName());
         });
     }
 }

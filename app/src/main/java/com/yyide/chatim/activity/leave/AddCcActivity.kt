@@ -4,6 +4,7 @@ import android.text.TextUtils
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
+import com.blankj.utilcode.util.SizeUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
@@ -53,6 +54,7 @@ class AddCcActivity : KTBaseActivity<ActivityAddBinding>(ActivityAddBinding::inf
             override fun convert(holder: BaseViewHolder, item: LeaveApprovalBean.Cc) {
                 val viewbinding = ItemLeaveApprovaBinding.bind(holder.itemView)
                 viewbinding.tvName.text = item.name
+                viewbinding.cbCheck.isChecked = item.isCheck
                 viewbinding.itemView.setOnClickListener {
                     viewbinding.cbCheck.isChecked = !viewbinding.cbCheck.isChecked
                     if (viewbinding.cbCheck.isChecked) {
@@ -66,7 +68,7 @@ class AddCcActivity : KTBaseActivity<ActivityAddBinding>(ActivityAddBinding::inf
                 if (holder.absoluteAdapterPosition == (dataList.size - 1)) {
                     viewbinding.viewLine.visibility = View.INVISIBLE
                 }
-                GlideUtil.loadImageHead(context, item.avatar, viewbinding.ivHead)
+                GlideUtil.loadImageHead(context, item.avatar, viewbinding.ivHead, 12)
             }
         }
 }

@@ -4,6 +4,7 @@ import android.text.TextUtils
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
+import com.blankj.utilcode.util.SizeUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
@@ -11,6 +12,7 @@ import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.databinding.ActivityAddBinding
 import com.yyide.chatim.databinding.ItemLeaveApprovaBinding
 import com.yyide.chatim.model.LeaveApprovalBean
+import com.yyide.chatim.model.PostWorkBean
 import com.yyide.chatim.utils.GlideUtil
 
 /**
@@ -23,6 +25,7 @@ class AddApprovalActivity : KTBaseActivity<ActivityAddBinding>(ActivityAddBindin
     private var itemSelect = LeaveApprovalBean.Branappr()
     private var dataList = mutableListOf<LeaveApprovalBean.Branappr>()
     private var isApproval = false
+    private var itemId = ""
     override fun initView() {
         super.initView()
         binding.top.backLayout.setOnClickListener { finish() }
@@ -32,9 +35,11 @@ class AddApprovalActivity : KTBaseActivity<ActivityAddBinding>(ActivityAddBindin
         binding.recyclerView.adapter = mAdapter
         intent.apply {
             val json = getStringExtra("dataList")
+            itemId = getStringExtra("itemId") as String
             isApproval = getBooleanExtra("isApproval", false)
             if (!TextUtils.isEmpty(json)) {
                 dataList = JSON.parseArray(json, LeaveApprovalBean.Branappr::class.java)
+                position = getPosition(dataList)
                 mAdapter.setList(dataList)
             }
         }
@@ -48,6 +53,15 @@ class AddApprovalActivity : KTBaseActivity<ActivityAddBinding>(ActivityAddBindin
         }
     }
 
+    private fun getPosition(dataList: List<LeaveApprovalBean.Branappr>): Int {
+        dataList.forEachIndexed { index, branappr ->
+            if (branappr.id == itemId) {
+                return index
+            }
+        }
+        return -1
+    }
+
     private var position = -1
 
     private var mAdapter =
@@ -58,11 +72,10 @@ class AddApprovalActivity : KTBaseActivity<ActivityAddBinding>(ActivityAddBindin
                 viewbinding.tvName.text = item.name
 //                binding.tvDesc.text = item.get
                 viewbinding.cbCheck.isChecked = position == getItemPosition(item)
-
                 if (holder.absoluteAdapterPosition == (dataList.size - 1)) {
                     viewbinding.viewLine.visibility = View.INVISIBLE
                 }
-                GlideUtil.loadImageHead(context, item.avatar, viewbinding.ivHead)
+                GlideUtil.loadImageHead(context, item.avatar, viewbinding.ivHead, 12)
                 viewbinding.itemView.setOnClickListener {
                     viewbinding.cbCheck.isChecked = !viewbinding.cbCheck.isChecked
                     itemSelect = item

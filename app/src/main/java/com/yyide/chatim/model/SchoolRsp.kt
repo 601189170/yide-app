@@ -58,6 +58,8 @@ data class UserBean(
     var name: String = "",
     @JSONField(name = "phone")
     var phone: String = "",
+    @JSONField(name = "identityUserId")
+    var identityUserId: String = "",
     @JSONField(name = "username")
     var username: String = ""
 ) : Serializable

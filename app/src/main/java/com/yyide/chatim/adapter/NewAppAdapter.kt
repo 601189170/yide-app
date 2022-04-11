@@ -37,7 +37,7 @@ class NewAppAdapter() : BaseQuickAdapter<NewAppRspJ, BaseViewHolder>(R.layout.ap
         grid.setOnItemClickListener { _, _, position, _ ->
             val gridItem = adapter.getItem(position)
             LogUtil.e("gridItem.name"+gridItem.name + "gridItem.appurl"+gridItem.appurl)
-            JumpUtil.appOpen(context, gridItem.name, gridItem.appurl)
+            JumpUtil.appOpen(context, gridItem.name, gridItem.appurl, gridItem.name)
         }
     }
 
