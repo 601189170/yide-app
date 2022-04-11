@@ -155,6 +155,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
     private void initView() {
         viewModel.getAcceptMessage().observe(requireActivity(), acceptMessageBean -> {
+            mSwipeRefreshLayout.setRefreshing(false);
             if (!acceptMessageBean.getAcceptMessage().isEmpty()) {
                 bannerAdapter.setDatas(acceptMessageBean.getAcceptMessage());
             } else {
@@ -168,7 +169,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
 
         viewModel.getConfirmInfo().observe(requireActivity(), result -> {
-            mSwipeRefreshLayout.setRefreshing(false);
             isClose = false;
             dismiss();
             if (!result) {
@@ -179,7 +179,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         });
 
         viewModel.getDialogInfo().observe(requireActivity(), noticeMessage -> {
-            mSwipeRefreshLayout.setRefreshing(false);
             if (noticeMessage.getId() != 0) {
                 showNotice(noticeMessage);
             }
@@ -208,7 +207,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
 //        mvpPresenter.getUserSchool();
         viewModel.requestAcceptMessage();
-        viewModel.showDialogMessage();
     }
 
     private Dialog dialog;
