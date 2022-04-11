@@ -57,11 +57,11 @@ class OperationCreatWorkActivity :
 
     var classListBean: MutableList<CreateWorkBean.ClassesListDTO> = ArrayList()
 
-    private val requestServerTimeFormat = "yyyy-MM-dd"
+    private val requestServerTimeFormat = "yyyy-MM-dd HH:mm"
 
     private val timeFormat = "MM月dd日 HH:mm E"
     private val showAllTimeFormat = "MM月dd日 E"
-    private val allDayTimeFormat = "yyyy-MM-dd"
+    private val allDayTimeFormat = "yyyy-MM-dd HH:mm"
 
     var RESULT_LOAD_IMAGE=1
 
@@ -80,7 +80,6 @@ class OperationCreatWorkActivity :
         viewModel.getSubject()
 
         viewModel.getClassList()
-
 
         viewModel.ispost.observe(this){
             if (it.isSuccess){
@@ -247,14 +246,19 @@ class OperationCreatWorkActivity :
             return
         }
 
+
         var  bean= CreateWorkBean()
         getclassesList();
         bean.title=binding.workname.text.toString()
         bean.content=binding.edit.text.toString()
         //图片地址
 //        bean.imgPaths=imglist.toString()
-        bean.feedbackEndTime=binding.feedbackEndTime.text.toString()
-        bean.releaseTime=binding.releaseTime.text.toString()
+        if (!binding.feedbackEndTime.text.toString().equals("无")){
+            bean.feedbackEndTime=binding.feedbackEndTime.text.toString()
+        }
+        if (!binding.releaseTime.text.toString().equals("无")){
+            bean.releaseTime=binding.releaseTime.text.toString()
+        }
         bean.subjectId=viewModel.subjectId.value
         bean.classesList=classListBean
         viewModel.createWork(bean)
@@ -347,7 +351,7 @@ class OperationCreatWorkActivity :
 
         mAdapter.data.forEach(){
 
-            if (!TextUtils.isEmpty(it.classesId)&&!TextUtils.isEmpty(it.timetableId)&&!TextUtils.isEmpty(it.timetableTime)){
+            if (!TextUtils.isEmpty(it.classesId)){
                 var  bean=CreateWorkBean.ClassesListDTO()
                 bean.classesId=it.classesId
                 bean.timetableId=it.timetableId
@@ -355,7 +359,7 @@ class OperationCreatWorkActivity :
                 bean2list.add(bean)
                 classListBean=bean2list
             }else{
-                ToastUtils.showShort("请关联班级或科目")
+                ToastUtils.showShort("请关联班级")
                 return
             }
         }

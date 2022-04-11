@@ -126,7 +126,8 @@ class LostFoundFragment :
                     viewBind.itemMessageContentTitleTv.text = item.title
                     val subStr = "${item.identityUserName}发布于"
                     viewBind.itemMessageContentSubTv.text = subStr
-                    viewBind.itemMessageContentSubTimeTv.text = item.timerDate
+                    val simpleTimeStr = DateUtils.formatTime(item.timerDate,"yyyy-MM-dd HH:mm:ss","yyyy-MM-dd HH:mm")
+                    viewBind.itemMessageContentSubTimeTv.text = simpleTimeStr
                     viewBind.itemMessageContentStateIv.remove()
                     viewBind.itemMessageContentStateTv.remove()
                     viewBind.itemMessageContentTitleIv.remove()
@@ -136,6 +137,8 @@ class LostFoundFragment :
                             if (TimeUtil.isDateOver3(item.timerDate)) {
                                 viewBind.itemMessageContentStateTv.text = "已发布"
                                 viewBind.itemMessageContentStateTv.setTextColor(R.color.black11.asColor())
+                                val subTimeStr = "$simpleTimeStr 浏览${item.viewUsers} 确认${item.confirmUsers}/${item.receiveUsers}"
+                                viewBind.itemMessageContentSubTimeTv.text = subTimeStr
                                 viewBind.itemMessageContentSubTimeTv.setTextColor(R.color.black10.asColor())
                             } else {
                                 viewBind.itemMessageContentStateTv.text = "待发布"

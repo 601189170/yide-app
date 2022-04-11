@@ -103,6 +103,11 @@ class NoticeContentActivity:KTBaseActivity<ActivityNoticeContentBinding>(Activit
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.noticeContentMv.destroy()
+    }
+
 
 
 }

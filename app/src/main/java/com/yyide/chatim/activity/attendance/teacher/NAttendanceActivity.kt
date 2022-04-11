@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.attendance.teacher
 
 import android.Manifest
 import android.app.AlertDialog
+import android.app.Application
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -118,9 +119,11 @@ class NAttendanceActivity :
             BaseQuickAdapter<SignTimeListItem, BaseViewHolder>(R.layout.item_punch_record) {
             override fun convert(holder: BaseViewHolder, item: SignTimeListItem) {
                 val binding = ItemPunchRecordBinding.bind(holder.itemView)
-                val signTypeStr = if (item.signType == 0) getString(R.string.sign_in) else getString(R.string.sign_out)
+                val signTypeStr =
+                    if (item.signType == 0) getString(R.string.sign_in) else getString(R.string.sign_out)
                 val timeStr = "$signTypeStr${item.shouldSignTime}"
-                val signStr = if (item.signResult == "未打卡") getString(R.string.not_punched) else "已打卡"
+                val signStr =
+                    if (item.signResult == "未打卡") getString(R.string.not_punched) else "已打卡"
                 val actualSignTime = "${item.actualSignTime}$signStr"
                 binding.tvPunchTime.text = timeStr
                 binding.tvPunchState.text = actualSignTime
@@ -129,7 +132,7 @@ class NAttendanceActivity :
                         binding.tvPunchStateLogo.text = ""
                         binding.tvPunchStateLogo.setBackgroundResource(R.mipmap.attendance_success_logo)
                     }
-                    "迟到","早退" -> {
+                    "迟到", "早退" -> {
                         binding.tvPunchStateLogo.text = item.signResult
                         binding.tvPunchStateLogo.setTextColor(R.color.late.asColor())
                         binding.tvPunchStateLogo.setBackgroundResource(R.drawable.bg_yellow_2)
@@ -158,15 +161,12 @@ class NAttendanceActivity :
             hideLoading()
             val data = it.getOrNull()
             data?.let { bean ->
-                binding.tvTeacherAttendanceJob.text = bean.groupName
+                binding.tvTeacherAttendanceJob.text = String.format(getString(R.string.attendance_group),bean.groupName)
                 binding.tvTeacherAttendanceName.text = bean.personName
                 punchRecordAdapter.setList(bean.signTimeList)
                 if (!bean.canSign) {
                     viewModel.setPunchInfo(
-                        PunchInfoBean(
-                            viewModel.punchTypeNOT,
-                            bean.signMessage ?: ""
-                        )
+                        PunchInfoBean(viewModel.punchTypeNOT, bean.signMessage ?: "")
                     )
                 } else {
                     //viewModel.judgePunchFunction(viewModel.saveLocationInfo!!)

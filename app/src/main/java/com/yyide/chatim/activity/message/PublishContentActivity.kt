@@ -137,4 +137,9 @@ class PublishContentActivity :
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.publishContentWv.destroy()
+    }
+
 }

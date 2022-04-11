@@ -356,6 +356,7 @@
     <string name="watch_rule">查看规则</string>
     <string name="warn_out_of_range">超出管理员指定打卡范围</string>
     <string name="warn_out_of_wifi">未连接到指定Wi-Fi</string>
+    <string name="warn_not_in">不在考勤组内,请联系管理员处理</string>
     <string name="sign_in">签到</string>
     <string name="sign_out">签退</string>
     <string name="not_punched">未打卡</string>
@@ -364,6 +365,7 @@
     <string name="can_punched_tip">签到打卡</string>
     <string name="attendance_in_range">已进入考勤范围:  %s</string>
     <string name="attendance_in_wifi">已连接指定wifi:  %s</string>
+    <string name="attendance_group">考勤组: %s</string>
 
     <string name="attendance_time_title">考勤时间</string>
     <string name="range_title">打卡范围</string>

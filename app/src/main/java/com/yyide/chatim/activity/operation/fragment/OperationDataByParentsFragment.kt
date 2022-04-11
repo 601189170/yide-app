@@ -137,12 +137,29 @@ class OperationDataByParentsFragment : Fragment() , SwipeRefreshLayout.OnRefresh
                 viewBind.tvTime.text=item.releaseTime
                 viewBind.tvContent.text=item.title
                 //家长视角展示
-                viewBind.postStuatsLeft.text=""
-                viewBind.postStuatsRihgt.text=""
-                viewBind.noPost.text=""
-                viewBind.postStuatsLeft.visibility=View.VISIBLE
-                viewBind.postStuatsRihgt.visibility=View.VISIBLE
-                viewBind.noPost.visibility=View.VISIBLE
+
+                if (item.completion==1){
+                    viewBind.postStuatsLeft.text="已完成"
+                }else{
+                    viewBind.postStuatsLeft.text="未完成"
+                }
+                if (item.completion==1){
+                    viewBind.postStuatsRihgt.text="很简单"
+                }else if(item.completion==2){
+                    viewBind.postStuatsRihgt.text="有难度"
+                } else{
+                    viewBind.postStuatsRihgt.text="非常难"
+                }
+                if (item.isFeedback){
+                    viewBind.postStuatsLeft.visibility=View.VISIBLE
+                    viewBind.postStuatsRihgt.visibility=View.VISIBLE
+                    viewBind.noPost.visibility=View.GONE
+                }else{
+                    viewBind.postStuatsLeft.visibility=View.GONE
+                    viewBind.postStuatsRihgt.visibility=View.GONE
+                    viewBind.noPost.visibility=View.VISIBLE
+                }
+
                 //家长视角隐藏
                 viewBind.tvHaveRead.visibility=View.GONE
                 viewBind.tvComplete.visibility=View.GONE

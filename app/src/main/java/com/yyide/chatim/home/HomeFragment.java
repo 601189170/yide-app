@@ -139,8 +139,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         EventBus.getDefault().register(this);
         childFragmentManager = getChildFragmentManager();
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
-        mSwipeRefreshLayout.setRefreshing(true);
-        mSwipeRefreshLayout.setRefreshing(false);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         replaceFragment();
         initBanner();
@@ -169,17 +167,18 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
 
         viewModel.getConfirmInfo().observe(requireActivity(), result -> {
+            mSwipeRefreshLayout.setRefreshing(false);
             isClose = false;
             dismiss();
             if (!result) {
                 ToastUtils.showLong("确认失败");
                 return;
             }
-            Log.d("ss", "aa" + result);
             closeDialog();
         });
 
         viewModel.getDialogInfo().observe(requireActivity(), noticeMessage -> {
+            mSwipeRefreshLayout.setRefreshing(false);
             if (noticeMessage.getId() != 0) {
                 showNotice(noticeMessage);
             }
@@ -208,6 +207,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void onRefresh() {
         EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
 //        mvpPresenter.getUserSchool();
+        viewModel.requestAcceptMessage();
+        viewModel.showDialogMessage();
     }
 
     private Dialog dialog;
@@ -232,7 +233,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             previewBinding.cardView.setLayoutParams(layoutParams);*/
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             dialog.setOnDismissListener(dialog -> {
-
+                previewBinding.dialogHomeShowMv.destroy();
             });
             previewBinding.icClose.setOnClickListener(v -> closeDialog());
             if (model.getContentType() == 0) {

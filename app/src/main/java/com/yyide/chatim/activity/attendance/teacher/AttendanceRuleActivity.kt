@@ -65,7 +65,7 @@ class AttendanceRuleActivity:KTBaseActivity<ActivityAttendanceV2RuleBinding>(Act
             binding.viewEmpty.root.hide()
 
             binding.tvTeacherAttendanceRuleName.text = it.personName
-            binding.tvTeacherAttendanceJob.text = it.groupName
+            binding.tvTeacherAttendanceJob.text = String.format(getString(R.string.attendance_group),it.groupName)
 
             val timeRuleSb = StringBuilder()
             for ((i,workStr) in it.workDay.withIndex()){
@@ -81,7 +81,9 @@ class AttendanceRuleActivity:KTBaseActivity<ActivityAttendanceV2RuleBinding>(Act
                     timeRuleSb.append("、")
                 }
             }
-            timeRuleSb.append(" 休息")
+            if (!it.restDay.isNullOrEmpty()) {
+                timeRuleSb.append(" 休息")
+            }
             binding.tvTeacherAttendanceRuleTime.text = timeRuleSb.toString()
 
             val sb = StringBuilder()
