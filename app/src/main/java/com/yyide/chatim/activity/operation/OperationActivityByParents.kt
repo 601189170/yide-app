@@ -68,6 +68,7 @@ class OperationActivityByParents :
         viewModel.endTime.observe(this) {
             binding.layoutTime.tvEndTime.text=it
         }
+
         binding.layoutTime.tvStartTime.setOnClickListener(View.OnClickListener {
             DatePickerDialogUtil.showDateTime(
                     this,
@@ -126,9 +127,7 @@ class OperationActivityByParents :
                     listclassssub= list as MutableList<selectParentStudent>
                     Log.e("TAG", "onCreate: "+JSON.toJSONString(listclassssub) )
                     if (list != null) {
-                        binding.tv1.text=listclassssub.get(0).name
-                        viewModel.studentId.value=listclassssub.get(0).id
-                        viewModel.classesId.value=listclassssub.get(0).classesId
+
                         Log.e("TAG", "viewModel.name: "+JSON.toJSONString(listclassssub.get(0).name) )
                         Log.e("TAG", "viewModel.studentId: "+JSON.toJSONString(listclassssub.get(0).id) )
                         Log.e("TAG", "viewModel.classesId: "+JSON.toJSONString(listclassssub.get(0).classesId) )
@@ -139,6 +138,10 @@ class OperationActivityByParents :
 
                         setFirstRightData(list2)
 
+                        binding.tv1.text=listclassssub.get(0).name
+                        viewModel.studentId.value=listclassssub.get(0).id
+                        viewModel.studentId.postValue(listclassssub.get(0).id)
+                        viewModel.classesId.value=listclassssub.get(0).classesId
 
 
                         viewModel.startTime.value=binding.layoutTime.tvStartTime.text.toString()
