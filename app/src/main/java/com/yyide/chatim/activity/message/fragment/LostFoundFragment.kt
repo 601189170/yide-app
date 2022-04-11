@@ -120,6 +120,8 @@ class LostFoundFragment :
                     val viewBind = ItemMessageContentBinding.bind(holder.itemView)
                     if (viewModel.selectContent?.id != viewModel.noticeTypeByReceive && item.isTop) {
                         viewBind.itemMessageContentTopIv.show()
+                    }else{
+                        viewBind.itemMessageContentTopIv.hide()
                     }
                     viewBind.itemMessageContentTitleTv.text = item.title
                     val subStr = "${item.identityUserName}发布于"
@@ -130,7 +132,6 @@ class LostFoundFragment :
                     viewBind.itemMessageContentTitleIv.remove()
                     when (viewModel.selectContent?.id) {
                         viewModel.noticeTypeByPublish -> {
-                            viewBind.itemMessageContentTitleIv.remove()
                             viewBind.itemMessageContentStateTv.show()
                             if (TimeUtil.isDateOver3(item.timerDate)) {
                                 viewBind.itemMessageContentStateTv.text = "已发布"

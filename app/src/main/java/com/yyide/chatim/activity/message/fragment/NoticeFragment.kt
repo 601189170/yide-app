@@ -124,6 +124,8 @@ class NoticeFragment :
                     val viewBind = ItemMessageContentBinding.bind(holder.itemView)
                     if (viewModel.selectContent?.id != viewModel.noticeTypeByReceive && item.isTop) {
                         viewBind.itemMessageContentTopIv.show()
+                    }else{
+                        viewBind.itemMessageContentTopIv.hide()
                     }
                     viewBind.itemMessageContentTitleTv.text = item.title
                     val subStr = "${item.identityUserName}发布于"
@@ -137,6 +139,7 @@ class NoticeFragment :
                                 viewBind.itemMessageContentTitleIv.show()
                             }
                             if (item.isNeedConfirm) {
+                                viewBind.itemMessageContentStateTv.show()
                                 if (item.isConfirm) {
                                     viewBind.itemMessageContentStateIv.hide()
                                     viewBind.itemMessageContentStateTv.text = "已确认"
@@ -153,15 +156,13 @@ class NoticeFragment :
                         }
                         viewModel.noticeTypeByPublish -> {
                             viewBind.itemMessageContentStateTv.show()
-                            viewBind.itemMessageContentStateIv.show()
+                            viewBind.itemMessageContentStateIv.remove()
                             viewBind.itemMessageContentTitleIv.remove()
                             if (TimeUtil.isDateOver3(item.timerDate)) {
-                                viewBind.itemMessageContentStateIv.hide()
                                 viewBind.itemMessageContentStateTv.text = "已发布"
                                 viewBind.itemMessageContentStateTv.setTextColor(R.color.black11.asColor())
                                 viewBind.itemMessageContentSubTimeTv.setTextColor(R.color.black10.asColor())
                             } else {
-                                viewBind.itemMessageContentStateIv.hide()
                                 viewBind.itemMessageContentStateTv.text = "待发布"
                                 viewBind.itemMessageContentStateTv.setTextColor(R.color.not_publish_color.asColor())
                                 viewBind.itemMessageContentSubTimeTv.setTextColor(R.color.not_publish_color.asColor())
