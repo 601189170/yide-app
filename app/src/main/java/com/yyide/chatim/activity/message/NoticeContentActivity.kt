@@ -3,8 +3,8 @@ package com.yyide.chatim.activity.message
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Html
 import androidx.activity.viewModels
+import com.bumptech.glide.Glide
 import com.yyide.chatim.activity.message.viewmodel.NoticeContentViewModel
 import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.databinding.ActivityNoticeContentBinding
@@ -65,7 +65,7 @@ class NoticeContentActivity:KTBaseActivity<ActivityNoticeContentBinding>(Activit
             binding.noticeContentSubTv.text = subStr
 
             if (data.contentType == 1){
-                GlideUtil.loadImage(this,GlideUtil.DataUrl(data.contentImg),binding.noticeContentIv)
+                Glide.with(this).load(GlideUtil.DataUrl(data.contentImg)).centerInside().into(binding.noticeContentIv)
             }else{
                 binding.noticeContentMv.loadDataWithBaseURL(
                     null,

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import androidx.activity.viewModels
+import com.bumptech.glide.Glide
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.message.viewmodel.NoticeContentViewModel
 import com.yyide.chatim.activity.message.viewmodel.PublishContentViewModel
@@ -74,11 +75,7 @@ class PublishContentActivity :
             binding.publishContentSubEndTv.text = "浏览 ${data.viewUsers}"
 
             if (data.contentType == 1) {
-                GlideUtil.loadImage(
-                    this,
-                    GlideUtil.DataUrl(data.contentImg),
-                    binding.publishContentIv
-                )
+                Glide.with(this).load(GlideUtil.DataUrl(data.contentImg)).centerInside().into(binding.publishContentIv)
             } else {
                 binding.publishContentWv.loadDataWithBaseURL(
                     null,
