@@ -52,7 +52,7 @@
                     android:id="@+id/out_or_in"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="80%"
+                    android:text="0%"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_18" />
@@ -83,7 +83,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="88%"
+                    android:text="0%"
                     android:id="@+id/time"
                     android:textStyle="bold"
                     android:textColor="@color/white"
@@ -115,7 +115,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="90%"
+                    android:text="0%"
                     android:id="@+id/course"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_18" />

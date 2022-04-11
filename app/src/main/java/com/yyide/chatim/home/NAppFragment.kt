@@ -16,8 +16,6 @@ import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.NappFragmentBinding
 import com.yyide.chatim.model.EventMessage
-import com.yyide.chatim.model.NewAppRspJ
-import com.yyide.chatim.model.NewAppRspJ.AppsDTO
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -30,7 +28,6 @@ class NAppFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var binding: NappFragmentBinding
     private val viewModel: NewAppViewModel by viewModels()
     private var mNewAppAdapter: NewAppAdapter? = null
-    private var refresh = false
     private var isClick = false
     private val mTitles: MutableList<String> = ArrayList()
     override fun onCreateView(
@@ -43,35 +40,69 @@ class NAppFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
         getData()
+        initView()
+        //getData()
     }
 
     private fun initView() {
         mNewAppAdapter = NewAppAdapter()
         binding.newappRecycle.layoutManager = LinearLayoutManager(mActivity)
-        binding.newappTablayout.tabMode = TabLayout.MODE_SCROLLABLE
         binding.newappRecycle.adapter = mNewAppAdapter
         mNewAppAdapter!!.setEmptyView(R.layout.empty)
-        binding.swipeRefreshLayout.setOnRefreshListener(this)
-        binding.swipeRefreshLayout.isRefreshing = refresh
+        binding.newappTablayout.tabMode = TabLayout.MODE_SCROLLABLE
         binding.swipeRefreshLayout.setColorSchemeColors(this.resources.getColor(R.color.colorPrimary))
+        binding.swipeRefreshLayout.setOnRefreshListener(this)
+        binding.swipeRefreshLayout.isRefreshing = true
+        binding.swipeRefreshLayout.isRefreshing = false
         binding.newappRecycle.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == 0)
                     isClick = false
+
             }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (!isClick) {
-                    val l = recyclerView.layoutManager as LinearLayoutManager?
-                    val firstPosition = l!!.findFirstVisibleItemPosition()
-                    binding.newappTablayout.setScrollPosition(firstPosition, 0f, true)
-                }
+                //if (!isClick) {
+                val l = recyclerView.layoutManager as LinearLayoutManager?
+                val firstPosition = l!!.findFirstVisibleItemPosition()
+                binding.newappTablayout.setScrollPosition(firstPosition, 0f, true)
+                //}
             }
         })
+
+        // binding.newappTablayout.addTab()
+    }
+
+    private fun getData() {
+        viewModel.getApplist()
+        binding.swipeRefreshLayout.isRefreshing = false
+        viewModel.nAppList.observe(requireActivity()) {
+            if (it.isSuccess) {
+                val data = it.getOrNull()
+                data?.let { dataList ->
+                    mTitles.clear()
+                    /*  if (!dataList.isNullOrEmpty()) {
+                          if (dataList.first().categoryName != "常用应用") {
+                              val often = NewAppRspJ()
+                              often.categoryName = "常用应用"
+                              dataList.add(0, often)
+                          }
+                      }*/
+                    mNewAppAdapter?.setList(dataList)
+                    for (i in it.getOrNull()!!) {
+                        mTitles.add(i.categoryName)
+                        val newTab = binding.newappTablayout.newTab()
+                        newTab.text = i.categoryName
+                        binding.newappTablayout.addTab(newTab)
+                    }
+                }
+
+            }
+
+        }
         binding.newappTablayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 isClick = true
@@ -95,47 +126,21 @@ class NAppFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
+
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
+                //第一次进入页面不调用recyclerview滑动设置不走onTabselected
+                onTabSelected(tab)
             }
 
         })
 
     }
 
-    private fun getData() {
-        viewModel.getApplist()
-        viewModel.nAppList.observe(requireActivity()) {
-            if (it.isSuccess) {
-                val data = it.getOrNull()
-                data?.let { dataList ->
-                    mTitles.clear()
-                    if (!dataList.isNullOrEmpty()) {
-                        if (dataList.first().categoryName != "常用应用") {
-                            val often = NewAppRspJ()
-                            often.categoryName = "常用应用"
-                            dataList.add(0, often)
-                        }
-                    }
-                    mNewAppAdapter?.setList(dataList)
-                    for (i in it.getOrNull()!!) {
-                        mTitles.add(i.categoryName)
-                        val newTab = binding.newappTablayout.newTab()
-                        newTab.text = i.categoryName
-                        binding.newappTablayout.addTab(newTab)
-                    }
-                }
-
-            }
-
-        }
-        binding.swipeRefreshLayout.isRefreshing = false
-    }
-
 
     override fun onRefresh() {
-        refresh = true
+        //refresh = true
         EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_APPCENTER_LIST, ""))
     }
 

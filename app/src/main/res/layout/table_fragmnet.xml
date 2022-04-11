@@ -203,12 +203,14 @@
                 android:text="秒"
                 android:textColor="#ff333333"
                 android:textSize="13sp"
+                android:id="@+id/textview4"
                 app:layout_constraintBottom_toBottomOf="@+id/tvSecond"
                 app:layout_constraintStart_toEndOf="@+id/tvSecond"
                 app:layout_constraintTop_toTopOf="@+id/tvSecond" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/table_group"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:constraint_referenced_ids="time" />

@@ -37,13 +37,19 @@ class BannerStudentAttendanceAdapter(datas: MutableList<AttendanceStudentRsp.Att
         size: Int
     ) {
         var bind = ItemStudentAttendanceBinding.bind(holder!!.itemView)
-        bind.studentName.text = "${data!!.name}"
-        bind.normalOut.text = "${data!!.normalNumOut}"
-        bind.normalEvent.text = "${data!!.normalNumEvent}"
-        bind.normalCourse.text = "${data!!.normalNumCourse}"
-        bind.unusualOut.text = "${data!!.errorNumOut}"
-        bind.unusualEvent.text = "${data!!.errorNumEvent}"
-        bind.unusualCourse.text = "${data!!.errorNumCourse}"
+        if (data != null) {
+            bind.studentName.text = if (data.name != null) "${data.name}" else ""
+            bind.normalOut.text = if (data.normalNumOut != null) "${data.normalNumOut}" else "0"
+            bind.normalEvent.text =
+                if (data.normalNumEvent != null) "${data.normalNumEvent}" else "0"
+            bind.normalCourse.text =
+                if (data.normalNumCourse != null) "${data.normalNumCourse}" else "0"
+            bind.unusualOut.text = if (data.errorNumOut != null) "${data.errorNumOut}" else "0"
+            bind.unusualEvent.text =
+                if (data.errorNumEvent != null) "${data.errorNumEvent}" else "0"
+            bind.unusualCourse.text =
+                if (data.errorNumCourse != null) "${data.errorNumCourse}" else "0"
+        }
     }
 
     class BannerViewHolder(@NonNull view: View) : RecyclerView.ViewHolder(view) {

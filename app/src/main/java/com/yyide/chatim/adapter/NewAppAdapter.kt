@@ -7,6 +7,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.model.NewAppRspJ
 import com.yyide.chatim.utils.JumpUtil
+import com.yyide.chatim.utils.LogUtil
 
 /**
  * @ProjectName : yideapp
@@ -21,6 +22,7 @@ class NewAppAdapter() : BaseQuickAdapter<NewAppRspJ, BaseViewHolder>(R.layout.ap
         title.text = item.categoryName;
         var adapter = NewAppItemAdapter()
         grid.adapter = adapter
+        /* 常用应用编辑按钮
         if (item.categoryName == "常用应用") {
             item.apps = ArrayList()
             var mCommon = NewAppRspJ.AppsDTO()
@@ -28,12 +30,13 @@ class NewAppAdapter() : BaseQuickAdapter<NewAppRspJ, BaseViewHolder>(R.layout.ap
             mCommon.id = ""
             mCommon.name = "编辑"
             item.apps.add(mCommon)
-        }
+        }*/
         if (item.apps != null && item.apps.isNotEmpty()) {
             adapter.notifyData(item.apps);
         }
         grid.setOnItemClickListener { _, _, position, _ ->
             val gridItem = adapter.getItem(position)
+            LogUtil.e("gridItem.name"+gridItem.name + "gridItem.appurl"+gridItem.appurl)
             JumpUtil.appOpen(context, gridItem.name, gridItem.appurl)
         }
     }

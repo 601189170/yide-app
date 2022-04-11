@@ -37,9 +37,11 @@ class BannerTeacherAttendanceAdapter(datas: MutableList<AttendanceTeacherRsp.Att
         size: Int
     ) {
         val bind = ItemTeacherAttendanceBinding.bind(holder!!.itemView)
-        bind.outOrIn.text = "${data!!.normalRateOut}"
-        bind.time.text = "${data!!.normalRateTime}"
-        bind.course.text = "${data!!.normalRateCourse}"
+        if (data != null) {
+            bind.outOrIn.text =  if (data.normalRateOut != null ) "${data!!.normalRateOut}" else "0"
+            bind.time.text =  if (data.normalRateTime != null ) "${data!!.normalRateTime}" else "0"
+            bind.course.text =  if (data.normalRateCourse != null ) "${data!!.normalRateCourse}" else "0"
+        }
     }
 
     class BannerViewHolder(@NonNull view: View) : RecyclerView.ViewHolder(view) {

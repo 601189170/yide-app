@@ -44,7 +44,8 @@ public class AttendanceStudentPresenter extends BasePresenter<AttendanceStudentV
             public void onSuccess(AttendanceStudentRsp rsp) {
                 List<AttendanceStudentRsp.AttendanceAdapterBean> bean = null;
                 if (!rsp.getData().isEmpty() &&
-                        rsp.data.size() > 0) {
+                        rsp.data.size() > 0 &&
+                rsp.getCode() == BaseConstant.REQUEST_SUCCESS) {
                     bean = new ArrayList<>();
                     List<AttendanceStudentRsp.DataDTO> data = rsp.getData();
                     for (int i = 0; i < data.size(); i++) {
@@ -70,8 +71,11 @@ public class AttendanceStudentPresenter extends BasePresenter<AttendanceStudentV
                             bean.add(studentatt);
                         }
                     }
+                    mvpView.getStudentAttendanceSuccess(bean);
                 }
-                mvpView.getStudentAttendanceSuccess(bean);
+                else {
+                    mvpView.getAttendanceFail("无数据");
+                }
             }
 
             @Override
@@ -98,7 +102,8 @@ public class AttendanceStudentPresenter extends BasePresenter<AttendanceStudentV
             public void onSuccess(AttendanceTeacherRsp rsp) {
                 List<AttendanceTeacherRsp.AttendanceTeacherAdapterBean> teacherList = null;
                 if (!rsp.getData().isEmpty() &&
-                        rsp.getData().size() > 0) {
+                        rsp.getData().size() > 0 &&
+                        rsp.getCode() == BaseConstant.REQUEST_SUCCESS) {
                     List<AttendanceTeacherRsp.DataDTO> data = rsp.getData();
                     teacherList = new ArrayList<>();
                     AttendanceTeacherRsp.AttendanceTeacherAdapterBean teacherbean = new AttendanceTeacherRsp.AttendanceTeacherAdapterBean();
@@ -116,13 +121,15 @@ public class AttendanceStudentPresenter extends BasePresenter<AttendanceStudentV
                         }
                     }
                     teacherList.add(teacherbean);
+                    mvpView.getTeacherAttendanceSuccess(teacherList);
+                }else {
+                    mvpView.getAttendanceFail("无数据");
                 }
-                mvpView.getTeacherAttendanceSuccess(teacherList);
             }
 
             @Override
             public void onFailure(String msg) {
-                mvpView.getAttendanceFail(msg);
+
             }
 
             @Override

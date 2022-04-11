@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jude.rollviewpager.RollPagerView;
+import com.jude.rollviewpager.hintview.IconHintView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.ClassesHomeworkAnnounAdapter;
@@ -66,7 +67,8 @@ public class WorkFragment extends BaseMvpFragment<WorkPresenter> implements Work
 
     private void initView() {
         indexAdapter = new IndexAdapter();
-        rollPagerView.setHintView(null);
+        rollPagerView.setHintView(new IconHintView(getContext(),R.mipmap.icon_banner_select_green,
+                R.mipmap.icon_banner_normal_green));
 
         announAdapter = new ClassesHomeworkAnnounAdapter(rollPagerView);
         rollPagerView.setPlayDelay(5000);

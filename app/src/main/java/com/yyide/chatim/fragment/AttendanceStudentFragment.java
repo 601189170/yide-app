@@ -51,13 +51,13 @@ public class AttendanceStudentFragment extends BaseMvpFragment<AttendanceStudent
     private void initView() {
 
         mViewBinding.attendanceBanner.addBannerLifecycleObserver(this);
-        DrawableIndicator indicator = new DrawableIndicator(getContext(), R.mipmap.icon_banner_nomral, R.mipmap.icon_banner_select);
+        DrawableIndicator indicator = new DrawableIndicator(getContext(), R.mipmap.icon_banner_normal_white50, R.mipmap.icon_banner_select_white);
         //获取前一天的时间
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1);
         String format = formatter.format(calendar.getTime());
-        if (SpData.getIdentityInfo().staffIdentity()) {
+        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().staffIdentity()) {
             mvpPresenter.getAttendTeacherBanner(format, format);
         } else {
             mvpPresenter.getAttendStudentBanner(format, format);
@@ -80,11 +80,12 @@ public class AttendanceStudentFragment extends BaseMvpFragment<AttendanceStudent
 
     @Override
     public void getStudentAttendanceSuccess(List<AttendanceStudentRsp.AttendanceAdapterBean> rsp) {
-        if (rsp.size()>0) {
-            mViewBinding.bannerConstrain.setVisibility(View.GONE);
-        } else {
+        if (!rsp.isEmpty()) {
             mViewBinding.bannerConstrain.setVisibility(View.VISIBLE);
             mViewBinding.attendanceBanner.setAdapter(new BannerStudentAttendanceAdapter(rsp));
+        } else {
+            mViewBinding.bannerConstrain.setVisibility(View.GONE);
+
         }
 
     }
@@ -92,15 +93,12 @@ public class AttendanceStudentFragment extends BaseMvpFragment<AttendanceStudent
     @Override
     public void getTeacherAttendanceSuccess(List<AttendanceTeacherRsp.AttendanceTeacherAdapterBean> rsp) {
         if (rsp.isEmpty()) {
-            LogUtil.e("getTeacherAttendanceSuccess  null");
-            mViewBinding.bannerConstrain.setVisibility(View.GONE);
-
-        } else {
-            LogUtil.e("getTeacherAttendanceSuccess  "+rsp.size());
             mViewBinding.bannerConstrain.setVisibility(View.VISIBLE);
             mViewBinding.attendanceBanner.setAdapter(new BannerTeacherAttendanceAdapter(rsp));
-
+        } else {
+            mViewBinding.bannerConstrain.setVisibility(View.GONE);
         }
+
 
     }
 }

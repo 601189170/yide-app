@@ -9,8 +9,7 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-       >
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/newapp_parent"
@@ -42,15 +41,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/newapp_title"
                 app:layout_scrollFlags="scroll|snap|enterAlways"
-                app:tabIndicatorColor="@color/punch_normal"
-                app:tabIndicatorHeight="@dimen/dp_2"
                 app:tabIndicator="@drawable/tab_indicator"
-                app:tl_indicator_width="@dimen/dp_10"
-                app:tl_tab_padding="@dimen/dp_30"
-                app:tl_tab_space_equal="true"
-                app:tl_textSelectColor="@color/punch_normal"
-                app:tl_textUnselectColor="@color/text_999999"
-                app:tl_textsize="@dimen/text_15" />
+                app:tabIndicatorHeight="@dimen/dp_2"
+                app:tabMaxWidth="200dp"
+                app:tabMinWidth="@dimen/dp_20"
+                app:tabPaddingEnd="@dimen/dp_20"
+                app:tabPaddingStart="@dimen/dp_20"
+                app:tabSelectedTextColor="@color/punch_normal" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/newapp_recycle"

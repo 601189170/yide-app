@@ -56,9 +56,20 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     TextView tvMinute;
     @BindView(R.id.tvSecond)
     TextView tvSecond;
+    @BindView(R.id.textView44)
+    TextView textView44;
+    @BindView(R.id.textview2)
+    TextView textview2;
+    @BindView(R.id.textview3)
+    TextView textview3;
+    @BindView(R.id.textview4)
+    TextView textview4;
+    @BindView(R.id.view)
+    View mView;
     @BindView(R.id.table_group)
     Group table_group;
     private View mBaseView;
+    private boolean isHasTab = false;
 
     private static final String TAG = "TableFragment";
 
@@ -126,17 +137,38 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         if (dataBean != null) {
             setTableMsg(dataBean);
         } else if (isTable) {
-            setDefaultView("今日课已上完");
+            setDefaultView("今日课已上完", isHasTab);
         } else {
-            setDefaultView("今日无课");
+            setDefaultView("今日无课", isHasTab);
         }
     }
 
-    private void setDefaultView(String string) {
+    private void setDefaultView(String string, Boolean isShow) {
         className.setText(string);
-        subjectName.setText("-");
-        time.setText("");
-//        tips.setText("");
+        if (isShow) {
+            time.setVisibility(View.VISIBLE);
+            table_next.setVisibility(View.VISIBLE);
+            textView44.setVisibility(View.VISIBLE);
+            textview2.setVisibility(View.VISIBLE);
+            textview3.setVisibility(View.VISIBLE);
+            textview4.setVisibility(View.VISIBLE);
+            tvSecond.setVisibility(View.VISIBLE);
+            tvHours.setVisibility(View.VISIBLE);
+            tvMinute.setVisibility(View.VISIBLE);
+            mView.setVisibility(View.VISIBLE);
+        } else {
+            time.setVisibility(View.GONE);
+            mView.setVisibility(View.GONE);
+            table_next.setVisibility(View.GONE);
+            textView44.setVisibility(View.GONE);
+            textview2.setVisibility(View.GONE);
+            textview3.setVisibility(View.GONE);
+            textview4.setVisibility(View.GONE);
+            tvSecond.setVisibility(View.GONE);
+            tvHours.setVisibility(View.GONE);
+            tvMinute.setVisibility(View.GONE);
+        }
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -176,33 +208,46 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
 
     @Override
     public void SelectSchByTeaidFail(String msg) {
-        setDefaultView("今日无课");
+        LogUtil.e("msg===" + msg);
+        setDefaultView("今日无课", isHasTab);
     }
 
 
     @Override
     public void SelectHomeTimeTbale(HomeTimeTable msg) {
-        className.setText(msg.data.name);
-        subjectName.setText(msg.data.subjectName);
-        time.setText(msg.data.startTime + "-" + msg.data.endTime);
+        if (msg.code == BaseConstant.REQUEST_SUCCESS) {
+            if (msg.data != null) {
+                isHasTab = true;
+                className.setText(msg.data.name);
+                subjectName.setText(msg.data.subjectName);
+                time.setText(msg.data.startTime + "-" + msg.data.endTime);
+                setDefaultView(msg.data.name, isHasTab);
+                new CountDownTimer(msg.data.sec, 1000) {
+                    public void onTick(long millisUntilFinished) {
+                        long myhour = (millisUntilFinished / 1000) / 3600;
+                        long myminute = ((millisUntilFinished / 1000) - myhour * 3600) / 60;
+                        long mysecond = millisUntilFinished / 1000 - myhour * 3600
+                                - myminute * 60;
+                        tvHours.setText("" + (int) myhour);
+                        tvMinute.setText("" + (int) myminute);
+                        tvSecond.setText("" + (int) mysecond);
+                    }
 
-        new CountDownTimer(msg.data.sec, 1000) {
-            public void onTick(long millisUntilFinished) {
-                long myhour = (millisUntilFinished / 1000) / 3600;
-                long myminute = ((millisUntilFinished / 1000) - myhour * 3600) / 60;
-                long mysecond = millisUntilFinished / 1000 - myhour * 3600
-                        - myminute * 60;
-                tvHours.setText("" + (int) myhour);
-                tvMinute.setText("" + (int) myminute);
-                tvSecond.setText("" + (int) mysecond);
-            }
+                    public void onFinish() {
+                        //TODO 正在上课逻辑
+                        //setDefaultView("正在上课");
+                    }
+                }.start();
 
-            public void onFinish() {
-                //TODO 提示上课时间到了
+            } else {
+                setDefaultView("今日课已上完", isHasTab);
             }
-        }.start();
+        } else {
+            setDefaultView("今日无课", isHasTab);
+        }
 
     }
-
-
 }
+
+
+
