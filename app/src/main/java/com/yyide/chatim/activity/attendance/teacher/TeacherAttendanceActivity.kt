@@ -2,7 +2,6 @@ package com.yyide.chatim.activity.attendance.teacher
 
 import android.Manifest
 import android.app.AlertDialog
-import android.app.Application
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -21,7 +20,6 @@ import com.yyide.chatim.activity.attendance.teacher.viewmodel.TeacherAttendanceV
 import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.databinding.ActivityAttendanceTeacherBinding
 import com.yyide.chatim.databinding.ItemPunchRecordBinding
-import com.yyide.chatim.dialog.YearMonthSelectDialog
 import com.yyide.chatim.model.attendance.teacher.PunchInfoBean
 import com.yyide.chatim.model.attendance.teacher.SignTimeListItem
 import com.yyide.chatim.utils.*
@@ -33,7 +31,7 @@ import com.yyide.chatim.utils.*
  * @date 2022/3/28 15:29
  * @description v2版本的考勤activity
  */
-class NAttendanceActivity :
+class TeacherAttendanceActivity :
     KTBaseActivity<ActivityAttendanceTeacherBinding>(ActivityAttendanceTeacherBinding::inflate) {
 
     private val viewModel by viewModels<TeacherAttendanceViewModel>()
@@ -48,7 +46,7 @@ class NAttendanceActivity :
 
     companion object {
         fun startGo(context: Context) {
-            val intent = Intent(context, NAttendanceActivity::class.java)
+            val intent = Intent(context, TeacherAttendanceActivity::class.java)
             context.startActivity(intent)
         }
     }
@@ -234,11 +232,11 @@ class NAttendanceActivity :
         binding.clTeacherAttendanceTop.backLayout.setOnClickListener { finish() }
 
         binding.tvTeacherAttendanceStatistics.setOnClickListener {
-            TeacherStatisticsActivity.startGo(this@NAttendanceActivity)
+            TeacherStatisticsActivity.startGo(this@TeacherAttendanceActivity)
         }
 
         binding.tvTeacherAttendanceRule.setOnClickListener {
-            AttendanceRuleActivity.startGo(this@NAttendanceActivity)
+            AttendanceRuleActivity.startGo(this@TeacherAttendanceActivity)
         }
 
         binding.clTeacherAttendancePunch.setOnClickListener {

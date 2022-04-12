@@ -765,7 +765,7 @@
 
         <!--教师考勤-->
         <activity android:name=".activity.attendance.teacher.TeacherStatisticsActivity" />
-        <activity android:name=".activity.attendance.teacher.NAttendanceActivity" />
+        <activity android:name=".activity.attendance.teacher.TeacherAttendanceActivity" />
         <activity android:name=".activity.attendance.teacher.AttendanceRuleActivity" />
 
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,16 +11,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -34,7 +30,7 @@ import com.youth.banner.indicator.DrawableIndicator;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.activity.attendance.teacher.NAttendanceActivity;
+import com.yyide.chatim.activity.attendance.teacher.TeacherAttendanceActivity;
 import com.yyide.chatim.activity.leave.AskForLeaveActivity;
 import com.yyide.chatim.activity.meeting.MeetingHomeActivity;
 import com.yyide.chatim.activity.message.MessagePushActivity;
@@ -43,7 +39,6 @@ import com.yyide.chatim.activity.operation.OperationActivityByParents;
 import com.yyide.chatim.activity.operation.OperationActivityByTeacher;
 import com.yyide.chatim.activity.table.TableActivity;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.DialogHomeShowNoticeBinding;
 import com.yyide.chatim.dialog.LeftMenuPop;
@@ -57,15 +52,13 @@ import com.yyide.chatim.fragment.TableFragment;
 import com.yyide.chatim.fragment.WorkFragment;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
-import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
-import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.SchoolRsp;
-import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.model.UserBean;
 import com.yyide.chatim.model.message.AcceptMessageItem;
 import com.yyide.chatim.model.message.HomeNoticeDetaiBean;
 import com.yyide.chatim.presenter.HomeFragmentPresenter;
 import com.yyide.chatim.utils.GlideUtil;
+import com.yyide.chatim.utils.JumpUtil;
 import com.yyide.chatim.utils.TakePicUtil;
 import com.yyide.chatim.view.HomeFragmentView;
 
@@ -79,7 +72,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import kotlin.Result;
 
 
 public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> implements HomeFragmentView, SwipeRefreshLayout.OnRefreshListener {
@@ -317,10 +309,10 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 startActivity(new Intent(getContext(), MeetingHomeActivity.class));
                 break;
             case R.id.tvMenu4:
-                startActivity(new Intent(getContext(), TableActivity.class));
+                //startActivity(new Intent(getContext(), TableActivity.class));
                 break;
             case R.id.tvMenu5:
-                startActivity(new Intent(getContext(), NAttendanceActivity.class));
+                JumpUtil.appOpen(requireContext(),"周报","","周报");
                 break;
             default:
                 break;
