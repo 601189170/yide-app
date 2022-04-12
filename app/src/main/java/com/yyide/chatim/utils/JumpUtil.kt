@@ -10,6 +10,7 @@ import com.yyide.chatim.activity.WebViewActivity
 import com.yyide.chatim.activity.attendance.teacher.TeacherAttendanceActivity
 import com.yyide.chatim.activity.leave.AskForLeaveActivity
 import com.yyide.chatim.activity.meeting.MeetingHomeActivity
+import com.yyide.chatim.activity.message.MessagePushActivity
 import com.yyide.chatim.activity.newnotice.NewNoticeAnnouncementActivity
 import com.yyide.chatim.activity.schedule.SchoolCalendarActivity
 import com.yyide.chatim.base.BaseConstant
@@ -26,8 +27,7 @@ object JumpUtil {
                 mActivity.startActivity(intent)
             }
             "通知公告" -> {
-                val intent = Intent(mActivity, NewNoticeAnnouncementActivity::class.java)
-                mActivity.startActivity(intent)
+                MessagePushActivity.startGo(mActivity)
             }
             "请假" -> {
                 val intent = Intent(mActivity, AskForLeaveActivity::class.java)
@@ -63,6 +63,10 @@ object JumpUtil {
             "周报" -> {
                 WebViewActivity.startTitle(mActivity, getHttpUrl(BaseConstant.WEEKLY_HTML), title)
             }
+            "信息发布" ->{
+                MessagePushActivity.startGo(mActivity)
+            }
+
             else -> if ("#" == url) {
                 ToastUtils.showShort("暂无权限")
             } else {

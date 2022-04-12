@@ -302,8 +302,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 startActivity(new Intent(getContext(), AskForLeaveActivity.class));
                 break;
             case R.id.tvMenu2:
-                //startActivity(new Intent(getContext(), MessagePushActivity.class));
-                MessagePushActivity.Companion.startGo(requireContext());
+                //MessagePushActivity.Companion.startGo(requireContext());
                 break;
             case R.id.tvMenu3:
                 startActivity(new Intent(getContext(), MeetingHomeActivity.class));
