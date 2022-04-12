@@ -75,9 +75,13 @@ class TeacherStatisticsActivity :
                 val viewBind = ItemPunchListBinding.bind(holder.itemView)
                 if (holder.absoluteAdapterPosition == 0) {
                     viewBind.lineTop.hide()
+                }else{
+                    viewBind.lineTop.show()
                 }
                 if (holder.absoluteAdapterPosition == punchAdapter.data.size - 1) {
                     viewBind.lineBottom.hide()
+                }else{
+                    viewBind.lineBottom.show()
                 }
                 val signType = if (item.signType == 0) getString(R.string.sign_in) else getString(R.string.sign_out)
                 val signStr = if (item.signResult == "未打卡") "$signType${getString(R.string.not_punched)}" else "已打卡"
@@ -408,24 +412,18 @@ class TeacherStatisticsActivity :
     }
 
     private fun judgeShowColor(dailyRecord: DailyRecordItem): Int {
-        if (dailyRecord.hasAbsenceFromWork || !dailyRecord.hasRecord) {
-            return R.color.leave_early.asColor()
+
+
+        if (dailyRecord.hasAbnormal || dailyRecord.hasBeLate || dailyRecord.hasLeaveEarly) {
+            return R.color.late.asColor()
         }
 
         if (dailyRecord.hasAskForLeave) {
             return R.color.not_punch_color.asColor()
         }
 
-        if (dailyRecord.hasAbnormal) {
-            return R.color.late.asColor()
-        }
-
-        if (dailyRecord.hasLeaveEarly) {
-            return R.color.late.asColor()
-        }
-
-        if (dailyRecord.hasBeLate) {
-            return R.color.late.asColor()
+        if (dailyRecord.hasAbsenceFromWork) {
+            return R.color.leave_early.asColor()
         }
 
         return R.color.punch_normal.asColor()
