@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.operation
 
 import android.os.Bundle
 import android.text.Html
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -38,7 +39,7 @@ class OperationDetailActivityByParents :
     private lateinit var viewModel: OperationParentsViewModel
     var id=""
     val fragments = mutableListOf<Fragment>()
-    var ispost:Boolean?=false
+    var ispost=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(OperationParentsViewModel::class.java)
@@ -49,7 +50,14 @@ class OperationDetailActivityByParents :
         binding.recyclerView.layoutManager =GridLayoutManager(this, 4)
 //        PhotoViewActivity.start(this, imgPath)
         binding.recyclerView.addItemDecoration(SpacesItemDecoration(SpacesItemDecoration.dip2px(5f)))
-
+        viewModel.ispost.observe(this){
+            if (it.isSuccess){
+                ToastUtils.showShort("反馈成功")
+                finish()
+            }else{
+                ToastUtils.showShort("反馈失败")
+            }
+        }
 
 
         binding.tvExpand.setOnClickListener(View.OnClickListener {
@@ -61,10 +69,13 @@ class OperationDetailActivityByParents :
             if (it.isSuccess){
                 val result = it.getOrNull()
                 if (result!=null){
-                    ispost=result.isFeedback
+                    ispost=result.feedbackData.isFeedback
                     Log.e("TAG", "getSchoolWorkRsp: "+JSON.toJSONString(result))
-                    binding.tvClassName.text=result.classesName+result.subjectName
-                    if (result.isFeedback){
+                    binding.tvClassName.text=result.classesTimetable.classesName
+                    binding.tvTitle.text=result.title
+                    binding.tvContent.text=result.content
+                    binding.tvGl.text=result.classesTimetable.subjectName
+                    if (!result.feedbackData.isFeedback){
                         //已反馈
                         binding.compelete.isEnabled=false
                         binding.nocompelete.isEnabled=false
@@ -84,22 +95,23 @@ class OperationDetailActivityByParents :
                     }
                     setCheckTop()
                     setCheckDonw()
-                    if (result.completion==1){
+                    if (result.feedbackData.completion==1){
                         binding.compelete.isChecked=true
                     }else{
                         binding.nocompelete.isChecked=true
                     }
-                    if (result.difficulty==1){
+                    if (result.feedbackData.difficulty==1){
                         binding.nd1.isChecked=true
-                    }else if (result.difficulty==2){
+                    }else if (result.feedbackData.difficulty==2){
                         binding.nd2.isChecked=true
-                    }else if (result.difficulty==3){
+                    }else if (result.feedbackData.difficulty==3){
                         binding.nd3.isChecked=true
                     }
 
 
                     //设置图片
-//                    mAdapter.setList(result.imgPaths.split(","))
+                    if(!TextUtils.isEmpty(result.imgPaths))
+                    mAdapter.setList(result.imgPaths.split(","))
 
                 }
             }
@@ -128,8 +140,8 @@ class OperationDetailActivityByParents :
             binding.nd3.isChecked=true
         })
         binding.btnCommit.setOnClickListener(View.OnClickListener {
-            var compelete:Int?=0
-            var difficulty:Int?=0
+            var compelete=0
+            var difficulty=0
             if (binding.compelete.isChecked){
                 compelete=1
             }else{
@@ -142,7 +154,8 @@ class OperationDetailActivityByParents :
             }else if (binding.nd3.isChecked){
                 difficulty=3
             }
-            difficulty?.let { it1 -> ispost?.let { it2 -> viewModel.CommitFeedback(id,compelete, it1, it2) } }
+            viewModel.CommitFeedback(id,compelete,difficulty,ispost)
+//            difficulty?.let { it1 -> ispost?.let { it2 -> viewModel.CommitFeedback(id,compelete, it1, it2) } }
         })
         initParentsLayaout()
 
@@ -181,7 +194,7 @@ class OperationDetailActivityByParents :
     override fun initView() {
         binding.top.title.text = getString(R.string.operation_detail_title)
         binding.top.backLayout.setOnClickListener { finish() }
-        binding.top.ivRight.visibility=View.VISIBLE
+        binding.top.ivRight.visibility=View.GONE
 
 
     }

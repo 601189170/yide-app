@@ -108,7 +108,7 @@ class OperationCreatWorkActivity :
                         val dateTimes = defaultTwoTimeListOfDateTime(date)
                         val time1 = dateTimes[0]
                         val toptime = time1.toStringTime("MM/dd")
-                        binding.workname.text=toptime+postsubjectList[0].name+"作业"
+                        binding.workname.setText(toptime+postsubjectList[0].name+"作业")
                     }
                 }
             }
@@ -218,7 +218,7 @@ class OperationCreatWorkActivity :
                 val dateTimes = defaultTwoTimeListOfDateTime(date)
                 val time1 = dateTimes[0]
                 val toptime = time1.toStringTime("MM/dd")
-                binding.workname.text=toptime+it.name+"作业"
+                binding.workname.setText(toptime+it.name+"作业")
             },postsubjectList,viewModel.subjectId.value)
         })
 
@@ -267,13 +267,14 @@ class OperationCreatWorkActivity :
 
     private val mAdapterimg =
             object :
-                    BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_operation_work_img) {
+                    BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_operation_work_img2) {
                 override fun convert(holder: BaseViewHolder, item: String) {
                     val viewBind = ItemOperationWorkImgBinding.bind(holder.itemView)
                     GlideUtil.loadImageRadius(baseContext, item, viewBind.img, SizeUtils.dp2px(4f))
                     viewBind.img.setOnClickListener(View.OnClickListener {
                         PhotoViewActivity.start(this@OperationCreatWorkActivity, item)
                     })
+
 
                 }
             }
@@ -307,9 +308,9 @@ class OperationCreatWorkActivity :
                         if(!TextUtils.isEmpty(item.classesId)){
                             val intent = Intent(this@OperationCreatWorkActivity, TableActivity2::class.java)
                             intent.putExtra("classesId",item.classesId)
-
-                            var teacherids= SpData.getIdentityInfo().id.toString()
-                            intent.putExtra("teacherIds",teacherids)
+                            //保证当前账号的当前身份
+                            val userid = SpData.getUser().identityUserId
+                            intent.putExtra("teacherIds",userid)
                             intent.putExtra("subjectId",viewModel.subjectId.value)
                             intent.putExtra("className",item.className)
                             index=getItemPosition(item)

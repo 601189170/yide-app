@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.alibaba.fastjson.JSON;
 import com.contrarywind.adapter.WheelAdapter;
 import com.contrarywind.view.WheelView;
 import com.yyide.chatim.R;
@@ -98,6 +99,9 @@ public class postClassDataPop extends PopupWindow {
         }
         time1.setOnItemSelectedListener(index -> {
             date1 = (getClassList) classAdapter.stringList.get(index);
+            subjectAdatper = new TimeWheelAdapter2(getsubjectData(classAdapter.stringList.get(index).getChildren()));
+            time2.setAdapter(subjectAdatper);
+            date2 = (getClassList.Children) subjectAdatper.stringList.get(0);
         });
 
 
@@ -115,6 +119,7 @@ public class postClassDataPop extends PopupWindow {
 
         time2.setOnItemSelectedListener(index -> {
             date2 = (getClassList.Children) subjectAdatper.stringList.get(index);
+            Log.e("TAG", "setOnItemSelectedListener: "+ JSON.toJSONString(date2));
         });
 
         popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
@@ -142,6 +147,8 @@ public class postClassDataPop extends PopupWindow {
                 bean.ljname=date1.getName();
                 bean.classId=date2.getId();
                 bean.className=date2.getName();
+                Log.e("TAG", "bean: "+ JSON.toJSONString(bean));
+
                 mSelectDateListener.onSelectDateListener(bean);
             }
             if (popupWindow != null && popupWindow.isShowing()) {

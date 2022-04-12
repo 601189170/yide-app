@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.operation
 
 import android.os.Bundle
 import android.text.Html
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -71,6 +72,7 @@ class OperationDetailActivity :
                     initViewPager(type0,type1,type2,type3)
 
                     //设置图片
+                    if(!TextUtils.isEmpty(result.imgPaths))
                     mAdapter.setList(result.imgPaths.split(","))
 
                 }

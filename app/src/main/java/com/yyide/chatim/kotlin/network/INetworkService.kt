@@ -245,7 +245,7 @@ interface INetworkService {
     /**
      * 家长-提交反馈
      */
-    @GET("/cloud/app/work/updateWorkFeedback")
+    @POST("/cloud/app/work/updateWorkFeedback")
     suspend fun updateWorkFeedback(@Body requestBody: RequestBody): BaseResponse<Boolean>
 
     /**
