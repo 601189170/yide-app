@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent" />
         <ScrollView
             android:layout_marginTop="@dimen/dp_44"
-
+            android:layout_marginBottom="@dimen/dp_60"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -284,7 +284,7 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         android:layout_marginHorizontal="15dp"
-        android:layout_marginBottom="22dp"
+        android:layout_marginBottom="10dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="发布"

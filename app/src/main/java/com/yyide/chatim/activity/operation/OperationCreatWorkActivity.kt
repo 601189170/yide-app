@@ -324,10 +324,14 @@ class OperationCreatWorkActivity :
                 }
             }
         }
-
-        imglist.forEach(){
-            showPicFileByLuban(File(it))
+        if (imglist.size>0){
+            imglist.forEach(){
+                showPicFileByLuban(File(it))
+            }
+        }else{
+            postData("")
         }
+
 
     }
 
