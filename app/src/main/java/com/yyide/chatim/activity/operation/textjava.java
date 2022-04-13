@@ -34,6 +34,10 @@ public class textjava {
 
             }
         });
+
+        for (int i = 0; i < list.size(); i++) {
+
+        }
 //        pop.setSelectClasses(new deletePop.SelectDateListener() {
 //            @Override
 //            public void onSelectDateListener(Boolean br) {

@@ -15,6 +15,7 @@ import com.jzxiang.pickerview.TimePickerDialog
 import com.jzxiang.pickerview.listener.OnDateSetListener
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.operation.fragment.OperationChartFragment
+import com.yyide.chatim.activity.operation.fragment.OperationDataByParentsFragment
 import com.yyide.chatim.activity.operation.fragment.OperationDataByTeacherFragment
 import com.yyide.chatim.activity.operation.viewmodel.OperationViewModel
 import com.yyide.chatim.base.KTBaseActivity
@@ -58,8 +59,9 @@ class OperationActivityByTeacher :
 
         viewModel = ViewModelProvider(this).get(OperationViewModel::class.java)
 
-
-        tl_3()
+        supportFragmentManager.beginTransaction()
+                .replace(binding.content.id, OperationDataByTeacherFragment.newInstance()).commit()
+//        tl_3()
         initData()
 
 
@@ -70,6 +72,14 @@ class OperationActivityByTeacher :
         viewModel.endTime.observe(this) {
             binding.layoutTime.tvEndTime.text=it
         }
+
+        var starTime=DateUtils.getDate2(System.currentTimeMillis())
+        var endTime=DateUtils.getDate2(System.currentTimeMillis())
+        binding.layoutTime.tvStartTime.setText(starTime)
+        binding.layoutTime.tvEndTime.setText(endTime)
+        viewModel.startTime.value=starTime
+        viewModel.endTime.value=endTime
+
         binding.layoutTime.tvStartTime.setOnClickListener(View.OnClickListener {
             DatePickerDialogUtil.showDateTime(
                     this,
@@ -208,7 +218,8 @@ class OperationActivityByTeacher :
 
       override fun initView() {
 
-        binding.top.title.text = getString(R.string.operation_title)
+
+          binding.top.title.text = getString(R.string.operation_title)
         binding.top.ivRight.visibility=View.VISIBLE
 
         binding.top.backLayout.setOnClickListener { this?.finish() }
@@ -217,36 +228,72 @@ class OperationActivityByTeacher :
               val intent = Intent(this, OperationCreatWorkActivity::class.java)
               startActivity(intent)
           })
-        binding.layoutTime.tvToDay.setOnClickListener {
-            if (!binding.layoutTime.tvToDay.isChecked) {
-                setCheck()
-                binding.layoutTime.tvToDay.isChecked = true
-            }
-        }
-        binding.layoutTime.tvWeek.setOnClickListener {
-            if (!binding.layoutTime.tvWeek.isChecked) {
-                setCheck()
-                binding.layoutTime.tvWeek.isChecked = true
-            }
-        }
-        binding.layoutTime.tvLastWeek.setOnClickListener {
-            if (!binding.layoutTime.tvLastWeek.isChecked) {
-                setCheck()
-                binding.layoutTime.tvLastWeek.isChecked = true
-            }
-        }
-        binding.layoutTime.tvMonth.setOnClickListener {
-            if (!binding.layoutTime.tvMonth.isChecked) {
-                setCheck()
-                binding.layoutTime.tvMonth.isChecked = true
-            }
-        }
-        binding.layoutTime.tvLastMonth.setOnClickListener {
-            if (!binding.layoutTime.tvLastMonth.isChecked) {
-                setCheck()
-                binding.layoutTime.tvLastMonth.isChecked = true
-            }
-        }
+          binding.layoutTime.tvToDay.setOnClickListener {
+              if (!binding.layoutTime.tvToDay.isChecked) {
+                  setCheck()
+                  var starTime=DateUtils.getDate2(System.currentTimeMillis())
+                  var endTime=DateUtils.getDate2(System.currentTimeMillis())
+                  binding.layoutTime.tvStartTime.setText(starTime)
+                  binding.layoutTime.tvEndTime.setText(endTime)
+                  viewModel.startTime.value=starTime
+                  viewModel.endTime.value=endTime
+                  binding.layoutTime.tvToDay.isChecked = true
+              }
+          }
+          binding.layoutTime.tvWeek.setOnClickListener {
+              if (!binding.layoutTime.tvWeek.isChecked) {
+                  setCheck()
+
+                  var  starTime = DateUtils.getDate2(DateUtils.getBeginDayOfWeek2().time)
+                  var  endTime = DateUtils.getDate2(DateUtils.getEndDayOfWeek2().time)
+
+                  binding.layoutTime.tvStartTime.setText(starTime)
+                  binding.layoutTime.tvEndTime.setText(endTime)
+                  viewModel.startTime.value=starTime
+                  viewModel.endTime.value=endTime
+                  binding.layoutTime.tvWeek.isChecked = true
+              }
+          }
+          binding.layoutTime.tvLastWeek.setOnClickListener {
+              if (!binding.layoutTime.tvLastWeek.isChecked) {
+                  setCheck()
+                  var  starTime = DateUtils.getDate2(DateUtils.getBeginDayOfLastWeek().time)
+                  var  endTime = DateUtils.getDate2(DateUtils.getEndDayOfLastWeek().time)
+
+                  binding.layoutTime.tvStartTime.setText(starTime)
+                  binding.layoutTime.tvEndTime.setText(endTime)
+                  viewModel.startTime.value=starTime
+                  viewModel.endTime.value=endTime
+                  binding.layoutTime.tvLastWeek.isChecked = true
+              }
+          }
+          binding.layoutTime.tvMonth.setOnClickListener {
+              if (!binding.layoutTime.tvMonth.isChecked) {
+                  setCheck()
+
+                  var  starTime = DateUtils.getDate2(DateUtils.getBeginDayOfMonth().time)
+                  var  endTime = DateUtils.getDate2(DateUtils.getEndDayOfMonth().time)
+
+                  binding.layoutTime.tvStartTime.setText(starTime)
+                  binding.layoutTime.tvEndTime.setText(endTime)
+                  viewModel.startTime.value=starTime
+                  viewModel.endTime.value=endTime
+                  binding.layoutTime.tvMonth.isChecked = true
+              }
+          }
+          binding.layoutTime.tvLastMonth.setOnClickListener {
+              if (!binding.layoutTime.tvLastMonth.isChecked) {
+                  setCheck()
+
+                  var  starTime = DateUtils.getDate2(DateUtils.getBeginDayOfMonth2().time)
+                  var  endTime = DateUtils.getDate2(DateUtils.getEndDayOfMonth2().time)
+                  binding.layoutTime.tvStartTime.setText(starTime)
+                  binding.layoutTime.tvEndTime.setText(endTime)
+                  viewModel.startTime.value=starTime
+                  viewModel.endTime.value=endTime
+                  binding.layoutTime.tvLastMonth.isChecked = true
+              }
+          }
     }
 
     private fun setCheck() {
@@ -257,35 +304,35 @@ class OperationActivityByTeacher :
         binding.layoutTime.tvLastMonth.isChecked = false
     }
 
-    private fun tl_3() {
-        mFragments.add(OperationDataByTeacherFragment.newInstance())
-        mFragments.add(OperationChartFragment.newInstance())
-        val viewPager: ViewPager = binding.viewpager
-        viewPager.adapter = MyPagerAdapter(supportFragmentManager)
-        binding.mTabLayout.setTabData(mTitles)
-        binding.mTabLayout.setOnTabSelectListener(object : OnTabSelectListener {
-            override fun onTabSelect(position: Int) {
-                viewPager.currentItem = position
-            }
-
-            override fun onTabReselect(position: Int) {}
-        })
-        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(
-                    position: Int,
-                    positionOffset: Float,
-                    positionOffsetPixels: Int
-            ) {
-            }
-
-            override fun onPageSelected(position: Int) {
-                binding.mTabLayout.currentTab = position
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {}
-        })
-        viewPager.currentItem = 0
-    }
+//    private fun tl_3() {
+//        mFragments.add(OperationDataByTeacherFragment.newInstance())
+//        mFragments.add(OperationChartFragment.newInstance())
+//        val viewPager: ViewPager = binding.viewpager
+//        viewPager.adapter = MyPagerAdapter(supportFragmentManager)
+//        binding.mTabLayout.setTabData(mTitles)
+//        binding.mTabLayout.setOnTabSelectListener(object : OnTabSelectListener {
+//            override fun onTabSelect(position: Int) {
+//                viewPager.currentItem = position
+//            }
+//
+//            override fun onTabReselect(position: Int) {}
+//        })
+//        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+//            override fun onPageScrolled(
+//                    position: Int,
+//                    positionOffset: Float,
+//                    positionOffsetPixels: Int
+//            ) {
+//            }
+//
+//            override fun onPageSelected(position: Int) {
+//                binding.mTabLayout.currentTab = position
+//            }
+//
+//            override fun onPageScrollStateChanged(state: Int) {}
+//        })
+//        viewPager.currentItem = 0
+//    }
 
     private class MyPagerAdapter(fm: FragmentManager?) :
             FragmentPagerAdapter(fm!!) {

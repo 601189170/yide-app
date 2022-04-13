@@ -1,5 +1,10 @@
 package com.yyide.chatim.activity.operation
 
+import android.Manifest
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.text.TextUtils
@@ -15,6 +20,7 @@ import com.blankj.utilcode.util.SizeUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.tbruyelle.rxpermissions3.RxPermissions
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.PhotoViewActivity
@@ -30,6 +36,8 @@ import com.yyide.chatim.model.BookStudentItem
 import com.yyide.chatim.model.Detail
 import com.yyide.chatim.model.TeacherWorkListRsp
 import com.yyide.chatim.utils.GlideUtil
+import com.yyide.chatim.utils.logd
+import com.yyide.chatim.utils.showShotToast
 import com.yyide.chatim.view.SpacesItemDecoration
 
 class OperationDetailActivity :
@@ -37,7 +45,8 @@ class OperationDetailActivity :
     private lateinit var viewModel: OperationTearcherViewModel
     var id=""
     val fragments = mutableListOf<Fragment>()
-
+    var titleIndex=0;
+    var two=false;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(OperationTearcherViewModel::class.java)
@@ -54,23 +63,26 @@ class OperationDetailActivity :
         binding.tvExpand.setOnClickListener(View.OnClickListener {
             setvisibility()
         })
+
+
         binding.recyclerView.adapter = mAdapter
         viewModel.getSchoolWorkRsp.observe(this){
             if (it.isSuccess){
                 val result = it.getOrNull()
                 if (result!=null){
                     Log.e("TAG", "getSchoolWorkRsp: "+JSON.toJSONString(result))
-                    binding.tvClassName.text=result.classesTimetable.classesName
+                    binding.tvClassName.text=result.classesTimetable.classesName+result.classesTimetable.subjectName
                     binding.textView38.text=result.releaseTime+"发布"
-                    binding.tvGl.text=result.classesTimetable.subjectName
+
+                    binding.tvGl.text="关联课程:"+result.classesTimetable.timetableTime+"第"+result.classesTimetable.sequence+"节"+result.classesTimetable.startTime
+
                     binding.tvTitle.text=result.title
                     binding.tvContent.text=result.content
-                    val type0=result.feedbackList.size;
-                    val type1=result.noFeedbackList.size;
-                    val type2=result.readList.size;
-                    val type3=result.noReadList.size;
+                    val type0=result.feedbackList.size
+                    val type1=result.noFeedbackList.size
+                    val type2=result.readList.size
+                    val type3=result.noReadList.size
                     initViewPager(type0,type1,type2,type3)
-
                     //设置图片
                     if(!TextUtils.isEmpty(result.imgPaths))
                     mAdapter.setList(result.imgPaths.split(","))
@@ -106,6 +118,11 @@ class OperationDetailActivity :
 
 
     }
+
+    fun setIndex(boolean: Boolean){
+        two=boolean
+    }
+
     fun initParentsLayaout(){
         binding.tvExpand.visibility=View.GONE
         binding.imExpand.visibility=View.GONE
@@ -148,6 +165,7 @@ class OperationDetailActivity :
         mTitles.add("未反馈"+"("+type1+")")
         mTitles.add("已读"+"("+type2+")")
         mTitles.add("未读"+"("+type3+")")
+
         binding.viewpager.offscreenPageLimit = mTitles.size
         //需要动态数据设置该tab
         binding.viewpager.adapter = object :
@@ -167,8 +185,13 @@ class OperationDetailActivity :
                 return mTitles[position]
             }
         }
+
         binding.slidingTabLayout.setViewPager(binding.viewpager,mTitles.toTypedArray())
-        binding.slidingTabLayout.currentTab = 0
+        if (!two){
+            binding.slidingTabLayout.currentTab = 0
+        }else{
+            binding.slidingTabLayout.currentTab = 1
+        }
         binding.slidingTabLayout.notifyDataSetChanged()
 
     }
@@ -179,7 +202,9 @@ class OperationDetailActivity :
                 override fun convert(holder: BaseViewHolder, item: String) {
                     val viewBind = ItemOperationWorkImgBinding.bind(holder.itemView)
                     GlideUtil.loadImageRadius(baseContext, item, viewBind.img, SizeUtils.dp2px(4f))
-
+                    viewBind.img.setOnClickListener(View.OnClickListener {
+                        PhotoViewActivity.start(this@OperationDetailActivity, item)
+                    })
                 }
             }
 }

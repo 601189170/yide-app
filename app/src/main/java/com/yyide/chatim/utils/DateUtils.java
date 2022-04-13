@@ -102,6 +102,42 @@ public class DateUtils {
         }
         return time;
     }
+    public static String getDate2(long dateTime) {
+        String time = "";
+        try {
+            SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            time = sDateFormat.format(new Date(dateTime + 0));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return time;
+    }
+
+    // 获取上周的开始时间
+    @SuppressWarnings("unused")
+    public static Date getBeginDayOfLastWeek() {
+        Date date = new Date();
+        if (date == null) {
+            return null;
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int dayofweek = cal.get(Calendar.DAY_OF_WEEK);
+        if (dayofweek == 1) {
+            dayofweek += 7;
+        }
+        cal.add(Calendar.DATE, 2 - dayofweek - 7);
+        return getDayStartTime(cal.getTime());
+    }
+
+    // 获取上周的结束时间
+    public static Date getEndDayOfLastWeek() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(getBeginDayOfLastWeek());
+        cal.add(Calendar.DAY_OF_WEEK, 6);
+        Date weekEndSta = cal.getTime();
+        return getDayEndTime(weekEndSta);
+    }
 
     /**
      * 将时间戳转换为时间
@@ -186,7 +222,20 @@ public class DateUtils {
         cal.add(Calendar.DATE, 2 - dayofweek);
         return getDayStartTime(cal.getTime());
     }
-
+    public static Date getBeginDayOfWeek2() {
+        Date date = new Date();
+        if (date == null) {
+            return null;
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int dayofweek = cal.get(Calendar.DAY_OF_WEEK);
+        if (dayofweek == 1) {
+            dayofweek += 7;
+        }
+        cal.add(Calendar.DATE, 2 - dayofweek);
+        return getDayStartTime(cal.getTime());
+    }
     // 获取本周的结束时间
     public static Date getEndDayOfWeek() {
         Calendar cal = Calendar.getInstance();
@@ -195,11 +244,23 @@ public class DateUtils {
         Date weekEndSta = cal.getTime();
         return getDayEndTime(weekEndSta);
     }
-
+    public static Date getEndDayOfWeek2() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(getBeginDayOfWeek2());
+        cal.add(Calendar.DAY_OF_WEEK, 6);
+        Date weekEndSta = cal.getTime();
+        return getDayEndTime(weekEndSta);
+    }
     // 获取本月的开始时间
     public static Date getBeginDayOfMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(getNowYear(), getNowMonth() - 1, 1);
+        return getDayStartTime(calendar.getTime());
+    }
+    // 获取上月的开始时间
+    public static Date getBeginDayOfMonth2() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(getNowYear(), getNowMonth() - 2, 1);
         return getDayStartTime(calendar.getTime());
     }
 
@@ -222,7 +283,14 @@ public class DateUtils {
         calendar.set(getNowYear(), getNowMonth() - 1, day);
         return getDayEndTime(calendar.getTime());
     }
-
+    // 获取本月的结束时间
+    public static Date getEndDayOfMonth2() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(getNowYear(), getNowMonth() - 2, 1);
+        int day = calendar.getActualMaximum(5);
+        calendar.set(getNowYear(), getNowMonth() - 2, day);
+        return getDayEndTime(calendar.getTime());
+    }
     // 获取某个日期的结束时间
     public static Timestamp getDayEndTime(Date d) {
         Calendar calendar = Calendar.getInstance();

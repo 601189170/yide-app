@@ -69,13 +69,17 @@ class OperationDetailActivityByParents :
             if (it.isSuccess){
                 val result = it.getOrNull()
                 if (result!=null){
+                    setCheckTop()
+                    setCheckDonw()
                     ispost=result.feedbackData.isFeedback
                     Log.e("TAG", "getSchoolWorkRsp: "+JSON.toJSONString(result))
-                    binding.tvClassName.text=result.classesTimetable.classesName
+                    binding.tvClassName.text=result.classesTimetable.classesName+result.classesTimetable.subjectName
                     binding.tvTitle.text=result.title
                     binding.tvContent.text=result.content
-                    binding.tvGl.text=result.classesTimetable.subjectName
-                    if (!result.feedbackData.isFeedback){
+//                    android:text="关联课程：03-13 第一节 08:30"
+                    binding.tvGl.text="关联课程:"+result.classesTimetable.timetableTime+"第"+result.classesTimetable.sequence+"节"+result.classesTimetable.startTime
+
+                    if (result.feedbackData.isFeedback){
                         //已反馈
                         binding.compelete.isEnabled=false
                         binding.nocompelete.isEnabled=false
@@ -84,6 +88,19 @@ class OperationDetailActivityByParents :
                         binding.nd3.isEnabled=false
                         binding.btnCommit.visibility=View.GONE
                         binding.btnCommitGray.visibility=View.VISIBLE
+
+                        if (result.feedbackData.completion==1){
+                            binding.compelete.isChecked=true
+                        }else{
+                            binding.nocompelete.isChecked=true
+                        }
+                        if (result.feedbackData.difficulty==1){
+                            binding.nd1.isChecked=true
+                        }else if (result.feedbackData.difficulty==2){
+                            binding.nd2.isChecked=true
+                        }else if (result.feedbackData.difficulty==3){
+                            binding.nd3.isChecked=true
+                        }
                     }else{
                         binding.compelete.isEnabled=true
                         binding.nocompelete.isEnabled=true
@@ -92,22 +109,8 @@ class OperationDetailActivityByParents :
                         binding.nd3.isEnabled=true
                         binding.btnCommit.visibility=View.VISIBLE
                         binding.btnCommitGray.visibility=View.GONE
-                    }
-                    setCheckTop()
-                    setCheckDonw()
-                    if (result.feedbackData.completion==1){
-                        binding.compelete.isChecked=true
-                    }else{
-                        binding.nocompelete.isChecked=true
-                    }
-                    if (result.feedbackData.difficulty==1){
-                        binding.nd1.isChecked=true
-                    }else if (result.feedbackData.difficulty==2){
-                        binding.nd2.isChecked=true
-                    }else if (result.feedbackData.difficulty==3){
-                        binding.nd3.isChecked=true
-                    }
 
+                    }
 
                     //设置图片
                     if(!TextUtils.isEmpty(result.imgPaths))
@@ -207,7 +210,9 @@ class OperationDetailActivityByParents :
                 override fun convert(holder: BaseViewHolder, item: String) {
                     val viewBind = ItemOperationWorkImgBinding.bind(holder.itemView)
                     GlideUtil.loadImageRadius(baseContext, item, viewBind.img, SizeUtils.dp2px(4f))
-
+                    viewBind.img.setOnClickListener(View.OnClickListener {
+                        PhotoViewActivity.start(this@OperationDetailActivityByParents, item)
+                    })
                 }
             }
 }

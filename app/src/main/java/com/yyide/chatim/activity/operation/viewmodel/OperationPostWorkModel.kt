@@ -1,17 +1,24 @@
 package com.yyide.chatim.activity.operation.viewmodel
 
+import android.os.Environment
+import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alibaba.fastjson.JSON
+import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.kotlin.network.NetworkApi
-import com.yyide.chatim.model.CreateWorkBean
-import com.yyide.chatim.model.getClassList
-import com.yyide.chatim.model.getWeekTimeRsp
-import com.yyide.chatim.model.selectSubjectByUserIdRsp
+import com.yyide.chatim.model.*
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import top.zibin.luban.CompressionPredicate
+import top.zibin.luban.Luban
+import top.zibin.luban.OnCompressListener
+import java.io.File
 
 class OperationPostWorkModel : ViewModel() {
 
@@ -20,6 +27,8 @@ class OperationPostWorkModel : ViewModel() {
     val subjectData = MutableLiveData<Result<List<selectSubjectByUserIdRsp>>>()
 
     val ClassListData = MutableLiveData<Result<List<getClassList>>>()
+
+    val UploadRsp = MutableLiveData<Result<List<UploadRsp>>>()
 
     val ispost = MutableLiveData<Result<String>>()
 
@@ -71,6 +80,28 @@ class OperationPostWorkModel : ViewModel() {
             val body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(bean))
             val result = NetworkApi.createWork(body)
             ispost.value = result
+        }
+    }
+
+    fun upPohto(files: List<File>){
+
+        viewModelScope.launch {
+
+
+//            val fileRequestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+//
+//            val requestImgPart = MultipartBody.Part.createFormData("file", "fileName.jpg", fileRequestBody)
+
+
+            val parts: MutableList<MultipartBody.Part> = ArrayList()
+            for (file in files) {
+                // TODO: 16-4-2  这里为了简单起见，没有判断file的类型
+                val requestBody = RequestBody.create("image/png".toMediaTypeOrNull(), file)
+                val part = MultipartBody.Part.createFormData("file", file.name, requestBody)
+                parts.add(part)
+            }
+            val result = NetworkApi.upPohto(parts)
+            UploadRsp.value = result
         }
     }
 }

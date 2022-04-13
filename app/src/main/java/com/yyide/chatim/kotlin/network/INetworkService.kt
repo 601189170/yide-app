@@ -4,6 +4,7 @@ import com.yyide.chatim.kotlin.network.base.BaseResponse
 import com.yyide.chatim.model.*
 import com.yyide.chatim.model.schedule.ScheduleData
 import io.reactivex.rxjava3.core.Observable
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
 
@@ -284,5 +285,12 @@ interface INetworkService {
      */
     @GET("/cloud/student/getFaceList")
     suspend fun getFaceList(@Query("identityId") identityId: String): BaseResponse<List<FaceStudentBean>>
+
+    /**
+     * 批量上传图片
+     */
+    @Multipart
+    @POST("/cloud/file/upload")
+    suspend fun upload(@Part infos: List<MultipartBody.Part> ): BaseResponse<List<UploadRsp>>
 }
 

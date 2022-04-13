@@ -18,7 +18,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:text="确定要删除接受班级1吗？"
+            android:text="确定要删除接受班级吗？"
             android:textSize="17sp"
             android:textColor="#333333"
             android:layout_width="wrap_content"

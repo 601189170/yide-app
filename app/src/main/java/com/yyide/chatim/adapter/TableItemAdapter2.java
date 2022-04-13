@@ -69,15 +69,15 @@ public class TableItemAdapter2 extends BaseAdapter {
         if (!subjectName.equals("/")) {
             String finalSubjectName = subjectName;
             text_view.setOnClickListener(v -> {
-
                 if (mOnItemClickListener != null){
-                    img.setVisibility(View.VISIBLE);
-                    sl=position;
-                    if (position==sl){
-                        img.setVisibility(View.VISIBLE);
-                    }else {
+                    if (sl==position){
+                        sl=-1;
                         img.setVisibility(View.GONE);
+                    }else {
+                        sl=position;
+                        img.setVisibility(View.VISIBLE);
                     }
+                    notifyDataSetChanged();
                     mOnItemClickListener.onItemClick(v, finalSubjectName,position);
                 }
             });

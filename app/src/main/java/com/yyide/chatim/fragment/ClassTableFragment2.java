@@ -108,7 +108,8 @@ public class ClassTableFragment2 extends BaseMvpFragment<ClassTablePresenter> im
             public void onClick(View v) {
                 if (tableItemAdapter.sl!=-1){
                     timetableId=tableItemAdapter.list.get(tableItemAdapter.sl).getId();
-                    timetableTime=tableItemAdapter.list.get(tableItemAdapter.sl).getDate();
+                    int topindex=tableItemAdapter.sl%7;
+                    timetableTime=timeAdapter.list.get(topindex).day;
                     timetableName=tableItemAdapter.list.get(tableItemAdapter.sl).getSubjectName();
 
                     Intent mIntent = new Intent();
@@ -129,7 +130,10 @@ public class ClassTableFragment2 extends BaseMvpFragment<ClassTablePresenter> im
         });
         tableItemAdapter = new TableItemAdapter2();
         tableItemAdapter.setOnItemClickListener((view13, content,index) -> {
-            textPopUp.setText(content, view13);
+//            textPopUp.setText(content, view13);
+
+//            tableItemAdapter.setSelectSubject(index);
+
 
         });
 
