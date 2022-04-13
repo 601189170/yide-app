@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:width="@dimen/dp_20"
+        android:width="@dimen/dp_40"
         android:gravity="center">
         <shape>
-            <size android:height="2dp" />
-            <solid android:color="@color/punch_normal" />
+            <size android:height="3dp" />
+            <solid android:color="@color/colorPrimary" />
         </shape>
     </item>
 </layer-list>

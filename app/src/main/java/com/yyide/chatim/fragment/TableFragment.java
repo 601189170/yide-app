@@ -46,7 +46,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     TextView subjectName;
     @BindView(R.id.className)
     TextView className;
-    @BindView(R.id.time)
+    @BindView(R.id.mTime)
     TextView mTime;
     @BindView(R.id.table_next)
     TextView table_next;

@@ -410,7 +410,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
         } else if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
             //家长身份
-            tableContent.setVisibility(View.VISIBLE);
+            tableContent.setVisibility(View.GONE);//课表
             noticeContent.setVisibility(View.VISIBLE);
             workContent.setVisibility(View.VISIBLE);
             kqContent.setVisibility(View.VISIBLE);
@@ -418,11 +418,11 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             studentHonorContent.setVisibility(View.GONE);
             classHonorContent.setVisibility(View.GONE);
             //班级课表
-            fragmentTransaction.replace(R.id.table_content, new TableFragment());
+            //fragmentTransaction.replace(R.id.table_content, new TableFragment());
             //通知
 //            fragmentTransaction.replace(R.id.notice_content, new NoticeFragment());
             //班级考勤情况
-            fragmentTransaction.replace(R.id.kq_content, new AttendancePatriarchFragment());
+            //fragmentTransaction.replace(R.id.kq_content, new AttendancePatriarchFragment());
             //学生考勤
             fragmentTransaction.replace(R.id.kq_banner_content, new AttendanceStudentFragment());
             //班级作业

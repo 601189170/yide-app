@@ -25,10 +25,10 @@
         android:text="开学典礼"
         android:textColor="#1E1E1E"
         android:maxLines="1"
-        android:textSize="@dimen/text_16"
-        android:maxEms="12"
+
+        android:textSize="@dimen/text_15"
+        android:maxEms="10"
         app:layout_constraintRight_toLeftOf="@+id/iv_mine_label"
-        android:singleLine="true"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@id/iv_schedule_type_img"
         app:layout_constraintTop_toTopOf="@id/iv_schedule_type_img"

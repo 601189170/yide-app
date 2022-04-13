@@ -88,7 +88,7 @@
             android:maxLines="1"
             android:text="开学典礼"
             android:textColor="#ff666666"
-            android:textSize="@dimen/text_16"
+            android:textSize="@dimen/text_15"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/iv_schedule_type_img"
             app:layout_constraintLeft_toRightOf="@id/iv_schedule_type_img"

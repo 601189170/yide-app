@@ -42,11 +42,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/newapp_title"
                 app:layout_scrollFlags="scroll|snap|enterAlways"
                 app:tabIndicator="@drawable/tab_indicator"
+                app:tabIndicatorColor="@color/colorPrimary"
                 app:tabIndicatorHeight="@dimen/dp_2"
                 app:tabMaxWidth="200dp"
                 app:tabMinWidth="@dimen/dp_20"
                 app:tabPaddingEnd="@dimen/dp_20"
                 app:tabPaddingStart="@dimen/dp_20"
+                app:tabTextAppearance="@style/TabTextSize"
                 app:tabSelectedTextColor="@color/punch_normal" />
 
             <androidx.recyclerview.widget.RecyclerView

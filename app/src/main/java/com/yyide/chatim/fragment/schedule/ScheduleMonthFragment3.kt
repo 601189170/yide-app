@@ -450,8 +450,9 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
         mCurrentSelectDay = day
         val dateTime = DateTime(year,month+1,day,0,0,0).simplifiedDataTime()
         loge("dateTime=$dateTime")
-//        scheduleMonthViewModel.scheduleList(dateTime)
-//        scheduleViewModel.curDateTime.postValue(dateTime)
+        scheduleViewModel.curDateTime.value = dateTime
+        scheduleMonthViewModel.scheduleList(dateTime)
+        //scheduleViewModel.curDateTime.postValue(dateTime)
     }
     fun scrollToPosition(year: Int, month: Int, day: Int) {
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")

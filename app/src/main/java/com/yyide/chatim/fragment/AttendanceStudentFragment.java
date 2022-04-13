@@ -75,7 +75,7 @@ public class AttendanceStudentFragment extends BaseMvpFragment<AttendanceStudent
                 @Override
                 public void onItemClick(@NonNull View view, int position) {
                     //跳转到h5页面
-                    JumpUtil.appOpen(getContext(),"学生考勤","","学生考勤");
+                    JumpUtil.appOpen(getContext(), "学生考勤", "", "学生考勤");
                 }
             });
         }
@@ -97,29 +97,29 @@ public class AttendanceStudentFragment extends BaseMvpFragment<AttendanceStudent
 
     @Override
     public void getAttendanceFail(String rsp) {
-        mViewBinding.bannerConstrain.setVisibility(View.GONE);
+        mViewBinding.emptyView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void getStudentAttendanceSuccess(List<AttendanceStudentRsp.AttendanceAdapterBean> rsp) {
         if (!rsp.isEmpty()) {
-            mViewBinding.bannerConstrain.setVisibility(View.VISIBLE);
+            mViewBinding.emptyView.setVisibility(View.GONE);
             bannerStudentAttendanceAdapter = new BannerStudentAttendanceAdapter(rsp);
             mViewBinding.attendanceBanner.setAdapter(bannerStudentAttendanceAdapter);
         } else {
-            mViewBinding.bannerConstrain.setVisibility(View.GONE);
+            mViewBinding.emptyView.setVisibility(View.VISIBLE);
         }
 
     }
 
     @Override
     public void getTeacherAttendanceSuccess(List<AttendanceTeacherRsp.AttendanceTeacherAdapterBean> rsp) {
-        if (rsp.isEmpty()) {
-            mViewBinding.bannerConstrain.setVisibility(View.VISIBLE);
+        if (!rsp.isEmpty()) {
+            mViewBinding.emptyView.setVisibility(View.GONE);
             bannerTeacherAttendanceAdapter = new BannerTeacherAttendanceAdapter(rsp);
             mViewBinding.attendanceBanner.setAdapter(bannerTeacherAttendanceAdapter);
         } else {
-            mViewBinding.bannerConstrain.setVisibility(View.GONE);
+            mViewBinding.emptyView.setVisibility(View.VISIBLE);
         }
 
 

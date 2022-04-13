@@ -75,20 +75,33 @@
                 app:layout_constraintStart_toEndOf="@+id/className"
                 app:layout_constraintTop_toTopOf="@+id/className" />
 
+            <!-- <TextView
+                 android:id="@+id/time"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center_horizontal"
+                 android:layout_marginStart="@dimen/dp_5"
+                 android:text="11:15-12:00"
+                 android:textColor="@color/text_1E1E1E"
+                 android:textSize="@dimen/text_14"
+                 android:textStyle="bold"
+                 app:layout_constraintBottom_toBottomOf="@+id/className"
+                 app:layout_constraintStart_toEndOf="@+id/view"
+                 app:layout_constraintTop_toTopOf="@+id/className"
+                 app:layout_constraintVertical_bias="0.0" />-->
+
             <TextView
-                android:id="@+id/time"
+                android:id="@+id/mTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="@dimen/dp_5"
-                android:text="11:15-12:00"
+                android:layout_marginLeft="@dimen/dp_5"
                 android:textColor="@color/text_1E1E1E"
                 android:textSize="@dimen/text_14"
+                android:text="11:15-12:00"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/className"
-                app:layout_constraintStart_toEndOf="@+id/view"
-                app:layout_constraintTop_toTopOf="@+id/className"
-                />
+                app:layout_constraintBottom_toBottomOf="@id/view"
+                app:layout_constraintLeft_toRightOf="@id/view"
+                app:layout_constraintTop_toTopOf="@id/view" />
 
             <TextView
                 android:id="@+id/table_next"
@@ -102,6 +115,7 @@
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/tips"
                 android:layout_width="0dp"
@@ -118,6 +132,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/className">
 
             </TextView>
+
             <TextView
                 android:id="@+id/textView44"
                 android:layout_width="wrap_content"
@@ -132,12 +147,12 @@
 
             <TextView
                 android:id="@+id/tvHours"
-                android:text="00"
                 android:layout_width="@dimen/dp_26"
                 android:layout_height="@dimen/dp_17"
                 android:layout_marginStart="@dimen/dp_5"
                 android:background="@drawable/textview_bg_2"
                 android:gravity="center"
+                android:text="00"
                 android:textColor="#ffffffff"
                 android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView44"
@@ -160,10 +175,10 @@
                 android:id="@+id/tvMinute"
                 android:layout_width="@dimen/dp_26"
                 android:layout_height="@dimen/dp_17"
-                android:text="00"
                 android:layout_marginStart="@dimen/dp_5"
                 android:background="@drawable/textview_bg_2"
                 android:gravity="center"
+                android:text="00"
                 android:textColor="#ffffffff"
                 android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textview2"
@@ -189,30 +204,30 @@
                 android:layout_marginStart="@dimen/dp_5"
                 android:background="@drawable/textview_bg_2"
                 android:gravity="center"
+                android:text="00"
                 android:textColor="#ffffffff"
                 android:textSize="13sp"
-                android:text="00"
                 app:layout_constraintBottom_toBottomOf="@+id/textview3"
                 app:layout_constraintStart_toEndOf="@+id/textview3"
                 app:layout_constraintTop_toTopOf="@+id/textview3" />
 
             <TextView
+                android:id="@+id/textview4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_5"
                 android:text="秒"
                 android:textColor="#ff333333"
                 android:textSize="13sp"
-                android:id="@+id/textview4"
                 app:layout_constraintBottom_toBottomOf="@+id/tvSecond"
                 app:layout_constraintStart_toEndOf="@+id/tvSecond"
                 app:layout_constraintTop_toTopOf="@+id/tvSecond" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/table_group"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:constraint_referenced_ids="time" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

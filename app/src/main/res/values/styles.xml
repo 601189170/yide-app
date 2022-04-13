@@ -178,5 +178,9 @@
         <item name="android:backgroundDimEnabled">true</item><!-- 模糊 -->
         <item name="android:windowSoftInputMode">stateAlwaysVisible</item><!--显示软件盘-->
     </style>
-
+    <!--tablayout的自定义颜色大小 -->
+    <style name="TabTextSize" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textSize">@dimen/text_15</item>
+        <item name="android:textColor">@color/text_999999</item>
+    </style>
 </resources>
