@@ -5,10 +5,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.attendance.teacher.viewmodel.AttendanceRuleViewModel
 import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.databinding.ActivityAttendanceV2RuleBinding
+import com.yyide.chatim.databinding.ItemNoticeNotifyMessageBinding
+import com.yyide.chatim.databinding.ItemTeacherRuleInfoBinding
+import com.yyide.chatim.model.attendance.teacher.AddressListItem
+import com.yyide.chatim.model.attendance.teacher.ItemRuleInfoBean
+import com.yyide.chatim.model.message.NotifyInfoBean
 import com.yyide.chatim.utils.GlideUtil
 import com.yyide.chatim.utils.hide
 import com.yyide.chatim.utils.remove
@@ -31,6 +39,17 @@ class AttendanceRuleActivity:KTBaseActivity<ActivityAttendanceV2RuleBinding>(Act
         }
     }
 
+    private val adapter: BaseQuickAdapter<ItemRuleInfoBean, BaseViewHolder> by lazy {
+        object :
+            BaseQuickAdapter<ItemRuleInfoBean, BaseViewHolder>(R.layout.item_teacher_rule_info) {
+            override fun convert(holder: BaseViewHolder, item: ItemRuleInfoBean) {
+                val viewBind = ItemTeacherRuleInfoBinding.bind(holder.itemView)
+                viewBind.itemTeacherAttendanceRuleTitleTv.text = item.title
+                viewBind.itemTeacherAttendanceRuleSubTv.text = item.subTitle
+            }
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +68,9 @@ class AttendanceRuleActivity:KTBaseActivity<ActivityAttendanceV2RuleBinding>(Act
         )
 
         binding.teacherAttendanceRuleTop.title.text = "查看规则"
+        binding.rvTeacherAttendanceRule.layoutManager = LinearLayoutManager(this)
+        binding.rvTeacherAttendanceRule.adapter = adapter
+        adapter.setEmptyView(R.layout.empty)
 
         viewModel.attendanceRule.observe(this){
 
@@ -86,19 +108,20 @@ class AttendanceRuleActivity:KTBaseActivity<ActivityAttendanceV2RuleBinding>(Act
             }
             binding.tvTeacherAttendanceRuleTime.text = timeRuleSb.toString()
 
-            val sb = StringBuilder()
-            it.addressList.forEach { address ->
-                sb.append(address.addressName).append("\r\n")
-            }
-            binding.tvTeacherAttendanceRuleRange.text = sb.toString()
+            val listRuleInfo = mutableListOf<ItemRuleInfoBean>()
 
-            val wifiSb = StringBuilder()
+            for ((index,data) in it.addressList.withIndex()){
+                val bean = ItemRuleInfoBean("打卡地址${index+1}",data.addressName)
+                listRuleInfo.add(bean)
+            }
+
             it.wifiList.forEach { wifi ->
-                wifiSb.append(wifi.wifiName).append("\r\n")
+                val bean = ItemRuleInfoBean(wifi.wifiName,wifi.wifiMac)
+                listRuleInfo.add(bean)
             }
-            binding.tvTeacherAttendanceRuleWifi.text = wifiSb.toString()
 
-            binding.tvTeacherAttendanceRuleBle.text = ""
+            adapter.setList(listRuleInfo)
+
 
         }
 
@@ -121,21 +144,13 @@ class AttendanceRuleActivity:KTBaseActivity<ActivityAttendanceV2RuleBinding>(Act
 
 
         binding.ivTeacherAttendanceRuleRangeLogo.setOnClickListener {
-            val v = binding.tvTeacherAttendanceRuleRange.visibility
+            val v = binding.rvTeacherAttendanceRule.visibility
             if (v == View.VISIBLE){
                 binding.ivTeacherAttendanceRuleRangeLogo.setImageResource(R.mipmap.icon_down)
-                binding.tvTeacherAttendanceRuleRange.remove()
-                binding.tvTeacherAttendanceRuleWifiTitle.remove()
-                binding.tvTeacherAttendanceRuleWifi.remove()
-                binding.tvTeacherAttendanceRuleBleTitle.remove()
-                binding.tvTeacherAttendanceRuleBle.remove()
+                binding.rvTeacherAttendanceRule.remove()
             }else{
                 binding.ivTeacherAttendanceRuleRangeLogo.setImageResource(R.mipmap.icon_up)
-                binding.tvTeacherAttendanceRuleRange.show()
-                binding.tvTeacherAttendanceRuleWifiTitle.show()
-                binding.tvTeacherAttendanceRuleWifi.show()
-                binding.tvTeacherAttendanceRuleBleTitle.show()
-                binding.tvTeacherAttendanceRuleBle.show()
+                binding.rvTeacherAttendanceRule.show()
             }
         }
 

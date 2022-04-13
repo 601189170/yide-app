@@ -349,8 +349,8 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     }
 
     override fun onStop() {
+        //ConversationManagerKit.getInstance().removeUnreadWatcher(this)
         ConversationManagerKit.getInstance().destroyConversation()
-        ConversationManagerKit.getInstance().removeUnreadWatcher(this)
         super.onStop()
     }
 
@@ -456,7 +456,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     }
 
     override fun updateUnread(count: Int) {
-        //Log.e("Chatim", "updateUnread==>: $count,to =$todoCount,notice = $noticeCount")
+        Log.e("Chatim", "updateUnread==>: $count,to =$todoCount,notice = $noticeCount")
         messageCount = count
         setMessageCount(todoCount + messageCount + noticeCount)
         // 华为离线推送角标
