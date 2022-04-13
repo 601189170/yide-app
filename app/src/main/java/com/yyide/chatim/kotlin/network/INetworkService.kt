@@ -15,6 +15,13 @@ interface INetworkService {
     @POST("/cloud/app/procAppr/pageTask")
     suspend fun todoList(@Body requestBody: RequestBody): BaseResponse<TodoRsp>
 
+
+    /**
+     * 请求IM签名数据
+     */
+    @GET("/cloud/im/user/sig/gen")
+    suspend fun requestImSign(@Query("identifier") id: String): BaseResponse<UserSigRsp.IMDataBean>
+
     /**
      * 请假拒绝、同意
      */
@@ -157,7 +164,7 @@ interface INetworkService {
      */
     @Headers("Content-Type: application/json", "Accept: application/json")
     @POST("/cloud/app/schedule/createSchedule")
-    suspend fun requestMeetingSave(@Body requestBody: RequestBody): BaseResponse<ResultBean>
+    suspend fun requestMeetingSave(@Body requestBody: RequestBody): BaseResponse<String>
 
     /**
      * 会议列表

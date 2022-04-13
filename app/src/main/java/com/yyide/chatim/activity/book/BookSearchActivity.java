@@ -109,7 +109,6 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
 //        adapterStudent.setEmptyView(emptyBinding.getRoot());
 
 
-
         //初始化标签
         Set<String> search_history = MMKV.defaultMMKV().decodeStringSet(BOOK_SEARCH_HISTORY, new HashSet<String>());
         if (!search_history.isEmpty()) {
@@ -180,9 +179,9 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
 
     private void search(String keyWord) {
         if (SpData.getIdentityInfo().staffIdentity()) {
-            mvpPresenter.bookSearch(keyWord, "2",from);
-        }else{
-            mvpPresenter.bookSearch(keyWord, "1",from);
+            mvpPresenter.bookSearch(keyWord, "2", from);
+        } else {
+            mvpPresenter.bookSearch(keyWord, "1", from);
         }
 
     }
@@ -223,14 +222,33 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
 //                            var departmentName: String?,
 //                            var avatar: String?,
 //                            var concealPhone: String?,
-                    Teacher student1 = new Teacher("", null, student.getName(), student.getType(), student.getTypeName(), student.getTypeName(),student, "","",student.getGender(),student.getPhone(),student.getId(),"",student.getElternAddBookDTOList(),student.getEmail(),student.getDepartmentName(),student.getAvatar(),"",student.getClassName(),1);
+                    Teacher student1 = new Teacher("",
+                            null,
+                            student.getName(),
+                            student.getType(),
+                            student.getTypeName(),
+                            student.getTypeName(),
+                            student,
+                            "",
+                            "",
+                            student.getGender(),
+                            student.getPhone(),
+                            student.getId(),
+                            "",
+                            student.getElternAddBookDTOList(),
+                            student.getEmail(),
+                            student.getDepartmentName(),
+                            student.getAvatar(),
+                            "",
+                            student.getClassName(),
+                            1);
                     studentlist.add(student1);
                 }
             }
             adapterTeacher.setList(teacherList);
             adapterStudent.setList(studentlist);
-            studentlayout.setVisibility(studentlist.size()>0?View.VISIBLE:View.GONE);
-            teacherlayout.setVisibility(teacherList.size()>0?View.VISIBLE:View.GONE);
+            studentlayout.setVisibility(studentlist.size() > 0 ? View.VISIBLE : View.GONE);
+            teacherlayout.setVisibility(teacherList.size() > 0 ? View.VISIBLE : View.GONE);
         }
     }
 

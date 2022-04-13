@@ -10,5 +10,6 @@ data class AcceptItemInfo(
     val title: String = "",
     val contentType: Int = 0,
     val content: String = "",
-    val contentImg: String = ""
+    val contentImg: String = "",
+    var isNeedConfirm: Boolean = false
 )

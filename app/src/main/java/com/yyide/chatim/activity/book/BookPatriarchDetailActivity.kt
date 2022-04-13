@@ -91,7 +91,7 @@ class BookPatriarchDetailActivity : BaseActivity() {
         viewBinding.clMessage.setOnClickListener {
             val chatInfo = ChatInfo()
             chatInfo.type = V2TIMConversation.V2TIM_C2C
-            chatInfo.id = guardianItem.userId
+            chatInfo.id = guardianItem.id
             chatInfo.chatName = guardianItem.name
             val intent = Intent(BaseApplication.getInstance(), ChatActivity::class.java)
             intent.putExtra(Constants.CHAT_INFO, chatInfo)

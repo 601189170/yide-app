@@ -157,6 +157,9 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
             list.addAll(records);
             userNoticeListAdapter.notifyDataSetChanged();
             showBlankPage();
+        }else {
+            refresh = false;
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 

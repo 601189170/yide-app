@@ -16,7 +16,7 @@ import okhttp3.RequestBody
 
 class MeetingSaveViewModel : BaseViewModel() {
 
-    val meetingSaveLiveData = MutableLiveData<Result<ResultBean>>()
+    val meetingSaveLiveData = MutableLiveData<Result<String>>()
 
     val meetingDelLiveData = MutableLiveData<Result<Boolean>>()
 

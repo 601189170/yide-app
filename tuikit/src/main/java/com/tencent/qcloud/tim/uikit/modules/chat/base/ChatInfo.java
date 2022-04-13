@@ -140,4 +140,16 @@ public class ChatInfo implements Serializable {
         return this.draft;
     }
 
+    @Override
+    public String toString() {
+        return "ChatInfo{" +
+                "chatName='" + chatName + '\'' +
+                ", type=" + type +
+                ", id='" + id + '\'' +
+                ", groupType='" + groupType + '\'' +
+                ", isTopChat=" + isTopChat +
+                ", mLocateTimMessage=" + mLocateTimMessage +
+                ", draft=" + draft +
+                '}';
+    }
 }

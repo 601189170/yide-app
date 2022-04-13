@@ -32,6 +32,8 @@ class ParentItemProvider: BaseNodeProvider() {
         viewBind.itemNoticeParentTv.text = eItem.name
         if (eItem.relations.trim().isNotEmpty()) {
             viewBind.itemNoticeParentItemTv.text = list[eItem.relations.toInt()]
+        }else{
+            viewBind.itemNoticeParentItemTv.text = ""
         }
     }
 }

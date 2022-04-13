@@ -81,8 +81,8 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
                             return@let
                         }
                     }
-                    wifiInfo = null
                 }
+                wifiInfo = null
             }
 
             // 不可以wifi打卡 判断能否定位打卡

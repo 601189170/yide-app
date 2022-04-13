@@ -44,7 +44,7 @@ data class Student(
     var gender: String?,
     var phone: String?,
     var ClassName: String?,
-    var id: Long?,
+    var id: String?,
     var UserId: String?,
 //    var employeeSubjects: String?,
     var email: String?,
@@ -71,7 +71,7 @@ data class Teacher(
     var userId: String?,
     var gender: String?,
     var phone: String?,
-    var id: Long?,
+    var id: String?,
     var employeeSubjects: String?,
     @JSONField(name = "elternAddBookDTOList")
     var elternAddBookDTOList: MutableList<Parent>,
@@ -121,7 +121,7 @@ data class Parent (
     @JSONField(name = "faceInformation")
     var faceInformation: String="",
     @JSONField(name = "id")
-    var id: Long=0,
+    var id: String="",
     @JSONField(name = "name")
     var name: String="",
     @JSONField(name = "phone")

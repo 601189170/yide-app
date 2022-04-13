@@ -36,6 +36,7 @@ import com.yyide.chatim.utils.DatePickerDialogUtil.showDateTime
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.logd
 import com.yyide.chatim.utils.loge
+import com.yyide.chatim.utils.showShotToast
 import com.yyide.chatim.view.DialogUtil
 import org.greenrobot.eventbus.EventBus
 import java.util.*
@@ -201,8 +202,12 @@ class MeetingSaveActivity : BaseActivity() {
         // 保存会议
         viewModel.meetingSaveLiveData.observe(this) {
             hideLoading()
-            EventBus.getDefault()
-                .post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
+            if (it.isFailure){
+                showShotToast(it.exceptionOrNull()?.message ?: "")
+                return@observe
+            }
+
+            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
             EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
             // 从会议详情里面进入的需要携带返回值
             setResult(Activity.RESULT_OK, Intent().apply {
@@ -427,7 +432,6 @@ class MeetingSaveActivity : BaseActivity() {
                 scheduleData.type = "3"
                 scheduleData.isAllDay = if (viewModel.allDayLiveData.value == true) "1" else "0"
                 showLoading()
-                viewBinding.btnConfirm.isClickable = false
                 viewModel.requestMeetingSave(scheduleData)
             }
         }

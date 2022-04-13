@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSON
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.kotlin.network.NetworkApi
 import com.yyide.chatim.model.TodoRsp
+import com.yyide.chatim.model.UserSigRsp
 import kotlinx.coroutines.launch
 import okhttp3.RequestBody
 
@@ -15,6 +16,9 @@ import okhttp3.RequestBody
  */
 class MainViewModel : ViewModel() {
     val todoLiveData = MutableLiveData<Result<TodoRsp>>()
+
+    private val imDataLiveData = MutableLiveData<Result<UserSigRsp.IMDataBean>>()
+    val imData = imDataLiveData
 
     fun getTodoList() {
         viewModelScope.launch {
@@ -25,6 +29,13 @@ class MainViewModel : ViewModel() {
             val body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map))
             val result = NetworkApi.todoList(body)
             todoLiveData.value = result
+        }
+    }
+
+    fun getUserSig(id: String) {
+        viewModelScope.launch {
+            val imDataResult = NetworkApi.requestIMSign(id)
+            imDataLiveData.value = imDataResult
         }
     }
 

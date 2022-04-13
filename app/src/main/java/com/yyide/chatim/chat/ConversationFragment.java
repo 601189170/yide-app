@@ -363,6 +363,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
             tvTodoTime.setText(date);
             tvTodoDesc.setText(msg);
         }
+        EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM,"",number));
     }
 
     @Override

@@ -52,7 +52,7 @@ class ScheduleMangeViewModel : ViewModel() {
                     response: Response<ScheduleDataRsp>
                 ) {
                     val body = response.body()
-                    loge("onResponse $body")
+                    //loge("onResponse $body")
                     if (body != null && body.code == BaseConstant.REQUEST_SUCCES_0 && body.data != null) {
                         //查询日程成功 并保存
                         requestAllScheduleResult.postValue(true)

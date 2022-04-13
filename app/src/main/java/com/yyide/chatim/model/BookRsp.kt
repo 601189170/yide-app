@@ -58,7 +58,7 @@ data class BookClassesItem(
  */
 data class BookStudentItem(
     @JSONField(name = "id")
-    var id: Long?,
+    var id: String?,
     @JSONField(name = "name")
     var name: String?,
     @JSONField(name = "phone")
@@ -83,13 +83,12 @@ data class BookStudentItem(
     var isOwnChild: String?,
 //    @JSONField(name = "guardianList")
 //    var guardianList: MutableList<BookGuardianItem>,
-        @JSONField(name = "guardianList")
-var elternAddBookDTOList: MutableList<Parent>,
-        @JSONField(name = "avatar")
-var avatar: String?,
+    @JSONField(name = "guardianList")
+    var elternAddBookDTOList: MutableList<Parent>,
+    @JSONField(name = "avatar")
+    var avatar: String?,
     //学生监护人信息){}){}){}
 ) : Serializable
-
 
 
 /**
@@ -99,7 +98,7 @@ data class BookGuardianItem(
     @JSONField(name = "name")
     var name: String?,
     @JSONField(name = "id")
-    var id: Long?,
+    var id: String?,
     @JSONField(name = "phone")
     var phone: String?,
     @JSONField(name = "userId")
@@ -136,6 +135,7 @@ data class BookGuardianItem(
  * 教师
  */
 data class BookTeacherItem(
+    var id: String ?= "",
     @JSONField(name = "name")
     var name: String?,
     @JSONField(name = "sex")

@@ -49,6 +49,7 @@ class PublishContentActivity :
             binding.publishContentRevokeBtn.isEnabled = false
             binding.publishContentRevokeBtn.text = getString(R.string.already_reBack)
         }
+
         isTop = noticeData.isTop
         if (noticeData.isTop) {
             binding.publishContentReTopBtn.text = getString(R.string.cancel_reTop)
@@ -67,12 +68,20 @@ class PublishContentActivity :
         viewModel.messageInfo.observe(this) {
 
             val data = it.getOrNull() ?: return@observe
+
+            if (!data.isNeedConfirm){
+                binding.notifyRangeLine.hide()
+                binding.publishContentNotifyPeopleCl.hide()
+            }
+
             binding.publishContentTop.title.text = data.title
 
             val subStr = "${data.identityUserName}发布于${data.timerDate}"
             binding.publishContentSubTv.text = subStr
 
             binding.publishContentSubEndTv.text = "浏览 ${data.viewUsers}"
+
+
 
             if (data.contentType == 1) {
                 Glide.with(this).load(GlideUtil.DataUrl(data.contentImg)).centerInside().into(binding.publishContentIv)

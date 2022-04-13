@@ -19,5 +19,8 @@ class MMKVConstant {
         const val YD_USERNAME = "yd_username"
         const val YD_PASSWORD = "yd_password"
         const val YD_LOGIN = "yd_login"
+
+        // IM Data
+        const val IM_DATA = "im_data"
     }
 }

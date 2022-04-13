@@ -63,7 +63,6 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        EventBus.getDefault().register(this);
         type = MMKV.defaultMMKV().decodeInt(MMKVConstant.YD_MAIN_JUMP_TYPE);
 //        fragment = new TodoMsgFragment();
 //        Bundle bundle = new Bundle();
@@ -134,17 +133,10 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Event(EventMessage messageEvent) {
-        if (BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())) {
-            //setNumber(messageEvent.getCount());
-        }
-    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     @Override

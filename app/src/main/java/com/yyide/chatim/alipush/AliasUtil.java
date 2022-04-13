@@ -104,9 +104,9 @@ public class AliasUtil {
                         Log.e(TAG, "syncAliases， aliases contains userid " + contains);
                         if (!contains) {
                             addAlias(mPushService, userid);
-                        } else {
+                        } /*else {
                             delAlias(mPushService, userid);
-                        }
+                        }*/
                     }
 
                     for (String alias : aliases) {

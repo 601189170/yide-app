@@ -105,9 +105,6 @@ public class SpData {
         return getClassInfo().classesStudentName;
     }
 
-    public static String UserSig() {
-        return SPUtils.getInstance().getString(USERSIG, "");
-    }
 
     /**
      * 保存学校信息

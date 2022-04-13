@@ -90,7 +90,7 @@ public class TeacherlistRsp implements Serializable {
              * roles : []
              */
 
-            public long id;
+            public String id;
             public String delInd;
             public String createdBy;
             public String createdDateTime;

@@ -110,8 +110,16 @@
                     android:gravity="end"
                     android:layout_marginStart="3dp"
                     app:layout_constraintStart_toEndOf="@id/publish_content_notify_range_tv"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/publish_content_range_iv"
                     app:layout_constraintTop_toTopOf="@id/publish_content_notify_range_tv" />
+
+                <ImageView
+                    android:id="@+id/publish_content_range_iv"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/icon_right"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/publish_content_range_tv"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -153,8 +161,16 @@
                     android:gravity="end"
                     android:layout_marginStart="3dp"
                     app:layout_constraintStart_toEndOf="@id/publish_content_notify_people_tv"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/publish_content_people_iv"
                     app:layout_constraintTop_toTopOf="@id/publish_content_notify_people_tv" />
+
+                <ImageView
+                    android:id="@+id/publish_content_people_iv"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/icon_right"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/publish_content_people_tv"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

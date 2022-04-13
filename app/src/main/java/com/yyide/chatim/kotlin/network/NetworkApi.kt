@@ -33,6 +33,13 @@ object NetworkApi : BaseNetworkApi<INetworkService>(BaseConstant.API_SERVER_URL)
     }
 
     /**
+     * 待办列表
+     */
+    suspend fun requestIMSign(id: String) = getResult {
+        service.requestImSign(id)
+    }
+
+    /**
      * 获取学校和身份信息
      */
     suspend fun getSchoolIdentityInfo() = getResult {

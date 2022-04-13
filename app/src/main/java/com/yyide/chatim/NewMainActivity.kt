@@ -107,6 +107,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     // 保存fragmentList
     private val fragmentList = mutableListOf<Fragment>()
 
+    val mmkv = MMKV.defaultMMKV()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -145,13 +146,9 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         EventBus.getDefault().register(this)
         registerMessageReceiver() // used for receive msg
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        //登录IM
-        getUserSig()
+
         //注册极光别名
         AliasUtil.syncAliases()
-        //登录IM
-        //处理失败时点击切换重新登录IM
-        prepareThirdPushToken()
         //ConversationManagerKit.getInstance().addUnreadWatcher(this);
         //离线消息推送处理
         val extras = intent.getStringExtra("extras")
@@ -187,6 +184,10 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         initView()
         initViewModel()
         viewModel.getTodoList()
+        //登录IM
+        getUserSig()
+        //处理失败时点击切换重新登录IM
+        prepareThirdPushToken()
     }
 
     private val HOME_TYPE = 1
@@ -208,6 +209,8 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
 
         //默认选中Home
         //setFragment(HOME_TYPE, homeFragment)
+
+
     }
 
     private fun initFragment() {
@@ -347,6 +350,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
 
     override fun onStop() {
         ConversationManagerKit.getInstance().destroyConversation()
+        ConversationManagerKit.getInstance().removeUnreadWatcher(this)
         super.onStop()
     }
 
@@ -417,12 +421,13 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
 
     private fun initViewModel() {
         //消息待办数
-        viewModel.todoLiveData.observe(this) {
+        viewModel.todoLiveData.observe(this) { it ->
             val result = it.getOrNull()
             if (it.isSuccess) {
                 val dataList = result?.list
                 if (dataList != null && dataList.isNotEmpty()) {
-                    messageCount = result.total
+                    val notReadCount = dataList.filter { listItem -> listItem.status == 0 }.size
+                    todoCount = notReadCount
                     setMessageCount(todoCount + messageCount + noticeCount)
                 }
             } else {
@@ -430,6 +435,15 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
                     loge(it1)
                 }
             }
+        }
+
+        viewModel.imData.observe(this) {
+            val data = it.getOrNull()
+            if (data == null) {
+                ToastUtils.showShort(it.exceptionOrNull().toString())
+                return@observe
+            }
+            initIm(data)
         }
     }
 
@@ -442,7 +456,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     }
 
     override fun updateUnread(count: Int) {
-        Log.e("Chatim", "updateUnread==>: $count")
+        //Log.e("Chatim", "updateUnread==>: $count,to =$todoCount,notice = $noticeCount")
         messageCount = count
         setMessageCount(todoCount + messageCount + noticeCount)
         // 华为离线推送角标
@@ -464,7 +478,6 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     private var todoCount = 0 //代办数量
 
     private fun setMessageCount(count: Int) {
-        //Log.e("Chatim", "setMessageCount==>: " + count);
         if (count > 0) {
             binding.msgTotalUnread.visibility = View.VISIBLE
         } else {
@@ -602,44 +615,17 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         GSYVideoManager.releaseAllVideos()
     }
 
-    private val mOkHttpClient = OkHttpClient()
 
     private fun getUserSig() {
-        val body = RequestBody.create(BaseConstant.JSON, "")
         //请求组合创建
-        val request = Request.Builder()
-            .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
-            .addHeader("Authorization", SpData.getLogin().getAccessToken())
-            .post(body)
-            .build()
-        //发起请求
-        mOkHttpClient.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                hideLoading()
-                Log.e(TAG, "getUserSigonFailure: $e")
-            }
-
-            @Throws(IOException::class)
-            override fun onResponse(call: Call, response: Response) {
-                val data = response.body!!.string()
-                Log.e(TAG, "getUserSig==>: $data")
-                val bean = JSON.parseObject(data, UserSigRsp::class.java)
-                if (bean.code == BaseConstant.REQUEST_SUCCESS2) {
-                    SPUtils.getInstance().put(SpData.USERSIG, bean.data)
-                    initIm(bean.data)
-                } else {
-                    hideLoading()
-                    ToastUtils.showShort(bean.msg)
-                }
-            }
-        })
+        viewModel.getUserSig(SpData.getUserId())
     }
 
-    private fun initIm(userSig: String) {
-        TUIKit.login(SpData.getUserId() + "", userSig, object : IUIKitCallBack {
+    private fun initIm(userSig: UserSigRsp.IMDataBean) {
+        logd("userid= ${SpData.getUserId()}")
+        TUIKit.login(userSig.identifier, userSig.userSig, object : IUIKitCallBack {
             override fun onError(module: String, code: Int, desc: String) {
                 runOnUiThread {
-
                     //YDToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
                     SPUtils.getInstance().put(
                         BaseConstant.LOGINNAME,
@@ -649,15 +635,13 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
                         BaseConstant.PASSWORD,
                         SPUtils.getInstance().getString(BaseConstant.PASSWORD)
                     )
-                    UserInfo.getInstance().isAutoLogin = false
-                    UserInfo.getInstance().userSig = userSig
-                    UserInfo.getInstance().userId = SpData.getUserId().toString()
+                    UserInfo.getInstance().userSig = userSig.userSig
                     Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活失败code：$code")
                 }
                 DemoLog.i(TAG, "imLogin errorCode = $code, errorInfo = $desc")
             }
 
-            override fun onSuccess(data: Any) {
+            override fun onSuccess(data: Any?) {
                 //腾讯IM离线调度
 //                OfflineMessageBean bean = OfflineMessageDispatcher.parseOfflineMessage(getIntent());
 //                 if (bean != null) {
@@ -672,9 +656,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
                     BaseConstant.PASSWORD,
                     SPUtils.getInstance().getString(BaseConstant.PASSWORD)
                 )
-                UserInfo.getInstance().isAutoLogin = true
-                UserInfo.getInstance().userSig = userSig
-                UserInfo.getInstance().userId = SpData.getUserId().toString()
+                UserInfo.getInstance().userSig = userSig.userSig
                 Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功")
                 EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_IM_LOGIN, ""))
             }

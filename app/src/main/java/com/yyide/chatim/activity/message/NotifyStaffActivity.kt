@@ -13,6 +13,7 @@ import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.databinding.ActivityNotifyListBinding
 import com.yyide.chatim.databinding.ItemNoticeNotifyMessageBinding
 import com.yyide.chatim.model.message.NotifyInfoBean
+import com.yyide.chatim.utils.hide
 import com.yyide.chatim.utils.remove
 
 /**
@@ -36,6 +37,7 @@ class NotifyStaffActivity :
             BaseQuickAdapter<NotifyInfoBean, BaseViewHolder>(R.layout.item_notice_notify_message) {
             override fun convert(holder: BaseViewHolder, item: NotifyInfoBean) {
                 val viewBind = ItemNoticeNotifyMessageBinding.bind(holder.itemView)
+                viewBind.notifyRightIv.hide()
                 viewBind.itemNoticeNotifyTv.text = item.name
             }
         }

@@ -29,6 +29,7 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
@@ -40,6 +41,7 @@ import com.yyide.chatim.activity.user.RegisterActivity;
 import com.yyide.chatim.activity.user.ResetPassWordActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.base.MMKVConstant;
 import com.yyide.chatim.database.ScheduleDaoUtil;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginAccountBean;
@@ -342,12 +344,12 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public void getUserSign(UserSigRsp bean) {
-        if (bean.code == BaseConstant.REQUEST_SUCCESS) {
-            SPUtils.getInstance().put(SpData.USERSIG, bean.data);
-            initIm(SpData.getUserId(), SpData.UserSig());
+        if (bean.getCode() == BaseConstant.REQUEST_SUCCESS) {
+            MMKV.defaultMMKV().encode(MMKVConstant.IM_DATA,bean.getData());
+            initIm(SpData.getUserId(), bean.getData().getUserSig());
         } else {
             hideLoading();
-            ToastUtils.showShort(bean.msg);
+            ToastUtils.showShort(bean.getMessage());
         }
     }
 

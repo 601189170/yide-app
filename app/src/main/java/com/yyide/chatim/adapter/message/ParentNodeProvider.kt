@@ -31,6 +31,8 @@ class ParentNodeProvider : BaseNodeProvider() {
         viewBind.itemNotifyParentNameTv.text = parent.name
         if (parent.className != "") {
             viewBind.itemNotifyParentClassTv.text = "(${parent.className})"
+        }else{
+            viewBind.itemNotifyParentClassTv.text = ""
         }
     }
 

@@ -159,7 +159,7 @@ class TeacherAttendanceActivity :
             hideLoading()
             val data = it.getOrNull()
             data?.let { bean ->
-                binding.tvTeacherAttendanceJob.text = String.format(getString(R.string.attendance_group),bean.groupName)
+                binding.tvTeacherAttendanceJob.text = bean.groupName
                 binding.tvTeacherAttendanceName.text = bean.personName
                 punchRecordAdapter.setList(bean.signTimeList)
                 if (!bean.canSign) {

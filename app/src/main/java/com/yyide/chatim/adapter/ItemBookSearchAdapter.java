@@ -176,7 +176,6 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
                 bind.viewLine.setVisibility(View.VISIBLE);
             }
 //            bind.viewLine.setVisibility();
-
             holder.itemView.setOnClickListener(v -> {
 
                 BookTeacherItem teacherItem1 = teacher.getList();
@@ -190,6 +189,7 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
 //                val list= ArrayList();
 //                if (teacherItem1!=null){
                     BookTeacherItem teacherItem = new BookTeacherItem(
+                            teacher.getId(),
                             teacher.getName(),
                             teacher.getGender(),
                             teacher.getPhone(),

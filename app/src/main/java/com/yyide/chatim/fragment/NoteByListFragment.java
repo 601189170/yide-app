@@ -115,7 +115,6 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
 
         listBean = getArguments().getParcelableArrayList(PARAMS_NAME);
         nowBean = getArguments().getParcelableArrayList(PARAMS_NAME2);
-        nowBean = getArguments().getParcelableArrayList(PARAMS_NAME2);
         studentlistbeanByJz = getArguments().getParcelableArrayList("StudentlistBeanByJz");
         studentlistbeanByTeacher = getArguments().getParcelableArrayList("StudentlistBeanByTeacher");
         Log.e("TAG", "NoteByListFragment: "+ JSON.toJSONString(listBean));
@@ -136,8 +135,8 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
         String studentDataByParent = getArguments().getString("StudentData_by_Parent");
         String TeacherDatabyParent = getArguments().getString("TeacherData_by_Parent");
 
-        parent_list_student=(ArrayList<TeacherlistRsp.DataBean.RecordsBean>) JSON.parseObject(studentDataByParent,new TypeReference<List<TeacherlistRsp.DataBean.RecordsBean>>(){});
-        parent_list_teacher=(ArrayList<TeacherlistRsp.DataBean.RecordsBean>) JSON.parseObject(TeacherDatabyParent,new TypeReference<List<TeacherlistRsp.DataBean.RecordsBean>>(){});
+        parent_list_student=JSON.parseObject(studentDataByParent,new TypeReference<List<TeacherlistRsp.DataBean.RecordsBean>>(){});
+        parent_list_teacher=JSON.parseObject(TeacherDatabyParent,new TypeReference<List<TeacherlistRsp.DataBean.RecordsBean>>(){});
 
 
 
@@ -222,6 +221,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                 BookTeacherItem teacherItem = new BookTeacherItem(
+                        parent_noteItemAdapter_teacher.getItem(position).id,
                         parent_noteItemAdapter_teacher.getItem(position).name,
                         parent_noteItemAdapter_teacher.getItem(position).sex,
                         parent_noteItemAdapter_teacher.getItem(position).phone,
@@ -469,7 +469,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
 
         setVG();
 
-        sendRequset();
+        //sendRequset();
     }
 
     void clearData(){
@@ -577,7 +577,8 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                     bean.itemType = 1;
                     bean.name = item.name;
 
-                    bean.id = Long.parseLong(item.id);
+                    bean.id =item.id;
+                    bean.userId = item.userId;
                     teacher_teacher_list.add(bean);
                 }
             }
@@ -594,7 +595,8 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                 bean.subjectName =item2.subjectName;
                 bean.concealPhone =item2.concealPhone;
 //            bean.sex = String.valueOf(item2.gender);
-                bean.id = Long.parseLong(item2.id);
+                bean.id = item2.id;
+                bean.userId = item2.userId;
                 teacher_teacher_list.add(bean);
             }
         }
@@ -640,19 +642,21 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                 activity.initDeptFragmentNew(bundle);
             } else {
 
-                Log.e("TAG", "teacher_noteItemAdapter_teacher: "+JSON.toJSONString(teacher_noteItemAdapter_teacher.getItem(position)) );
+
+                TeacherlistRsp.DataBean.RecordsBean bean = teacher_noteItemAdapter_teacher.getItem(position);
 
                 BookTeacherItem teacherItem = new BookTeacherItem(
-                        teacher_noteItemAdapter_teacher.getItem(position).name,
-                        teacher_noteItemAdapter_teacher.getItem(position).sex,
-                        teacher_noteItemAdapter_teacher.getItem(position).phone,
-                        teacher_noteItemAdapter_teacher.getItem(position).userId,
-                        teacher_noteItemAdapter_teacher.getItem(position).email,
-                        teacher_noteItemAdapter_teacher.getItem(position).subjectName,
-                        teacher_noteItemAdapter_teacher.getItem(position).employeeSubjects,
+                        bean.id,
+                        bean.name,
+                        bean.sex,
+                        bean.phone,
+                        bean.userId,
+                        bean.email,
+                        bean.subjectName,
+                        bean.employeeSubjects,
                         "",
-                        teacher_noteItemAdapter_teacher.getItem(position).concealPhone,
-                        teacher_noteItemAdapter_teacher.getItem(position).avatar);
+                        bean.concealPhone,
+                        bean.avatar);
 
                 Intent intent = new Intent(mActivity, BookTeacherDetailActivity.class);
                 intent.putExtra("teacher", teacherItem);

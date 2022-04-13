@@ -3,19 +3,11 @@ package com.yyide.chatim.activity.book.adapter
 import android.annotation.SuppressLint
 import android.text.TextUtils
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
-import com.yyide.chatim.activity.book.BookTeacherDetailActivity
 import com.yyide.chatim.databinding.ItemGuardianBinding
-import com.yyide.chatim.databinding.ItemNewBookBinding
-import com.yyide.chatim.databinding.ItemNewBookTeacherBinding
-import com.yyide.chatim.model.BookDepartmentItem
-import com.yyide.chatim.model.BookStudentItem
-import com.yyide.chatim.model.BookTeacherItem
 import com.yyide.chatim.model.Parent
-import com.yyide.chatim.utils.GlideUtil
 import com.yyide.chatim.utils.RxPermissionUtils
 import com.yyide.chatim.utils.Utils
 

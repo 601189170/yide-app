@@ -18,10 +18,7 @@ import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.chat.ChatActivity
 import com.yyide.chatim.databinding.ActivityBookStudentDetailBinding
 import com.yyide.chatim.model.BookStudentItem
-import com.yyide.chatim.utils.Constants
-import com.yyide.chatim.utils.GlideUtil
-import com.yyide.chatim.utils.RxPermissionUtils
-import com.yyide.chatim.utils.Utils
+import com.yyide.chatim.utils.*
 
 class BookStudentDetailActivity : BaseActivity() {
 
@@ -182,8 +179,9 @@ class BookStudentDetailActivity : BaseActivity() {
         viewBinding.clMessage.setOnClickListener {
             val chatInfo = ChatInfo()
             chatInfo.type = V2TIMConversation.V2TIM_C2C
-            chatInfo.id = student.userId
+            chatInfo.id = student.id
             chatInfo.chatName = student.name
+            logd("student id = ${chatInfo.id}")
             val intent = Intent(BaseApplication.getInstance(), ChatActivity::class.java)
             intent.putExtra(Constants.CHAT_INFO, chatInfo)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
