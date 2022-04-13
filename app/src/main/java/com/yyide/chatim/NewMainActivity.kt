@@ -440,7 +440,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         viewModel.imData.observe(this) {
             val data = it.getOrNull()
             if (data == null) {
-                ToastUtils.showShort(it.exceptionOrNull().toString())
+                ToastUtils.showShort("创建IM秘钥失败")
                 return@observe
             }
             initIm(data)
