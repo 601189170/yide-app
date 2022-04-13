@@ -93,6 +93,7 @@ class ScheduleSimpleEditionActivity : BaseActivity() {
         scheduleSimpleEditionBinding.top.backLayout.setOnClickListener {
             finish()
         }
+        scheduleSimpleEditionBinding.top.tvRight.visibility =View.VISIBLE
 
         if (scheduleEditViewModel.remindLiveData.value == null) {
             scheduleSimpleEditionBinding.tvRemind.text = "不提醒"
