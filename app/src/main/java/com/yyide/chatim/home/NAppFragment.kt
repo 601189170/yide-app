@@ -16,6 +16,7 @@ import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.NappFragmentBinding
 import com.yyide.chatim.model.EventMessage
+import com.yyide.chatim.model.NewAppRspJ
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -30,6 +31,7 @@ class NAppFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     private var mNewAppAdapter: NewAppAdapter? = null
     private var isClick = false
     private val mTitles: MutableList<String> = ArrayList()
+    private val mAppList: MutableList<NewAppRspJ> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,9 +42,8 @@ class NAppFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getData()
         initView()
-        //getData()
+        getData()
     }
 
     private fun initView() {
@@ -72,37 +73,6 @@ class NAppFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                 //}
             }
         })
-
-        // binding.newappTablayout.addTab()
-    }
-
-    private fun getData() {
-        viewModel.getApplist()
-        binding.swipeRefreshLayout.isRefreshing = false
-        viewModel.nAppList.observe(requireActivity()) {
-            if (it.isSuccess) {
-                val data = it.getOrNull()
-                data?.let { dataList ->
-                    mTitles.clear()
-                    /*  if (!dataList.isNullOrEmpty()) {
-                          if (dataList.first().categoryName != "常用应用") {
-                              val often = NewAppRspJ()
-                              often.categoryName = "常用应用"
-                              dataList.add(0, often)
-                          }
-                      }*/
-                    mNewAppAdapter?.setList(dataList)
-                    for (i in it.getOrNull()!!) {
-                        mTitles.add(i.categoryName)
-                        val newTab = binding.newappTablayout.newTab()
-                        newTab.text = i.categoryName
-                        binding.newappTablayout.addTab(newTab)
-                    }
-                }
-
-            }
-
-        }
         binding.newappTablayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 isClick = true
@@ -135,13 +105,46 @@ class NAppFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             }
 
         })
+        viewModel.nAppList.observe(requireActivity()) {
+            if (it.isSuccess) {
+                val data = it.getOrNull()
+                data?.let { dataList ->
+                    mTitles.clear()
+                    binding.newappTablayout.removeAllTabs()
+                    mAppList.clear()
+                    mAppList.addAll(dataList)
+                    /*  if (!dataList.isNullOrEmpty()) {
+                          if (dataList.first().categoryName != "常用应用") {
+                              val often = NewAppRspJ()
+                              often.categoryName = "常用应用"
+                              dataList.add(0, often)
+                          }
+                      }*/
+                    mNewAppAdapter?.setList(mAppList)
+                    for (i in it.getOrNull()!!) {
+                        mTitles.add(i.categoryName)
+                        val newTab = binding.newappTablayout.newTab()
+                        newTab.text = i.categoryName
+                        binding.newappTablayout.addTab(newTab)
+                    }
+                }
+            }
+            binding.swipeRefreshLayout.isRefreshing = false
 
+        }
+
+    }
+
+    private fun getData() {
+        viewModel.getApplist()
     }
 
 
     override fun onRefresh() {
+        getData()
         //refresh = true
-        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_APPCENTER_LIST, ""))
+        //EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_APPCENTER_LIST, ""))
+       // getData()
     }
 
 

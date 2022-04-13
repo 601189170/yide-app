@@ -53,12 +53,13 @@ class ScheduleEditActivitySimple : BaseActivity() {
     var dateEnd = AtomicReference("")
     val list = getList()
     val list2 = getList2()
-    var repetition:Boolean = false
+    var repetition: Boolean = false
     var from: String? = null
 
 
     //否是是发起人
     private var promoter = true
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +85,7 @@ class ScheduleEditActivitySimple : BaseActivity() {
      * 设置编辑模式
      * @param enable true设置可编辑 false设置不可编辑
      */
-    private fun initView(){
+    private fun initView() {
         val flexboxLayoutManager = FlexboxLayoutManager(this)
         flexboxLayoutManager.flexDirection = FlexDirection.ROW
         flexboxLayoutManager.flexWrap = FlexWrap.WRAP
@@ -92,15 +93,15 @@ class ScheduleEditActivitySimple : BaseActivity() {
         scheduleEditBinding.rvLabelList.layoutManager = flexboxLayoutManager
         scheduleEditBinding.rvLabelList.layoutManager = flexboxLayoutManager
         scheduleEditBinding.rvLabelList.addItemDecoration(
-                SpacesItemDecoration(
-                        SpacesItemDecoration.dip2px(
-                                5f
-                        )
+            SpacesItemDecoration(
+                SpacesItemDecoration.dip2px(
+                    5f
                 )
+            )
         )
         scheduleEditBinding.rvLabelList.adapter = adapter
 
-        scheduleEditBinding.top.title.text =  "日程详情"
+        scheduleEditBinding.top.title.text = "日程详情"
         scheduleEditBinding.top.backLayout.setOnClickListener {
             finish()
         }
@@ -110,19 +111,19 @@ class ScheduleEditActivitySimple : BaseActivity() {
 //        scheduleEditBinding.top.ivRight.visibility = View.VISIBLE
         scheduleEditBinding.top.ivRight.setOnClickListener {
             DialogUtil.showScheduleDelDialog(
-                    this,
-                    scheduleEditBinding.top.ivRight,
-                    object : DialogUtil.OnClickListener {
-                        override fun onCancel(view: View?) {
+                this,
+                scheduleEditBinding.top.ivRight,
+                object : DialogUtil.OnClickListener {
+                    override fun onCancel(view: View?) {
 
-                        }
+                    }
 
-                        override fun onEnsure(view: View?) {
-                            val scheduleId = scheduleEditViewModel.scheduleIdLiveData.value ?: ""
-                            scheduleEditViewModel.deleteScheduleById(scheduleId)
-                        }
+                    override fun onEnsure(view: View?) {
+                        val scheduleId = scheduleEditViewModel.scheduleIdLiveData.value ?: ""
+                        scheduleEditViewModel.deleteScheduleById(scheduleId)
+                    }
 
-                    })
+                })
         }
 
 
@@ -130,7 +131,7 @@ class ScheduleEditActivitySimple : BaseActivity() {
         val from = intent.getStringExtra("from")
 
         val scheduleData = JSON.parseObject(stringExtra, ScheduleData::class.java)
-        Log.e("TAG", "scheduleData: "+JSON.toJSONString(scheduleData) )
+        Log.e("TAG", "scheduleData: " + JSON.toJSONString(scheduleData))
         scheduleEditBinding.top.ivEdit.setOnClickListener {
             val intent = Intent(this, ScheduleEditActivityMain::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleData))
@@ -141,19 +142,23 @@ class ScheduleEditActivitySimple : BaseActivity() {
 
         scheduleData?.let {
             promoter = it.promoterSelf()
-            scheduleEditBinding.top.ivEdit.isEnabled=promoter;
-            scheduleEditBinding.top.ivRight.isEnabled=promoter;
-            if (promoter){
-                scheduleEditBinding.top.ivEdit.visibility=View.VISIBLE
-                scheduleEditBinding.top.ivRight.visibility=View.VISIBLE
-            }else{
-                scheduleEditBinding.top.ivEdit.visibility=View.GONE
-                scheduleEditBinding.top.ivRight.visibility=View.GONE
+            scheduleEditBinding.top.ivEdit.isEnabled = promoter;
+            scheduleEditBinding.top.ivRight.isEnabled = promoter;
+            if (promoter) {
+                scheduleEditBinding.top.ivEdit.visibility = View.VISIBLE
+                scheduleEditBinding.top.ivRight.visibility = View.VISIBLE
+            } else {
+                scheduleEditBinding.top.ivEdit.visibility = View.GONE
+                scheduleEditBinding.top.ivRight.visibility = View.GONE
             }
-            scheduleEditBinding.edit.setText(it.remark)
+            scheduleEditBinding.edit.visibility =
+                if (it.remark.isNullOrEmpty()) View.GONE else View.VISIBLE
+            scheduleEditBinding.tvAddress.visibility =
+                if (it.siteName.isNullOrEmpty()) View.GONE else View.VISIBLE
+            scheduleEditBinding.edit.text = it.remark
             scheduleEditBinding.tvAddress.text = it.siteName
             //日程名称name
-            scheduleEditBinding.etScheduleTitle.setText(it.name)
+            scheduleEditBinding.etScheduleTitle.text = it.name
             scheduleEditViewModel.participantList.value = it.participantList
             scheduleEditViewModel.scheduleIdLiveData.value = it.id
             val stringBuilder = StringBuilder()
@@ -163,16 +168,17 @@ class ScheduleEditActivitySimple : BaseActivity() {
 //
 //                }
 //            }
+            // loge(scheduleEditViewModel.participantList.value)
             it.participantList.map {
                 it.realname
             }.forEach {
                 stringBuilder.append(it).append("  ")
             }
-            scheduleEditBinding.tvPerson .setText(stringBuilder.toString())
+            scheduleEditBinding.tvPerson.setText(stringBuilder.toString())
             scheduleEditBinding.tvStartTime.text =
-                    DateUtils.formatTime(it.startTime, "", "MM月dd日 HH:mm")
+                DateUtils.formatTime(it.startTime, "", "MM月dd日 HH:mm")
             scheduleEditBinding.tvEndTime.text =
-                    DateUtils.formatTime(it.endTime, "", "MM月dd日 HH:mm")
+                DateUtils.formatTime(it.endTime, "", "MM月dd日 HH:mm")
             //日程提醒remind
             if (it.remindTypeInfo == "10") {
                 scheduleEditBinding.tvRemind.text = Remind.getNotRemind().title
@@ -205,7 +211,7 @@ class ScheduleEditActivitySimple : BaseActivity() {
     }
 
     val adapter = object :
-            BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_schedule_label_flow_list) {
+        BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_schedule_label_flow_list) {
         @SuppressLint("WrongConstant")
         override fun convert(holder: BaseViewHolder, item: LabelListRsp.DataBean) {
             holder.getView<ImageView>(R.id.iv_del).visibility = View.GONE
@@ -216,7 +222,7 @@ class ScheduleEditActivitySimple : BaseActivity() {
 
             drawable.setShape(GradientDrawable.LINEAR_GRADIENT);
 
-            holder.setTextColor(R.id.tv_label,ColorUtil.parseColor(item.colorValue))
+            holder.setTextColor(R.id.tv_label, ColorUtil.parseColor(item.colorValue))
 
             holder.getView<TextView>(R.id.tv_label).background = drawable
             holder.setText(R.id.tv_label, item.labelName)

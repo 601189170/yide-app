@@ -40,7 +40,7 @@ import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
 import java.util.concurrent.atomic.AtomicReference
 
 class ScheduleEditActivityMain : BaseActivity() {
-//    lateinit var scheduleEditBinding: ActivityScheduleEditBinding
+    //    lateinit var scheduleEditBinding: ActivityScheduleEditBinding
     lateinit var scheduleEditBinding: ActivityScheduleEdit3Binding
     private var labelList = mutableListOf<LabelListRsp.DataBean>()
     private val scheduleEditViewModel: ScheduleEditViewModel by viewModels()
@@ -49,9 +49,11 @@ class ScheduleEditActivityMain : BaseActivity() {
     var dateEnd = AtomicReference("")
     val list = getList()
     val list2 = getList2()
-    var repetition:Boolean = false
+    var repetition: Boolean = false
+
     //否是是发起人
     private var promoter = true
+
     //开启编辑模式
     private var enableEditMode = true
     private var sourceRepetitionRule: Repetition? = null
@@ -75,16 +77,16 @@ class ScheduleEditActivityMain : BaseActivity() {
      * 设置编辑模式
      * @param enable true设置可编辑 false设置不可编辑
      */
-    private fun editEnable(enable:Boolean){
+    private fun editEnable(enable: Boolean) {
         val editable = enable && promoter
         //标题
 
-        if (!TextUtils.isEmpty(from)){
+        if (!TextUtils.isEmpty(from)) {
             scheduleEditBinding.top.title.text = "编辑日程"
             //删除
             scheduleEditBinding.top.ivRight.visibility = View.VISIBLE
             scheduleEditBinding.top.tvRight.visibility = View.GONE
-        }else{
+        } else {
             scheduleEditBinding.top.title.text = "创建日程"
             scheduleEditBinding.top.ivRight.visibility = View.GONE
             scheduleEditBinding.top.ivEdit.visibility = View.GONE
@@ -96,7 +98,6 @@ class ScheduleEditActivityMain : BaseActivity() {
 
             finish()
         }
-
 
 
         //日程名称
@@ -184,11 +185,11 @@ class ScheduleEditActivityMain : BaseActivity() {
 
         type = intent.getStringExtra("type")
         if (SpData.getIdentityInfo().staffIdentity()) {
-            scheduleEditBinding.tvBt6.visibility=View.VISIBLE
-            scheduleEditBinding.clParticipant.visibility=View.VISIBLE
-        }else{
-            scheduleEditBinding.tvBt6.visibility=View.GONE
-            scheduleEditBinding.clParticipant.visibility=View.GONE
+            scheduleEditBinding.tvBt6.visibility = View.VISIBLE
+            scheduleEditBinding.clParticipant.visibility = View.VISIBLE
+        } else {
+            scheduleEditBinding.tvBt6.visibility = View.GONE
+            scheduleEditBinding.clParticipant.visibility = View.GONE
         }
         val scheduleData = JSON.parseObject(stringExtra, ScheduleData::class.java)
         val format = getString(R.string.schedule_create_time_and_status)
@@ -202,7 +203,7 @@ class ScheduleEditActivityMain : BaseActivity() {
             scheduleEditBinding.etScheduleTitle.setText(it.name)
             scheduleEditViewModel.scheduleTitleLiveData.value = it.name
             //日程状态status
-            if (!promoter && it.status != "1"){
+            if (!promoter && it.status != "1") {
 //                scheduleEditBinding.checkBox.visibility = View.GONE
             }
 //            scheduleEditBinding.checkBox.isChecked = it.status == "1"
@@ -214,8 +215,8 @@ class ScheduleEditActivityMain : BaseActivity() {
                 DateUtils.formatTime(it.endTime, "", "MM月dd日 HH:mm")
             scheduleEditViewModel.startTimeLiveData.value = it.startTime
             scheduleEditViewModel.endTimeLiveData.value = it.endTime
-            val bottomStartTime = DateUtils.formatTime(it.startTime,"","MM月dd HH:mm")
-            val bottomEndTime = DateUtils.formatTime(it.endTime,"","MM月dd HH:mm")
+            val bottomStartTime = DateUtils.formatTime(it.startTime, "", "MM月dd HH:mm")
+            val bottomEndTime = DateUtils.formatTime(it.endTime, "", "MM月dd HH:mm")
             //scheduleEditBinding.tvBottomDate.text = String.format(getString(R.string.schedule_edit_bottom_date),bottomStartTime,bottomEndTime)
             //是否全天isAllDay【0：不是，1：是】
             scheduleEditViewModel.allDayLiveData.value = it.isAllDay == "1"
@@ -231,7 +232,7 @@ class ScheduleEditActivityMain : BaseActivity() {
                 //scheduleEditBinding.tvRepetition.text = "自定义重复"
                 scheduleEditBinding.tvRepetition.text =
                     ScheduleRepetitionRuleUtil.ruleToString(JSON.toJSONString(it.rrule))
-                val repetition = Repetition(8,"", true, it.rrule)
+                val repetition = Repetition(8, "", true, it.rrule)
                 scheduleEditViewModel.repetitionLiveData.value = repetition
                 sourceRepetitionRule = repetition
             }
@@ -263,13 +264,19 @@ class ScheduleEditActivityMain : BaseActivity() {
 
             //日程便签label
             labelList.clear()
-            if (it.labelList!=null&&it.labelList.size>0)
-            labelList.addAll(it.labelList)
+            if (it.labelList != null && it.labelList.size > 0)
+                labelList.addAll(it.labelList)
             scheduleEditViewModel.labelListLiveData.value = labelList
             //参与人participant
+            val myself: ParticipantRsp.DataBean.ParticipantListBean =
+                ParticipantRsp.DataBean.ParticipantListBean()
+            myself!!.id = SpData.getUser().id
+            myself.userId = SpData.getUserId()
+            myself!!.name = SpData.getUser().name
+            myself.checked = true
+            it.participantList.add(0, myself)
             scheduleEditViewModel.participantList.value = it.participantList
             val stringBuilder = StringBuilder()
-
             it.participantList.map {
                 it.realname
             }.forEach {
@@ -277,12 +284,12 @@ class ScheduleEditActivityMain : BaseActivity() {
             }
 
             if (stringBuilder.isEmpty() || stringBuilder.isBlank()) {
-                scheduleEditBinding.tvParticipant.text = "添加参与人"
-                scheduleEditBinding.tvParticipant.setTextColor(resources.getColor(R.color.black11))
+                scheduleEditBinding.tvParticipant.text = SpData.getUser().name
             } else {
                 scheduleEditBinding.tvParticipant.text = stringBuilder.toString()
-                scheduleEditBinding.tvParticipant.setTextColor(resources.getColor(R.color.black9))
             }
+            scheduleEditBinding.tvParticipant.setTextColor(resources.getColor(R.color.black9))
+
             //显示参与人
 //            showSelectedParticipant(it.participantList)
 //            if (SpData.getIdentityInfo().staffIdentity()) {
@@ -321,7 +328,11 @@ class ScheduleEditActivityMain : BaseActivity() {
 
             //底部文本
             val statusText = if (it.status == "1") "已完成" else "待完成"
-            val bottomText = String.format(format,DateUtils.formatTime(it.createdDateTime, "", "MM月dd日 HH:mm"),statusText)
+            val bottomText = String.format(
+                format,
+                DateUtils.formatTime(it.createdDateTime, "", "MM月dd日 HH:mm"),
+                statusText
+            )
 //            scheduleEditBinding.tvScheduleCreateTime.text = bottomText
 
 
@@ -333,21 +344,21 @@ class ScheduleEditActivityMain : BaseActivity() {
 //        scheduleEditBinding.clBtnCommit.visibility = if (promoter) View.VISIBLE else View.GONE
         scheduleEditBinding.clBtnCommit.setOnClickListener {
             val title = scheduleEditBinding.etScheduleTitle.text.toString().trim()
-            if (TextUtils.isEmpty(title)){
+            if (TextUtils.isEmpty(title)) {
                 ToastUtils.showShort("需要输入日程名称")
                 return@setOnClickListener
             }
-            if (DialogUtil.isHasEmoji(title)){
+            if (DialogUtil.isHasEmoji(title)) {
                 ToastUtils.showShort("日程名称含有非字符的数据，请重新输入!")
                 return@setOnClickListener
             }
             scheduleEditViewModel.startTimeLiveData.value = dateStart.get()
             scheduleEditViewModel.endTimeLiveData.value = dateEnd.get()
             //不支持跨天且重复日程
-            val isRepeat = (scheduleEditViewModel.repetitionLiveData.value?.code?:"").toString()
-            val startTime = scheduleEditViewModel.startTimeLiveData.value?.toString()?:""
-            val endTime = scheduleEditViewModel.endTimeLiveData.value?.toString()?:""
-            if (ScheduleRepetitionRuleUtil.moreDayAndRepetitionData(isRepeat,startTime,endTime)){
+            val isRepeat = (scheduleEditViewModel.repetitionLiveData.value?.code ?: "").toString()
+            val startTime = scheduleEditViewModel.startTimeLiveData.value?.toString() ?: ""
+            val endTime = scheduleEditViewModel.endTimeLiveData.value?.toString() ?: ""
+            if (ScheduleRepetitionRuleUtil.moreDayAndRepetitionData(isRepeat, startTime, endTime)) {
                 ToastUtils.showShort("暂时不支持跨天重复日程！")
                 return@setOnClickListener
             }
@@ -403,18 +414,17 @@ class ScheduleEditActivityMain : BaseActivity() {
 //        }
 
 
-
         scheduleEditBinding.edit.addTextChangedListener {
             scheduleEditViewModel.remarkLiveData.value = it.toString()
         }
-        scheduleEditBinding.etScheduleTitle.addTextChangedListener{
+        scheduleEditBinding.etScheduleTitle.addTextChangedListener {
             scheduleEditViewModel.scheduleTitleLiveData.value = it.toString()
         }
 
         //日期操作
         scheduleEditBinding.clStartTime.setOnClickListener {
 
-                scheduleEditBinding.dateTimePicker.visibility = View.VISIBLE
+            scheduleEditBinding.dateTimePicker.visibility = View.VISIBLE
 
 
             scheduleEditBinding.dateTimePicker.setDefaultMillisecond(
@@ -428,7 +438,7 @@ class ScheduleEditActivityMain : BaseActivity() {
         scheduleEditBinding.clEndTime.setOnClickListener {
 //            if (scheduleEditBinding.llVLine.visibility == View.GONE) {
 //                scheduleEditBinding.llVLine.visibility = View.VISIBLE
-                scheduleEditBinding.dateTimePicker.visibility = View.VISIBLE
+            scheduleEditBinding.dateTimePicker.visibility = View.VISIBLE
 //            }
 //            scheduleEditBinding.vDateTopMarkLeft.visibility = View.INVISIBLE
 //            scheduleEditBinding.vDateTopMarkRight.visibility = View.VISIBLE
@@ -490,59 +500,59 @@ class ScheduleEditActivityMain : BaseActivity() {
             val time = DateUtils.formatTime(date, "", "", true)
             loge("showEditScheduleDialog: $aLong,date=$date, time=$time")
 //            if (scheduleEditBinding.vDateTopMarkLeft.visibility == View.VISIBLE) {
-                //左边选中设置左边的时间数据
-                scheduleEditBinding.tvDateStart.text = time
+            //左边选中设置左边的时间数据
+            scheduleEditBinding.tvDateStart.text = time
 //                if (!scheduleEditBinding.checkBox.isChecked) {
-                    scheduleEditBinding.tvTimeStart.text =
-                        DateUtils.formatTime(date, "", "HH:mm")
+            scheduleEditBinding.tvTimeStart.text =
+                DateUtils.formatTime(date, "", "HH:mm")
 //                }
-                dateStart.set(date)
+            dateStart.set(date)
 //            }
 //            else if (scheduleEditBinding.vDateTopMarkRight.visibility == View.VISIBLE) {
-                //右边被选中设置右边的时间数据
-                scheduleEditBinding.tvDateEnd.text = time
+            //右边被选中设置右边的时间数据
+            scheduleEditBinding.tvDateEnd.text = time
 //                if (!scheduleEditBinding.checkBox.isChecked) {
 //                    scheduleEditBinding.tvTimeEnd.text =
 //                        DateUtils.formatTime(date, "", "HH:mm")
 //                }
-                dateEnd.set(date)
+            dateEnd.set(date)
 //            }
 //            else {
-                //第一次设置两边的数据
-                if (TextUtils.isEmpty(startTime)) {
-                    scheduleEditBinding.tvDateStart.text = time
+            //第一次设置两边的数据
+            if (TextUtils.isEmpty(startTime)) {
+                scheduleEditBinding.tvDateStart.text = time
 //                    if (!scheduleEditBinding.checkBox.isChecked) {
-                        scheduleEditBinding.tvTimeStart.text =
-                            DateUtils.formatTime(date, "", "HH:mm")
+                scheduleEditBinding.tvTimeStart.text =
+                    DateUtils.formatTime(date, "", "HH:mm")
 //                    }
-                    dateStart.set(date)
-                } else {
-                    scheduleEditBinding.tvDateStart.text =
-                        DateUtils.formatTime(startTime, "", "", true)
+                dateStart.set(date)
+            } else {
+                scheduleEditBinding.tvDateStart.text =
+                    DateUtils.formatTime(startTime, "", "", true)
 //                    if (!scheduleEditBinding.checkBox.isChecked) {
-                        scheduleEditBinding.tvTimeStart.text =
-                            DateUtils.formatTime(startTime, "", "HH:mm")
+                scheduleEditBinding.tvTimeStart.text =
+                    DateUtils.formatTime(startTime, "", "HH:mm")
 //                    }
-                    dateStart.set(startTime)
-                }
-                if (TextUtils.isEmpty(endTime)) {
-                    scheduleEditBinding.tvDateEnd.text = time
-//                    if (!scheduleEditBinding.checkBox.isChecked) {
-                        scheduleEditBinding.tvTimeEnd.text =
-                            DateUtils.formatTime(date, "", "HH:mm")
-//                    }
-                    dateEnd.set(date)
-                } else {
-                    scheduleEditBinding.tvDateEnd.text =
-                        DateUtils.formatTime(endTime, "", "", true)
-//                    if (!scheduleEditBinding.checkBox.isChecked) {
-                        scheduleEditBinding.tvTimeEnd.text =
-                            DateUtils.formatTime(endTime, "", "HH:mm")
-//                    }
-                    dateEnd.set(endTime)
-                }
+                dateStart.set(startTime)
             }
-            null
+            if (TextUtils.isEmpty(endTime)) {
+                scheduleEditBinding.tvDateEnd.text = time
+//                    if (!scheduleEditBinding.checkBox.isChecked) {
+                scheduleEditBinding.tvTimeEnd.text =
+                    DateUtils.formatTime(date, "", "HH:mm")
+//                    }
+                dateEnd.set(date)
+            } else {
+                scheduleEditBinding.tvDateEnd.text =
+                    DateUtils.formatTime(endTime, "", "", true)
+//                    if (!scheduleEditBinding.checkBox.isChecked) {
+                scheduleEditBinding.tvTimeEnd.text =
+                    DateUtils.formatTime(endTime, "", "HH:mm")
+//                    }
+                dateEnd.set(endTime)
+            }
+        }
+        null
 //        }
 
 //        scheduleEditBinding.btnAddLabel.visibility = if (promoter) View.VISIBLE else View.GONE
@@ -633,9 +643,9 @@ class ScheduleEditActivityMain : BaseActivity() {
                 return@observe
             }
 //            ToastUtils.showShort("修改日程失败")
-            if (TextUtils.isEmpty(type)){
+            if (TextUtils.isEmpty(type)) {
                 ToastUtils.showShort("修改日程成功")
-            }else{
+            } else {
                 ToastUtils.showShort("新增日程成功")
             }
             finish()
@@ -643,9 +653,9 @@ class ScheduleEditActivityMain : BaseActivity() {
         //获取日程监听
         scheduleMangeViewModel.requestAllScheduleResult.observe(this, {
             if (it) {
-                if (TextUtils.isEmpty(type)){
+                if (TextUtils.isEmpty(type)) {
                     ToastUtils.showShort("修改日程成功")
-                }else{
+                } else {
                     ToastUtils.showShort("新增日程成功")
                 }
                 finish()
@@ -656,9 +666,9 @@ class ScheduleEditActivityMain : BaseActivity() {
                 return@observe
             }
 //            ToastUtils.showShort("修改日程失败")
-            if (TextUtils.isEmpty(type)){
+            if (TextUtils.isEmpty(type)) {
                 ToastUtils.showShort("修改日程成功")
-            }else{
+            } else {
                 ToastUtils.showShort("新增日程成功")
             }
             enableEditMode = false
@@ -684,13 +694,13 @@ class ScheduleEditActivityMain : BaseActivity() {
 
             drawable.setShape(GradientDrawable.LINEAR_GRADIENT);
 
-            holder.setTextColor(R.id.tv_label,ColorUtil.parseColor(item.colorValue))
+            holder.setTextColor(R.id.tv_label, ColorUtil.parseColor(item.colorValue))
 
             holder.getView<TextView>(R.id.tv_label).background = drawable
             holder.setText(R.id.tv_label, item.labelName)
             holder.itemView.setOnClickListener {
                 loge("item=$item")
-                if (!enableEditMode){
+                if (!enableEditMode) {
                     loge("日程便签只有发起人才能删除！")
                     return@setOnClickListener
                 }
@@ -805,13 +815,17 @@ class ScheduleEditActivityMain : BaseActivity() {
                 stringExtra,
                 ParticipantRsp.DataBean.ParticipantListBean::class.java
             )
+            /* val myself: ParticipantRsp.DataBean.ParticipantListBean = ParticipantRsp.DataBean.ParticipantListBean()
+             myself!!.id = SpData.getUserId()
+             myself!!.realname = SpData.getUser().username
+             myself!!.name = SpData.getUser().name
+             list.add(myself)*/
             if (list != null) {
-                loge("showSelectedParticipantParticipantBean:$"+JSON.toJSONString(list))
+                loge("showSelectedParticipantParticipantBean:$" + JSON.toJSONString(list))
                 scheduleEditViewModel.participantList.value = list
                 //list.map { ScheduleData.ParticipantBean(it.id) }
                 //显示参与人
                 showSelectedParticipant(list)
-
             }
             return
         }
@@ -824,12 +838,12 @@ class ScheduleEditActivityMain : BaseActivity() {
         }
 //        loge("showSelectedParticipant:$"+stringBuilder.toString())
         if (stringBuilder.isEmpty() || stringBuilder.isBlank()) {
-            scheduleEditBinding.tvParticipant.text = "添加参与人"
-            scheduleEditBinding.tvParticipant.setTextColor(resources.getColor(R.color.black11))
+            scheduleEditBinding.tvParticipant.text = SpData.getUser().name
         } else {
             scheduleEditBinding.tvParticipant.text = stringBuilder.toString()
-            scheduleEditBinding.tvParticipant.setTextColor(resources.getColor(R.color.black9))
         }
+        scheduleEditBinding.tvParticipant.setTextColor(resources.getColor(R.color.black9))
+
     }
 
     companion object {

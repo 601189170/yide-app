@@ -19,7 +19,8 @@ import com.yyide.chatim.model.AttendanceStudentRsp
 class BannerStudentAttendanceAdapter(datas: MutableList<AttendanceStudentRsp.AttendanceAdapterBean>?) :
     BannerAdapter<AttendanceStudentRsp.AttendanceAdapterBean, BannerStudentAttendanceAdapter.BannerViewHolder>(
         datas
-    ) {
+    ), View.OnClickListener {
+    lateinit var onItemClickListener: OnStudentItemClickListener
     override fun onCreateHolder(
         parent: ViewGroup?,
         viewType: Int
@@ -37,21 +38,32 @@ class BannerStudentAttendanceAdapter(datas: MutableList<AttendanceStudentRsp.Att
         size: Int
     ) {
         var bind = ItemStudentAttendanceBinding.bind(holder!!.itemView)
-        if (data != null) {
-            bind.studentName.text = if (data.name != null) "${data.name}" else ""
-            bind.normalOut.text = if (data.normalNumOut != null) "${data.normalNumOut}" else "0"
-            bind.normalEvent.text =
-                if (data.normalNumEvent != null) "${data.normalNumEvent}" else "0"
-            bind.normalCourse.text =
-                if (data.normalNumCourse != null) "${data.normalNumCourse}" else "0"
-            bind.unusualOut.text = if (data.errorNumOut != null) "${data.errorNumOut}" else "0"
-            bind.unusualEvent.text =
-                if (data.errorNumEvent != null) "${data.errorNumEvent}" else "0"
-            bind.unusualCourse.text =
-                if (data.errorNumCourse != null) "${data.errorNumCourse}" else "0"
-        }
+        bind.studentName.text = data?.name ?: "0"
+        bind.normalOut.text = (data?.normalNumCourse ?: "0") as String?
+        bind.normalEvent.text = (data?.normalNumEvent ?: "0") as String?
+        bind.normalCourse.text = (data?.normalNumCourse ?: "0") as String?
+        bind.unusualOut.text = (data?.errorNumOut ?: "0") as String?
+        bind.unusualEvent.text = (data?.errorNumEvent ?: "0") as String?
+        bind.unusualCourse.text = (data?.errorNumCourse ?: "0") as String?
     }
 
     class BannerViewHolder(@NonNull view: View) : RecyclerView.ViewHolder(view) {
+    }
+
+    override fun onClick(v: View?) {
+        val tag = v!!.getTag(R.id.layout_teacher)
+        if (tag == null || tag !is Int) return
+        val postion = tag
+        if (::onItemClickListener.isInitialized) {
+            onItemClickListener.onItemClick(v, postion)
+        }
+    }
+
+    public fun SetOnStuItemClickListener(onItemClickListener: OnStudentItemClickListener) {
+        this.onItemClickListener = onItemClickListener
+    }
+
+    interface OnStudentItemClickListener {
+        fun onItemClick(view: View, position: Int);
     }
 }

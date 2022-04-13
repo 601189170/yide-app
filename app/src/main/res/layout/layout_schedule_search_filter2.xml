@@ -249,7 +249,7 @@
                         android:id="@+id/rv_label_list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="16dp"
                         android:paddingStart="@dimen/dp_20"
                         android:paddingEnd="@dimen/dp_20"
                         android:paddingBottom="94dp"

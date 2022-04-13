@@ -1,6 +1,8 @@
 package com.yyide.chatim.adapter.schedule
 
 import android.widget.ImageView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
@@ -105,6 +107,12 @@ class ScheduleAdapter(data: List<ScheduleData>) :
             else -> {
             }
         }
+        val tabRecyclerview = holder.getView<RecyclerView>(R.id.label_list)
+        tabRecyclerview!!.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        val adapter = ScheduleTabListAdapter()
+        tabRecyclerview.adapter = adapter
+            adapter.setList(item.labelList)
 
 //        holder.itemView.setOnClickListener {
 //            val intent = Intent(context, ScheduleEditActivity::class.java)

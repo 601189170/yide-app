@@ -19,7 +19,8 @@ import com.yyide.chatim.model.AttendanceTeacherRsp
 class BannerTeacherAttendanceAdapter(datas: MutableList<AttendanceTeacherRsp.AttendanceTeacherAdapterBean>?) :
     BannerAdapter<AttendanceTeacherRsp.AttendanceTeacherAdapterBean, BannerTeacherAttendanceAdapter.BannerViewHolder>(
         datas
-    ) {
+    ), View.OnClickListener {
+    lateinit var onItemClickListener: OnItemClickListener
     override fun onCreateHolder(
         parent: ViewGroup?,
         viewType: Int
@@ -37,15 +38,34 @@ class BannerTeacherAttendanceAdapter(datas: MutableList<AttendanceTeacherRsp.Att
         size: Int
     ) {
         val bind = ItemTeacherAttendanceBinding.bind(holder!!.itemView)
-        if (data != null) {
-            bind.outOrIn.text =  if (data.normalRateOut != null ) "${data!!.normalRateOut}" else "0"
-            bind.time.text =  if (data.normalRateTime != null ) "${data!!.normalRateTime}" else "0"
-            bind.course.text =  if (data.normalRateCourse != null ) "${data!!.normalRateCourse}" else "0"
-        }
+        //holder.itemView.tag = ""
+            bind.outOrIn.text = data?.normalRateOut?:"0"
+            bind.outOrIn.text = data?.normalRateTime?:"0"
+            bind.outOrIn.text = data?.normalRateCourse?:"0"
+
+
     }
 
     class BannerViewHolder(@NonNull view: View) : RecyclerView.ViewHolder(view) {
 
 
     }
+
+    override fun onClick(v: View?) {
+        val tag = v!!.getTag(R.id.layout_teacher)
+        if (tag == null || tag !is Int) return
+        val postion = tag
+        if (::onItemClickListener.isInitialized) {
+            onItemClickListener.onItemClick(v, postion)
+        }
+    }
+
+    public fun SetOnTeaItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(view: View, position: Int);
+    }
+
 }

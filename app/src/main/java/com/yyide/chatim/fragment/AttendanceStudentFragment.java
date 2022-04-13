@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+
 import com.youth.banner.indicator.DrawableIndicator;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
@@ -16,6 +18,7 @@ import com.yyide.chatim.home.BannerTeacherAttendanceAdapter;
 import com.yyide.chatim.model.AttendanceStudentRsp;
 import com.yyide.chatim.model.AttendanceTeacherRsp;
 import com.yyide.chatim.presenter.AttendanceStudentPresenter;
+import com.yyide.chatim.utils.JumpUtil;
 import com.yyide.chatim.utils.LogUtil;
 import com.yyide.chatim.view.AttendanceStudentView;
 
@@ -34,6 +37,8 @@ import java.util.List;
 public class AttendanceStudentFragment extends BaseMvpFragment<AttendanceStudentPresenter> implements AttendanceStudentView {
 
     private FragmentAttendanceStudentBinding mViewBinding;
+    private BannerTeacherAttendanceAdapter bannerTeacherAttendanceAdapter;
+    private BannerStudentAttendanceAdapter bannerStudentAttendanceAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,6 +70,23 @@ public class AttendanceStudentFragment extends BaseMvpFragment<AttendanceStudent
         mViewBinding.attendanceBanner.setIndicator(indicator);
         mViewBinding.attendanceBanner.isAutoLoop(true);
         mViewBinding.attendanceBanner.setLoopTime(3000);
+        if (bannerStudentAttendanceAdapter != null) {
+            bannerStudentAttendanceAdapter.SetOnStuItemClickListener(new BannerStudentAttendanceAdapter.OnStudentItemClickListener() {
+                @Override
+                public void onItemClick(@NonNull View view, int position) {
+                    //跳转到h5页面
+                    JumpUtil.appOpen(getContext(),"学生考勤","","学生考勤");
+                }
+            });
+        }
+        if (bannerTeacherAttendanceAdapter != null) {
+            bannerTeacherAttendanceAdapter.SetOnTeaItemClickListener(new BannerTeacherAttendanceAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(@NonNull View view, int position) {
+
+                }
+            });
+        }
         mViewBinding.attendanceBanner.start();
     }
 
@@ -82,10 +104,10 @@ public class AttendanceStudentFragment extends BaseMvpFragment<AttendanceStudent
     public void getStudentAttendanceSuccess(List<AttendanceStudentRsp.AttendanceAdapterBean> rsp) {
         if (!rsp.isEmpty()) {
             mViewBinding.bannerConstrain.setVisibility(View.VISIBLE);
-            mViewBinding.attendanceBanner.setAdapter(new BannerStudentAttendanceAdapter(rsp));
+            bannerStudentAttendanceAdapter = new BannerStudentAttendanceAdapter(rsp);
+            mViewBinding.attendanceBanner.setAdapter(bannerStudentAttendanceAdapter);
         } else {
             mViewBinding.bannerConstrain.setVisibility(View.GONE);
-
         }
 
     }
@@ -94,7 +116,8 @@ public class AttendanceStudentFragment extends BaseMvpFragment<AttendanceStudent
     public void getTeacherAttendanceSuccess(List<AttendanceTeacherRsp.AttendanceTeacherAdapterBean> rsp) {
         if (rsp.isEmpty()) {
             mViewBinding.bannerConstrain.setVisibility(View.VISIBLE);
-            mViewBinding.attendanceBanner.setAdapter(new BannerTeacherAttendanceAdapter(rsp));
+            bannerTeacherAttendanceAdapter = new BannerTeacherAttendanceAdapter(rsp);
+            mViewBinding.attendanceBanner.setAdapter(bannerTeacherAttendanceAdapter);
         } else {
             mViewBinding.bannerConstrain.setVisibility(View.GONE);
         }

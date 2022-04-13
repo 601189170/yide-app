@@ -4,6 +4,8 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSON
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -168,6 +170,9 @@ class ScheduleTodayAdapter(type: Int,data: List<ScheduleData>) :
         val startTime = DateUtils.formatTime(item.moreDayStartTime ?: item.startTime, "", target)
         val endTime = DateUtils.formatTime(item.moreDayEndTime ?: item.endTime, "", target)
         holder.setText(R.id.tv_schedule_time_interval, "$startTime-$endTime")
+
+
+
     }
     override fun convert(holder: BaseViewHolder, item: ScheduleData) {
         when (holder.itemViewType) {

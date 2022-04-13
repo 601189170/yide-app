@@ -5,6 +5,7 @@ import android.opengl.Visibility
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -22,6 +23,7 @@ import com.google.android.flexbox.JustifyContent
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityScheduleParticipantBinding
 import com.yyide.chatim.fragment.schedule.StaffParticipantFragment
@@ -39,6 +41,7 @@ class ScheduleParticipantActivity : BaseActivity() {
     val fragments = mutableListOf<Fragment>()
     val tabs = mutableListOf<String>()
     private val participantSharedViewModel: ParticipantSharedViewModel by viewModels()
+
     // 判断是否从会议选择的参与人
     var isFromMeeting = false
 
@@ -80,7 +83,9 @@ class ScheduleParticipantActivity : BaseActivity() {
         adapter.setOnItemClickListener { _, _, position ->
             //更新view model里的数据源
             val removeAt = participantSharedViewModel.curStaffParticipantList.value
-            removeAt?.removeAt(position)
+            if (removeAt?.get(position)?.name != SpData.getUser().name){
+                removeAt?.removeAt(position)
+            }
             participantSharedViewModel.curStaffParticipantList.postValue(removeAt)
         }
     }
@@ -91,6 +96,8 @@ class ScheduleParticipantActivity : BaseActivity() {
             holder: BaseViewHolder,
             item: ParticipantRsp.DataBean.ParticipantListBean
         ) {
+            val ivDel = holder.getView<ImageView>(R.id.iv_del)
+            ivDel.visibility = if (item.name == SpData.getUser().name) View.GONE else View.VISIBLE
             holder.setText(R.id.tv_participant, item.name)
         }
     }
@@ -98,9 +105,9 @@ class ScheduleParticipantActivity : BaseActivity() {
     private fun initViewPager() {
         fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_STAFF))
         ///fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_STUDENT))
-        if (isFromMeeting){
+        if (isFromMeeting) {
             fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_MEETING_GUARDIAN))
-        }else{
+        } else {
             fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_GUARDIAN))
         }
         tabs.add("教职工")
@@ -138,11 +145,11 @@ class ScheduleParticipantActivity : BaseActivity() {
         )
         if (participantDataList != null) {
             participantDataList.forEach {
-                if (it!=null){
+                if (it != null) {
                     it.name = it.name
                     it.realname = it.realname
-                    if (!TextUtils.isEmpty(it.realname)){
-                        it.name=it.realname
+                    if (!TextUtils.isEmpty(it.realname)) {
+                        it.name = it.realname
                     }
                 }
 

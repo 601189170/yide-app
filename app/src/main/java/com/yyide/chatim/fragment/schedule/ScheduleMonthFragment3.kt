@@ -141,18 +141,19 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
         mCurrentSelectMonth = DateTime.now().monthOfYear
         mCurrentSelectDay = DateTime.now().dayOfMonth
         loge("当前日期：$mCurrentSelectYear-$mCurrentSelectMonth-$mCurrentSelectDay")
-        scheduleMonthViewModel.monthDataList.observe(requireActivity(),{
-            loge("keys ${it.keys.size}")
+        scheduleMonthViewModel.monthDataList.observe(requireActivity()) {
 //            removeTaskHints(hints)
-            Log.e("TAG", "monthDataList: "+JSON.toJSONString(it) )
-            it.keys.forEach {dateTime->
+            Log.e("TAG", "monthDataList: " + JSON.toJSONString(it))
+            it.keys.forEach { dateTime ->
                 val value = it[dateTime]
-                if (value != null){
-                    val hintCircle = HintCircle(dateTime,dateTime.dayOfMonth, value.size)
+                if (value != null) {
+                    val hintCircle = HintCircle(dateTime, dateTime.dayOfMonth, value.size)
                     hints.add(hintCircle)
 //                    addTaskHint(hintCircle)
                 }
             }
+            loge("keys ${it.keys.size}")
+
 //            val dateTime = DateTime(mCurrentSelectYear,mCurrentSelectMonth+1,mCurrentSelectDay,0,0,0).simplifiedDataTime()
 //            curDateTime = dateTime
 //            val value = scheduleMonthViewModel.monthDataList.value
@@ -166,42 +167,48 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
 //
 //            }
 
-            val dateTime = DateTime(mCurrentSelectYear,mCurrentSelectMonth+1,mCurrentSelectDay,0,0).simplifiedDataTime()
+            val dateTime = DateTime(
+                mCurrentSelectYear,
+                mCurrentSelectMonth + 1,
+                mCurrentSelectDay,
+                0,
+                0
+            ).simplifiedDataTime()
             curDateTime = dateTime
             val value = scheduleMonthViewModel.monthDataList.value
-            if (value!=null && value[dateTime] != null){
+            if (value != null && value[dateTime] != null) {
                 val mutableList = value[dateTime]
                 mutableList?.sort()
                 ScheduleMonthAdapter.setList(mutableList)
                 list.addAll(ScheduleMonthAdapter.data)
             }
-            if (refresh){
+            if (refresh) {
                 refresh = false
                 calendarComposeLayout.swipeRefreshLayout.isRefreshing = false
             }
-        })
+        }
         scheduleMonthViewModel.scheduleList(DateTime.now())
 
         //删除监听
-        scheduleEditViewModel.deleteResult.observe(requireActivity(), {
+        scheduleEditViewModel.deleteResult.observe(requireActivity()) {
             if (it) {
                 ScheduleDaoUtil.deleteScheduleData(curModifySchedule?.id ?: "")
                 updateDate()
             }
-        })
+        }
 
         //修改日程状态监听
-        scheduleEditViewModel.changeStatusResult.observe(requireActivity(), {
+        scheduleEditViewModel.changeStatusResult.observe(requireActivity()) {
             if (it) {
                 ToastUtils.showShort("日程修改成功")
                 ScheduleDaoUtil.changeScheduleState(
-                        curModifySchedule?.id ?: "", curModifySchedule?.status?:""
+                    curModifySchedule?.id ?: "", curModifySchedule?.status ?: ""
                 )
                 updateDate()
             } else {
                 ToastUtils.showShort("日程修改失败")
             }
-        })
+        }
 
         scheduleViewModel.requestAllScheduleResult.observe(requireActivity()){
             loge("刷新数据列表 $it")
@@ -243,11 +250,11 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
 
     private fun initScheduleList() {
         val manager = LinearLayoutManager(activity)
-        manager.setOrientation(LinearLayoutManager.VERTICAL)
+        manager.orientation = LinearLayoutManager.VERTICAL
         rvScheduleList.layoutManager = manager
         val itemAnimator = DefaultItemAnimator()
         itemAnimator.supportsChangeAnimations = false
-        rvScheduleList.setItemAnimator(itemAnimator)
+        rvScheduleList.itemAnimator = itemAnimator
         ScheduleMonthAdapter = ScheduleListAdapter()
         ScheduleMonthAdapter.setImgListener(this)
 //        todayScheduleTodayAdapter = ScheduleListAdapter()

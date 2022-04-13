@@ -20,7 +20,7 @@ class NewAppAdapter() : BaseQuickAdapter<NewAppRspJ, BaseViewHolder>(R.layout.ap
         val title = holder.getView<TextView>(R.id.title)
         val grid = holder.getView<GridView>(R.id.grid)
         title.text = item.categoryName;
-        var adapter = NewAppItemAdapter()
+        val adapter = NewAppItemAdapter()
         grid.adapter = adapter
         /* 常用应用编辑按钮
         if (item.categoryName == "常用应用") {

@@ -218,11 +218,11 @@ class ScheduleSearchFilterPop(
         val types = mutableListOf<Int>()
         val cbTransactionSchedule = binding.cbTransactionSchedule.isChecked
         if (cbTransactionSchedule) {
-            types.add(2)
+            types.add(0)
         }
         val cbSchoolCalendar = binding.cbSchoolCalendar.isChecked
         if (cbSchoolCalendar) {
-            types.add(0)
+            types.add(1)
         }
         val cbMeeting = binding.cbMeeting.isChecked
         if (cbMeeting) {
@@ -230,7 +230,7 @@ class ScheduleSearchFilterPop(
         }
         val cbClassSchedule = binding.cbClassSchedule.isChecked
         if (cbClassSchedule) {
-            types.add(1)
+            types.add(2)
         }
         val status = mutableListOf<Int>()
         val cbUndone = binding.cbUndone.isChecked

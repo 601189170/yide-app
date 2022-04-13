@@ -77,7 +77,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
     //是否显示时间轴
     private var timeAxisDateTime: DateTime? = null
 
-    //当前滚动方向是 0没滚动 1 向下滚动底部 -1向上滚动打顶部
+    //当前滚动方向是 0没滚动 1 向下滚动底部 -1向上滚动到顶部
     private var scrollOrientation: Int = 0
     private var curModifySchedule: ScheduleData? = null
 
@@ -106,7 +106,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
             //DialogUtil.showAddLabelDialog(context, labelList)
         }
 
-        scheduleListViewViewModel.listViewData.observe(requireActivity(), {
+        scheduleListViewViewModel.listViewData.observe(requireActivity()) {
             if (it.isEmpty() && !update) {
                 return@observe
             }
@@ -117,9 +117,9 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
                 list.addAll(it)
                 scheduleListAdapter.setList(list)
             }
-        })
+        }
         //重置更新列表时调用，和向上加载，向下加载区分开来
-        scheduleListViewViewModel.updateListViewData.observe(requireActivity()){
+        scheduleListViewViewModel.updateListViewData.observe(requireActivity()){ it ->
             list.clear()
             list.addAll(it)
             scheduleListAdapter.setList(list)
@@ -481,8 +481,9 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
     override fun onRefresh() {
         refresh = true
         EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
-//        scrollOrientation = -1
-//        curTopDateTime = curTopDateTime.minusMonths(1)
+
+       scrollOrientation = -1
+        //curTopDateTime = curTopDateTime.minusMonths(1)
 //        scheduleListViewViewModel.scheduleDataList(curTopDateTime, timeAxisDateTime)
     }
 

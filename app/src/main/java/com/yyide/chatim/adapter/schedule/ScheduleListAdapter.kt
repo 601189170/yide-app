@@ -1,18 +1,23 @@
 package com.yyide.chatim.adapter.schedule
 
+import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSON
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yanzhenjie.recyclerview.SwipeRecyclerView
 import com.yyide.chatim.R
+import com.yyide.chatim.adapter.NewAppItemAdapter
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
+import com.yyide.chatim.model.schedule.LabelListRsp
 import com.yyide.chatim.model.schedule.Schedule
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.utils.DateUtils
@@ -47,33 +52,33 @@ class ScheduleListAdapter :
         addItemType(Schedule.TYPE_TIME_AXIS, R.layout.schedule_item_time_axis)
         addItemType(Schedule.TYPE_LIST_VIEW_HEAD, R.layout.schedule_item_list_view_month_head)
     }
-    private  var listener: ImgListener?=null
 
-     fun setImgListener(listener: ImgListener){
-        this.listener=listener
+    private var listener: ImgListener? = null
+
+    fun setImgListener(listener: ImgListener) {
+        this.listener = listener
     }
-    interface ImgListener{
+
+    interface ImgListener {
         fun OnimgSelect(item: ScheduleData)
     }
+
     /**
      * 相同的布局设置
      */
     fun commonConvert(holder: BaseViewHolder, item: ScheduleData) {
-        loge("ScheduleData ${JSON.toJSONString(item)}")
-        holder.setText(R.id.tv_schedule_name, item.name)
-        holder.getView<TextView>(R.id.iv_mine_label).visibility = if (item.promoterSelf()) View.VISIBLE else View.GONE
 
-        if (item.promoterSelf()){
-            holder.getView<CheckBox>(R.id.iv_finish_tag).visibility=View.VISIBLE
-            holder.getView<CheckBox>(R.id.iv_finish_tag).isEnabled=true
-            if (item.status == "1") {
-                holder.getView<CheckBox>(R.id.iv_finish_tag).isChecked=true
-            } else {
-                holder.getView<CheckBox>(R.id.iv_finish_tag).isChecked=false
-            }
+        holder.setText(R.id.tv_schedule_name, item.name)
+        holder.getView<TextView>(R.id.iv_mine_label).visibility =
+            if (item.promoterSelf()) View.VISIBLE else View.GONE
+
+        if (item.promoterSelf()) {
+            holder.getView<CheckBox>(R.id.iv_finish_tag).visibility = View.VISIBLE
+            holder.getView<CheckBox>(R.id.iv_finish_tag).isEnabled = true
+            holder.getView<CheckBox>(R.id.iv_finish_tag).isChecked = item.status == "1"
 
             holder.getView<CheckBox>(R.id.iv_finish_tag).setOnClickListener(View.OnClickListener {
-                if (listener!=null){
+                if (listener != null) {
                     listener!!.OnimgSelect(item)
                 }
             })
@@ -94,6 +99,12 @@ class ScheduleListAdapter :
             DateUtils.dateExpired(item.moreDayEndTime),
             holder.getView(R.id.iv_schedule_type_img)
         )
+        val tabRecyclerview = holder.getView<RecyclerView>(R.id.label_list)
+        tabRecyclerview.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        val adapter = ScheduleTabListAdapter()
+        tabRecyclerview.adapter = adapter
+        adapter.setList(item.labelList)
         //日期设置
         val simplifiedDataTime =
             ScheduleDaoUtil.toDateTime(item.moreDayStartTime ?: item.startTime).simplifiedDataTime()
@@ -106,7 +117,8 @@ class ScheduleListAdapter :
         //全天跨天     全天 第1天，共3天
         if (item.isAllDay == "1" && moreDay && item.isRepeat == "0") {
             val target = "yyyy年MM月dd日"
-            val startTime = DateUtils.formatTime(item.moreDayStartTime ?: item.startTime, "", target)
+            val startTime =
+                DateUtils.formatTime(item.moreDayStartTime ?: item.startTime, "", target)
             val endTime = DateUtils.formatTime(item.moreDayEndTime ?: item.endTime, "", target)
             val timeDesc = "全天".plus(" 第${item.moreDayIndex}天，").plus("共${item.moreDayCount}天")
             //holder.setText(R.id.tv_schedule_time_interval, "$startTime - $endTime".plus("（全天）"))
@@ -118,18 +130,21 @@ class ScheduleListAdapter :
         //非全天跨天   08：00 - 09：00  第1天，共3天
         if (item.isAllDay == "0" && moreDay && item.isRepeat == "0") {
             val target = "HH:mm"
-            val startTime = DateUtils.formatTime(item.moreDayStartTime ?: item.startTime, "", target)
+            val startTime =
+                DateUtils.formatTime(item.moreDayStartTime ?: item.startTime, "", target)
             val endTime = DateUtils.formatTime(item.moreDayEndTime ?: item.endTime, "", target)
-            val timeDesc = startTime.plus(" - ").plus(endTime).plus("  第${item.moreDayIndex}天，").plus("共${item.moreDayCount}天")
+            val timeDesc = startTime.plus(" - ").plus(endTime).plus("  第${item.moreDayIndex}天，")
+                .plus("共${item.moreDayCount}天")
             holder.setText(R.id.tv_schedule_time_interval, timeDesc)
             return
         }
         //3.适用日程：全天不跨天非重复、全天不跨天重复
         //显示：2021年1月3日 （全天）
         //全天不跨天   全天
-        if ((item.isAllDay == "1" && !moreDay && item.isRepeat == "0") || (item.isAllDay == "1" && !moreDay && item.isRepeat != "0")){
+        if ((item.isAllDay == "1" && !moreDay && item.isRepeat == "0") || (item.isAllDay == "1" && !moreDay && item.isRepeat != "0")) {
             val target = "yyyy年MM月dd日"
-            val startTime = DateUtils.formatTime(item.moreDayStartTime ?: item.startTime, "", target)
+            val startTime =
+                DateUtils.formatTime(item.moreDayStartTime ?: item.startTime, "", target)
             //val endTime = DateUtils.formatTime(item.moreDayEndTime ?: item.endTime, "", target)
             holder.setText(R.id.tv_schedule_time_interval, "全天")
             return
@@ -137,10 +152,11 @@ class ScheduleListAdapter :
         //4.适用日程：非全天不跨天重复、非全天不跨天非重复
         //显示：2021年1月3日 08：00 - 09：00
         //非全天不跨天 08：00 - 10：00
-        if ((item.isAllDay == "0" && !moreDay && item.isRepeat != "0") || (item.isAllDay == "0" && !moreDay && item.isRepeat == "0")){
+        if ((item.isAllDay == "0" && !moreDay && item.isRepeat != "0") || (item.isAllDay == "0" && !moreDay && item.isRepeat == "0")) {
             val target = "HH:mm"
             val target2 = "HH:mm"
-            val startTime = DateUtils.formatTime(item.moreDayStartTime ?: item.startTime, "", target)
+            val startTime =
+                DateUtils.formatTime(item.moreDayStartTime ?: item.startTime, "", target)
             val endTime = DateUtils.formatTime(item.moreDayEndTime ?: item.endTime, "", target2)
             holder.setText(R.id.tv_schedule_time_interval, "$startTime - $endTime")
             return
@@ -150,6 +166,9 @@ class ScheduleListAdapter :
         val startTime = DateUtils.formatTime(item.moreDayStartTime, "", target)
         val endTime = DateUtils.formatTime(item.moreDayEndTime, "", target)
         holder.setText(R.id.tv_schedule_time_interval, "$startTime-$endTime")
+
+        //标签
+
 
     }
 
@@ -168,14 +187,14 @@ class ScheduleListAdapter :
                 commonConvert(holder, item)
             }
             Schedule.TYPE_LIST_VIEW_HEAD -> {
-                val month = DateUtils.formatTime(item.startTime, "", "MM月")
+                val month = DateUtils.formatTime(item.startTime, "", "MM月DD日")
                 holder.setText(R.id.tv_month_head_title, month)
                 holder.setVisible(R.id.tv_month_head_title, false)
             }
-            Schedule.TYPE_TIME_AXIS ->{
+            Schedule.TYPE_TIME_AXIS -> {
                 loge("分割线view")
                 val layoutParams = holder.itemView.layoutParams
-                layoutParams.height = DisplayUtils.dip2px(context,10f)
+                layoutParams.height = DisplayUtils.dip2px(context, 10f)
                 holder.itemView.requestLayout()
             }
             else -> {
