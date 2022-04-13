@@ -21,6 +21,7 @@ import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.schedule.ScheduleParticipantSearchActivity.Companion.guardianName
 import com.yyide.chatim.databinding.FragmentStaffParticipantBinding
 import com.yyide.chatim.model.schedule.ParticipantRsp
+import com.yyide.chatim.model.schedule.Schedule
 import com.yyide.chatim.model.schedule.SearchParticipantRsp
 import com.yyide.chatim.model.schedule.toParticipantListBean
 import com.yyide.chatim.utils.DisplayUtils
@@ -63,7 +64,7 @@ class StaffParticipantFragment : Fragment() {
 
         staffParticipantViewModel.getResponseResult().observe(requireActivity()) {
             if (it != null) {
-
+                loge("it== "+JSON.toJSONString(it))
                 listCache[it.name ?: "未知"] = it
                 val list = mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
                 it.list?.let {
@@ -313,7 +314,10 @@ class StaffParticipantFragment : Fragment() {
             holder: BaseViewHolder,
             item: ParticipantRsp.DataBean.ParticipantListBean
         ) {
+
+
             holder.setText(R.id.tv_student_name, "${item.name}")
+           // if (item.department)
             val recyclerView = holder.getView<RecyclerView>(R.id.rv_parent_of_student)
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
             val parentsAdapter = object :

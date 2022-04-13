@@ -47,7 +47,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     @BindView(R.id.className)
     TextView className;
     @BindView(R.id.time)
-    TextView time;
+    TextView mTime;
     @BindView(R.id.table_next)
     TextView table_next;
     @BindView(R.id.tvHours)
@@ -72,6 +72,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     private boolean isHasTab = false;
 
     private static final String TAG = "TableFragment";
+    private static final String DEFAULT_TIME = "00:00-24:00";
 
     @Nullable
     @Override
@@ -137,36 +138,20 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         if (dataBean != null) {
             setTableMsg(dataBean);
         } else if (isTable) {
-            setDefaultView("今日课已上完", isHasTab);
+            setDefaultView("今日课已上完", "",isHasTab);
         } else {
-            setDefaultView("今日无课", isHasTab);
+            setDefaultView("今日无课","" ,isHasTab);
         }
     }
 
-    private void setDefaultView(String string, Boolean isShow) {
-        className.setText(string);
-        if (isShow) {
-            time.setVisibility(View.VISIBLE);
+    private void setDefaultView(String string,String name, Boolean isHasTba) {
+        subjectName.setText(string);
+        className.setText(name);
+        if (isHasTba) {
             table_next.setVisibility(View.VISIBLE);
-            textView44.setVisibility(View.VISIBLE);
-            textview2.setVisibility(View.VISIBLE);
-            textview3.setVisibility(View.VISIBLE);
-            textview4.setVisibility(View.VISIBLE);
-            tvSecond.setVisibility(View.VISIBLE);
-            tvHours.setVisibility(View.VISIBLE);
-            tvMinute.setVisibility(View.VISIBLE);
-            mView.setVisibility(View.VISIBLE);
         } else {
-            time.setVisibility(View.GONE);
-            mView.setVisibility(View.GONE);
+            mTime.setText(DEFAULT_TIME);
             table_next.setVisibility(View.GONE);
-            textView44.setVisibility(View.GONE);
-            textview2.setVisibility(View.GONE);
-            textview3.setVisibility(View.GONE);
-            textview4.setVisibility(View.GONE);
-            tvSecond.setVisibility(View.GONE);
-            tvHours.setVisibility(View.GONE);
-            tvMinute.setVisibility(View.GONE);
         }
 
     }
@@ -202,14 +187,14 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     void setTableMsg(SelectSchByTeaidRsp.DataBean rsp) {
         subjectName.setText(rsp.subjectName);
         className.setText(rsp.classesName);
-        time.setText(rsp.fromDateTime + "-" + rsp.toDateTime);
+        mTime.setText(rsp.fromDateTime + "-" + rsp.toDateTime);
 //        tips.setText(TextUtils.isEmpty(rsp.beforeClass) ? "未设置课前提醒" : rsp.beforeClass);
     }
 
     @Override
     public void SelectSchByTeaidFail(String msg) {
         LogUtil.e("msg===" + msg);
-        setDefaultView("今日无课", isHasTab);
+        setDefaultView("暂无科目","暂无班级", isHasTab);
     }
 
 
@@ -219,9 +204,8 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
             if (msg.data != null) {
                 isHasTab = true;
                 className.setText(msg.data.name);
-                subjectName.setText(msg.data.subjectName);
-                time.setText(msg.data.startTime + "-" + msg.data.endTime);
-                setDefaultView(msg.data.name, isHasTab);
+                setDefaultView(msg.data.subjectName, msg.data.name,isHasTab);
+                mTime.setText(msg.data.startTime + "-" + msg.data.endTime);
                 new CountDownTimer(msg.data.sec, 1000) {
                     public void onTick(long millisUntilFinished) {
                         long myhour = (millisUntilFinished / 1000) / 3600;
@@ -234,16 +218,16 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                     }
 
                     public void onFinish() {
-                        //TODO 正在上课逻辑
-                        //setDefaultView("正在上课");
+                        //这节课开始上课时候从新请求下一节课
+                        mvpPresenter.getHomeTable();
                     }
                 }.start();
 
             } else {
-                setDefaultView("今日课已上完", isHasTab);
+                setDefaultView("暂无科目","暂无班级", isHasTab);
             }
         } else {
-            setDefaultView("今日无课", isHasTab);
+            setDefaultView("暂无科目","暂无班级", isHasTab);
         }
 
     }

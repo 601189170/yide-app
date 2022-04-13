@@ -67,14 +67,14 @@ class ScheduleEditActivitySimple : BaseActivity() {
         setContentView(scheduleEditBinding.root)
         initView()
         //日程删除监听
-        scheduleEditViewModel.deleteResult.observe(this, {
+        scheduleEditViewModel.deleteResult.observe(this) {
             if (it) {
                 //日程删除成功 并删除本地数据
                 val scheduleId = scheduleEditViewModel.scheduleIdLiveData.value ?: ""
                 ScheduleDaoUtil.deleteScheduleData(scheduleId)
                 finish()
             }
-        })
+        }
     }
 
     override fun getContentViewID(): Int {

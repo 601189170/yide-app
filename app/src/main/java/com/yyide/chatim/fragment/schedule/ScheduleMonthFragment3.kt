@@ -152,8 +152,6 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
 //                    addTaskHint(hintCircle)
                 }
             }
-            loge("keys ${it.keys.size}")
-
 //            val dateTime = DateTime(mCurrentSelectYear,mCurrentSelectMonth+1,mCurrentSelectDay,0,0,0).simplifiedDataTime()
 //            curDateTime = dateTime
 //            val value = scheduleMonthViewModel.monthDataList.value
@@ -181,6 +179,10 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
                 mutableList?.sort()
                 ScheduleMonthAdapter.setList(mutableList)
                 list.addAll(ScheduleMonthAdapter.data)
+                blankPage.visibility = View.GONE
+            }else{
+                ScheduleMonthAdapter.setList(null)
+                blankPage.visibility = View.VISIBLE
             }
             if (refresh) {
                 refresh = false
@@ -670,9 +672,10 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
     }
     private fun updateDate() {
         update = true
-        list.clear()
+        //list.clear()
         curTopDateTime = DateTime.now()
         curBottomDateTime = DateTime.now().plusMonths(1)
+
         //timeAxisDateTime = DateTime.now().simplifiedDataTime()
 //        scheduleMonthViewModel.scheduleDataList(DateTime.now().plusMonths(1), timeAxisDateTime,false,true)
         scheduleMonthViewModel.scheduleList(DateTime.now())

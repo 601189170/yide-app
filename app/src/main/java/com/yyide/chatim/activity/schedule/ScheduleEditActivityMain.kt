@@ -91,7 +91,7 @@ class ScheduleEditActivityMain : BaseActivity() {
             scheduleEditBinding.top.ivRight.visibility = View.GONE
             scheduleEditBinding.top.ivEdit.visibility = View.GONE
             scheduleEditBinding.top.tvRight.visibility = View.VISIBLE
-            scheduleEditBinding.top.tvRight.setText("简洁版")
+            scheduleEditBinding.top.tvRight.text = "简洁版"
         }
 
         scheduleEditBinding.top.tvRight.setOnClickListener {

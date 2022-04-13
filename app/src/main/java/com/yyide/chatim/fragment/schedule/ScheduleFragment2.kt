@@ -187,6 +187,7 @@ class ScheduleFragment2 : Fragment() {
 
         override fun onSwitch(view: View?) {
             loge("onSwitch")
+            showAddScheduleV2Dialog!!.dismiss()
 //            val intent = Intent(context, ScheduleFullEditionActivity::class.java)
             val intent = Intent(context, ScheduleEditActivityMain::class.java)
             val toScheduleDataBean = scheduleEditViewModel.toScheduleDataBean()

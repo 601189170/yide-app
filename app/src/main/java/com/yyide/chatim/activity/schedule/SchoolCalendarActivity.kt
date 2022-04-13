@@ -192,7 +192,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
         semesterList.forEach {
             val dataBean = LeaveDeptRsp.DataBean()
             dataBean.deptId = it.id
-            dataBean.deptName = it.schoolYear.plus("-").plus(it.name)
+            dataBean.deptName = (it.name)
 
             dataBean.startDate = it.startDate
             dataBean.endDate = it.endDate

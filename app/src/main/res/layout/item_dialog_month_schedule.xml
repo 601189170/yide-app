@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_6"
         android:maxEms="8"
-        android:singleLine="true"
+        android:maxLines="1"
         android:text="开学典礼"
         android:textColor="#ff1e1e1e"
         android:textSize="@dimen/text_16"

@@ -124,6 +124,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
             list.addAll(it)
             scheduleListAdapter.setList(list)
             if (refresh){
+                rvScheduleList.smoothScrollToPosition(0)
                 refresh = false
                 swipeRefreshLayout.isRefreshing = false
             }
