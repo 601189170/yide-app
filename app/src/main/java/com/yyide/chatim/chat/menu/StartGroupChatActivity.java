@@ -182,10 +182,10 @@ public class StartGroupChatActivity extends BaseActivity {
                 chatInfo.setType(V2TIMConversation.V2TIM_GROUP);
                 chatInfo.setId(data.toString());
                 chatInfo.setChatName(groupInfo.getGroupName());
-                Intent intent = new Intent(BaseApplication.getInstance(), ChatActivity.class);
+                Intent intent = new Intent(StartGroupChatActivity.this, ChatActivity.class);
                 intent.putExtra(Constants.CHAT_INFO, chatInfo);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                BaseApplication.getInstance().startActivity(intent);
+                startActivity(intent);
                 finish();
             }
 

@@ -98,10 +98,10 @@ class BookTeacherDetailActivity : BaseActivity() {
             chatInfo.id = teacher.id
             chatInfo.chatName = teacher.name
             logd("teacher id = ${chatInfo.id}")
-            val intent = Intent(BaseApplication.getInstance(), ChatActivity::class.java)
+            val intent = Intent(this, ChatActivity::class.java)
             intent.putExtra(Constants.CHAT_INFO, chatInfo)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            BaseApplication.getInstance().startActivity(intent)
+            startActivity(intent)
         }
     }
 

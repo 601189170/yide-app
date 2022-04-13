@@ -82,7 +82,7 @@ public class ChatActivity extends BaseActivity {
 
     private void chat(Intent intent) {
         Bundle bundle = intent.getExtras();
-        DemoLog.i(TAG, "bundle: " + bundle + " intent: " + intent);
+        Log.d(TAG, "bundle: " + bundle + " intent: " + intent);
         if (bundle == null) {
             startSplashActivity(null);
         }
@@ -95,6 +95,7 @@ public class ChatActivity extends BaseActivity {
         }
 
         if (V2TIMManager.getInstance().getLoginStatus() != V2TIM_STATUS_LOGINED) {
+            Log.d(TAG, "chat: status = "+ V2TIMManager.getInstance().getLoginStatus());
             startSplashActivity(bundle);
             finish();
             return;

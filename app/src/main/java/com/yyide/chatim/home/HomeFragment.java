@@ -147,6 +147,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
+        isStaff = SpData.getIdentityInfo().staffIdentity();
         childFragmentManager = getChildFragmentManager();
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
         mSwipeRefreshLayout.setRefreshing(true);
@@ -165,7 +166,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
     private void initView() {
 
-        isStaff = SpData.getIdentityInfo().staffIdentity();
         if (isStaff){
             menuTv1.setText("信息发布");
             menuTv2.setText("教师考勤");

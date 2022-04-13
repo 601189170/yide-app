@@ -118,19 +118,16 @@ public class PersonInfoActivity extends BaseActivity {
 
 
         setData(organization);
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ChatInfo chatInfo = new ChatInfo();
-                chatInfo.setType(V2TIMConversation.V2TIM_C2C);
-                chatInfo.setId(String.valueOf(bean.userId));
-                chatInfo.setChatName(bean.name);
+        send.setOnClickListener(v -> {
+            ChatInfo chatInfo = new ChatInfo();
+            chatInfo.setType(V2TIMConversation.V2TIM_C2C);
+            chatInfo.setId(String.valueOf(bean.userId));
+            chatInfo.setChatName(bean.name);
 
-                Intent intent = new Intent(BaseApplication.getInstance(), ChatActivity.class);
-                intent.putExtra(Constants.CHAT_INFO, chatInfo);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                BaseApplication.getInstance().startActivity(intent);
-            }
+            Intent intent = new Intent(this, ChatActivity.class);
+            intent.putExtra(Constants.CHAT_INFO, chatInfo);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         });
     }
 

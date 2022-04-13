@@ -38,10 +38,10 @@ public class XiaomiMsgReceiver extends PushMessageReceiver {
             DemoLog.w(TAG, "onNotificationMessageClicked: no extra data found");
             return;
         }
-        Intent intent = new Intent(BaseApplication.getInstance(), ChatActivity.class);
+        Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra("ext", ext);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        BaseApplication.getInstance().startActivity(intent);
+        context.startActivity(intent);
     }
 
     @Override

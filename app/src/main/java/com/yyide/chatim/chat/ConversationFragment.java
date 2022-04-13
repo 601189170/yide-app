@@ -320,10 +320,10 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         chatInfo.setType(conversationInfo.isGroup() ? V2TIMConversation.V2TIM_GROUP : V2TIMConversation.V2TIM_C2C);
         chatInfo.setId(conversationInfo.getId());
         chatInfo.setChatName(conversationInfo.getTitle());
-        Intent intent = new Intent(BaseApplication.getInstance(), ChatActivity.class);
+        Intent intent = new Intent(requireContext(), ChatActivity.class);
         intent.putExtra(Constants.CHAT_INFO, chatInfo);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        BaseApplication.getInstance().startActivity(intent);
+        startActivity(intent);
 
         //打印指定页面路径
         Intent intent2 = new Intent(getActivity(), ChatActivity.class);

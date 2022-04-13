@@ -93,10 +93,10 @@ class BookPatriarchDetailActivity : BaseActivity() {
             chatInfo.type = V2TIMConversation.V2TIM_C2C
             chatInfo.id = guardianItem.id
             chatInfo.chatName = guardianItem.name
-            val intent = Intent(BaseApplication.getInstance(), ChatActivity::class.java)
+            val intent = Intent(this, ChatActivity::class.java)
             intent.putExtra(Constants.CHAT_INFO, chatInfo)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            BaseApplication.getInstance().startActivity(intent)
+            startActivity(intent)
         }
     }
 
