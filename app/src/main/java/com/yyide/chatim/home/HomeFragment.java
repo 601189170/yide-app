@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -30,6 +31,8 @@ import com.youth.banner.indicator.DrawableIndicator;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.TodoActivity;
+import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.activity.attendance.teacher.TeacherAttendanceActivity;
 import com.yyide.chatim.activity.leave.AskForLeaveActivity;
 import com.yyide.chatim.activity.meeting.MeetingHomeActivity;
@@ -103,6 +106,21 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.homeBanner)
     Banner<AcceptMessageItem, BannerExampleAdapter> banner;
+
+    @BindView(R.id.tvMenu1)
+    TextView menuTv1;
+    @BindView(R.id.tvMenu2)
+    TextView menuTv2;
+    @BindView(R.id.tvMenu3)
+    TextView menuTv3;
+    @BindView(R.id.tvMenu4)
+    TextView menuTv4;
+    @BindView(R.id.tvMenu5)
+    TextView menuTv5;
+
+    boolean isStaff = false;
+
+
     private BannerExampleAdapter bannerAdapter;
     private View mBaseView;
     public FragmentListener mListener;
@@ -146,6 +164,22 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
     private void initView() {
+
+        isStaff = SpData.getIdentityInfo().staffIdentity();
+        if (isStaff){
+            menuTv1.setText("信息发布");
+            menuTv2.setText("教师考勤");
+            menuTv3.setText("待办");
+            menuTv4.setText("通行");
+            menuTv5.setText("周报");
+        }else {
+            menuTv1.setText("信息发布");
+            menuTv2.setText("课表");
+            menuTv3.setText("学生考勤");
+            menuTv4.setText("图书馆");
+            menuTv5.setText("食堂");
+        }
+
         viewModel.getAcceptMessage().observe(requireActivity(), acceptMessageBean -> {
             mSwipeRefreshLayout.setRefreshing(false);
             if (!acceptMessageBean.getAcceptMessage().isEmpty()) {
@@ -299,19 +333,35 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 //                startActivity(new Intent(getActivity(), SchoolCalendarActivity.class));
                 break;
             case R.id.tvMenu1:
-                startActivity(new Intent(getContext(), AskForLeaveActivity.class));
+                MessagePushActivity.Companion.startGo(requireContext());
                 break;
             case R.id.tvMenu2:
-                //MessagePushActivity.Companion.startGo(requireContext());
+                if (isStaff){
+                    JumpUtil.appOpen(requireContext(),"教师考勤","","教师考勤");
+                }else {
+                    JumpUtil.appOpen(requireContext(),"课表","","课表");
+                }
                 break;
             case R.id.tvMenu3:
-                startActivity(new Intent(getContext(), MeetingHomeActivity.class));
+                if (isStaff){
+                    JumpUtil.appOpen(requireContext(),"待办","","待办");
+                }else {
+                    JumpUtil.appOpen(requireContext(),"学生考勤","","学生考勤");
+                }
                 break;
             case R.id.tvMenu4:
-                //startActivity(new Intent(getContext(), TableActivity.class));
+                if (isStaff){
+                    JumpUtil.appOpen(requireContext(),"通行统计","","通行统计");
+                }else {
+                    JumpUtil.appOpen(requireContext(),"图书馆","","图书馆");
+                }
                 break;
             case R.id.tvMenu5:
-                JumpUtil.appOpen(requireContext(),"周报","","周报");
+                if (isStaff){
+                    JumpUtil.appOpen(requireContext(),"周报","","周报");
+                }else {
+                    JumpUtil.appOpen(requireContext(),"食堂","","食堂");
+                }
                 break;
             default:
                 break;
