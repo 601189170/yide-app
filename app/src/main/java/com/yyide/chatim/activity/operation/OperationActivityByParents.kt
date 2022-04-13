@@ -29,6 +29,7 @@ import com.yyide.chatim.model.*
 import com.yyide.chatim.utils.DatePickerDialogUtil
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.view.DialogUtil
+import org.joda.time.DateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -58,9 +59,12 @@ class OperationActivityByParents :
 
         viewModel = ViewModelProvider(this).get(OperationViewModelByParents::class.java)
 
+        supportFragmentManager.beginTransaction()
+                .replace(binding.content.id, OperationDataByParentsFragment.newInstance()).commit()
 
-        tl_3()
-        viewModel.getStudentDatas()
+
+
+
 
         viewModel.startTime.observe(this) {
             binding.layoutTime.tvStartTime.text=it
@@ -69,6 +73,14 @@ class OperationActivityByParents :
             binding.layoutTime.tvEndTime.text=it
         }
 
+        var starTime=DateUtils.getDate2(System.currentTimeMillis())
+        var endTime=DateUtils.getDate2(System.currentTimeMillis())
+        binding.layoutTime.tvStartTime.setText(starTime)
+        binding.layoutTime.tvEndTime.setText(endTime)
+        viewModel.startTime.value=starTime
+        viewModel.endTime.value=endTime
+
+        viewModel.getStudentDatas()
         binding.layoutTime.tvStartTime.setOnClickListener(View.OnClickListener {
             DatePickerDialogUtil.showDateTime(
                     this,
@@ -114,7 +126,6 @@ class OperationActivityByParents :
             if (list2!=null&&list2.size>0){
                 val pop = SwitchClassAndSubjectPop2(this,list2)
                 pop.setSSS(this)
-
             }
         })
 
@@ -208,30 +219,65 @@ class OperationActivityByParents :
         binding.layoutTime.tvToDay.setOnClickListener {
             if (!binding.layoutTime.tvToDay.isChecked) {
                 setCheck()
+                var starTime=DateUtils.getDate2(System.currentTimeMillis())
+                var endTime=DateUtils.getDate2(System.currentTimeMillis())
+                binding.layoutTime.tvStartTime.setText(starTime)
+                binding.layoutTime.tvEndTime.setText(endTime)
+                viewModel.startTime.value=starTime
+                viewModel.endTime.value=endTime
                 binding.layoutTime.tvToDay.isChecked = true
             }
         }
         binding.layoutTime.tvWeek.setOnClickListener {
             if (!binding.layoutTime.tvWeek.isChecked) {
                 setCheck()
+
+                 var  starTime = DateUtils.getDate2(DateUtils.getBeginDayOfWeek2().time)
+                 var  endTime = DateUtils.getDate2(DateUtils.getEndDayOfWeek2().time)
+
+                binding.layoutTime.tvStartTime.setText(starTime)
+                binding.layoutTime.tvEndTime.setText(endTime)
+                viewModel.startTime.value=starTime
+                viewModel.endTime.value=endTime
                 binding.layoutTime.tvWeek.isChecked = true
             }
         }
         binding.layoutTime.tvLastWeek.setOnClickListener {
             if (!binding.layoutTime.tvLastWeek.isChecked) {
                 setCheck()
+                var  starTime = DateUtils.getDate2(DateUtils.getBeginDayOfLastWeek().time)
+                var  endTime = DateUtils.getDate2(DateUtils.getEndDayOfLastWeek().time)
+
+                binding.layoutTime.tvStartTime.setText(starTime)
+                binding.layoutTime.tvEndTime.setText(endTime)
+                viewModel.startTime.value=starTime
+                viewModel.endTime.value=endTime
                 binding.layoutTime.tvLastWeek.isChecked = true
             }
         }
         binding.layoutTime.tvMonth.setOnClickListener {
             if (!binding.layoutTime.tvMonth.isChecked) {
                 setCheck()
+
+                var  starTime = DateUtils.getDate2(DateUtils.getBeginDayOfMonth().time)
+                var  endTime = DateUtils.getDate2(DateUtils.getEndDayOfMonth().time)
+
+                binding.layoutTime.tvStartTime.setText(starTime)
+                binding.layoutTime.tvEndTime.setText(endTime)
+                viewModel.startTime.value=starTime
+                viewModel.endTime.value=endTime
                 binding.layoutTime.tvMonth.isChecked = true
             }
         }
         binding.layoutTime.tvLastMonth.setOnClickListener {
             if (!binding.layoutTime.tvLastMonth.isChecked) {
                 setCheck()
+                var  starTime = DateUtils.getDate2(DateUtils.getBeginDayOfMonth2().time)
+                var  endTime = DateUtils.getDate2(DateUtils.getEndDayOfMonth2().time)
+                binding.layoutTime.tvStartTime.setText(starTime)
+                binding.layoutTime.tvEndTime.setText(endTime)
+                viewModel.startTime.value=starTime
+                viewModel.endTime.value=endTime
                 binding.layoutTime.tvLastMonth.isChecked = true
             }
         }
@@ -245,35 +291,35 @@ class OperationActivityByParents :
         binding.layoutTime.tvLastMonth.isChecked = false
     }
 
-    private fun tl_3() {
-        mFragments.add(OperationDataByParentsFragment.newInstance())
-        mFragments.add(OperationChartFragment.newInstance())
-        val viewPager: ViewPager = binding.viewpager
-        viewPager.adapter = MyPagerAdapter(supportFragmentManager)
-        binding.mTabLayout.setTabData(mTitles)
-        binding.mTabLayout.setOnTabSelectListener(object : OnTabSelectListener {
-            override fun onTabSelect(position: Int) {
-                viewPager.currentItem = position
-            }
-
-            override fun onTabReselect(position: Int) {}
-        })
-        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(
-                    position: Int,
-                    positionOffset: Float,
-                    positionOffsetPixels: Int
-            ) {
-            }
-
-            override fun onPageSelected(position: Int) {
-                binding.mTabLayout.currentTab = position
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {}
-        })
-        viewPager.currentItem = 0
-    }
+//    private fun tl_3() {
+//        mFragments.add(OperationDataByParentsFragment.newInstance())
+//        mFragments.add(OperationChartFragment.newInstance())
+//        val viewPager: ViewPager = binding.viewpager
+//        viewPager.adapter = MyPagerAdapter(supportFragmentManager)
+//        binding.mTabLayout.setTabData(mTitles)
+//        binding.mTabLayout.setOnTabSelectListener(object : OnTabSelectListener {
+//            override fun onTabSelect(position: Int) {
+//                viewPager.currentItem = position
+//            }
+//
+//            override fun onTabReselect(position: Int) {}
+//        })
+//        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+//            override fun onPageScrolled(
+//                    position: Int,
+//                    positionOffset: Float,
+//                    positionOffsetPixels: Int
+//            ) {
+//            }
+//
+//            override fun onPageSelected(position: Int) {
+//                binding.mTabLayout.currentTab = position
+//            }
+//
+//            override fun onPageScrollStateChanged(state: Int) {}
+//        })
+//        viewPager.currentItem = 0
+//    }
 
     private class MyPagerAdapter(fm: FragmentManager?) :
             FragmentPagerAdapter(fm!!) {

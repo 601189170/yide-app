@@ -53,6 +53,7 @@ data class SiteTableRsp(
             var date:String? = null,
             var startTime:String? = null,
             var endTime:String? = null,
+            var check:Boolean?=false,
         )
 
         data class WeekListBean(

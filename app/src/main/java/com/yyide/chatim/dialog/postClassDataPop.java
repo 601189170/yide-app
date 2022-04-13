@@ -70,7 +70,7 @@ public class postClassDataPop extends PopupWindow {
         init();
     }
     private void init() {
-        final View mView = LayoutInflater.from(context).inflate(R.layout.layout_top_chirld_pop2, null);
+        final View mView = LayoutInflater.from(context).inflate(R.layout.layout_top_pop_class, null);
         TextView confirm = mView.findViewById(R.id.confirm);
         TextView cancel = mView.findViewById(R.id.cancel);
         ConstraintLayout bg = mView.findViewById(R.id.bg);

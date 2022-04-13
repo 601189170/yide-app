@@ -109,6 +109,8 @@ class OperationDataByTeacherFragment : Fragment() , SwipeRefreshLayout.OnRefresh
 
                     }
                 }
+            }else{
+                viewBinding.swipeRefreshLayout.setRefreshing(false);
             }
         }
 
@@ -137,7 +139,13 @@ class OperationDataByTeacherFragment : Fragment() , SwipeRefreshLayout.OnRefresh
                 Html.fromHtml(completed)
 
                 viewBind.tvName.text=item.subjectName
-                viewBind.tvTime.text=item.releaseTime
+                if (item.isScheduled){
+                    viewBind.tvTime.setTextColor(resources.getColor(R.color.colorPrimary))
+                    viewBind.tvTime.text=item.releaseTime+"发布"
+                }else{
+                    viewBind.tvTime.setTextColor(resources.getColor(R.color.textview999))
+                    viewBind.tvTime.text=item.releaseTime
+                }
                 viewBind.tvContent.text=item.title
                 viewBind.tvHaveRead.text=Html.fromHtml(read)
                 viewBind.tvComplete.text=Html.fromHtml(completed)

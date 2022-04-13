@@ -1434,12 +1434,15 @@ public class DialogUtil {
         dialogWindow.setGravity(Gravity.TOP);
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = (int) (context.getResources().getDisplayMetrics().widthPixels );
-        lp.height = DisplayUtils.dip2px(context, 225f);
+        lp.height = DisplayUtils.dip2px(context, 200);
         rootView.measure(0, 0);
         lp.dimAmount = 0.75f;
         dialogWindow.setAttributes(lp);
+
+
         mDialog.setCancelable(true);
         mDialog.show();
+
 
     }
 

@@ -59,14 +59,22 @@ class OperationDataByParentsFragment : Fragment() , SwipeRefreshLayout.OnRefresh
 
         initView()
         viewModel.studentId.observe(viewLifecycleOwner){
-            Log.e("TAG", "viewModel.studentId.observe: ")
             getParentsData(pageNum,pageSize)
         }
-
+        viewModel.subjectId.observe(viewLifecycleOwner){
+            getParentsData(pageNum,pageSize)
+        }
+// 监听开始时间变化
+        viewModel.startTime.observe(viewLifecycleOwner) {
+            getParentsData(pageNum,pageSize)
+        }
+        viewModel.endTime.observe(viewLifecycleOwner) {
+            getParentsData(pageNum,pageSize)
+        }
         viewModel.ParentsWorkDatasList.observe(viewLifecycleOwner){
 
             Log.e("TAG", "selectParentStudentData: "+JSON.toJSONString(it.getOrNull()) )
-            viewBinding!!.swipeRefreshLayout.isRefreshing = false
+            viewBinding.swipeRefreshLayout.isRefreshing = false
             mAdapter.loadMoreModule.loadMoreComplete()
             if (it.isSuccess){
                 val result = it.getOrNull()
@@ -79,6 +87,8 @@ class OperationDataByParentsFragment : Fragment() , SwipeRefreshLayout.OnRefresh
 
                     }
                 }
+            }else{
+                viewBinding.swipeRefreshLayout.setRefreshing(false);
             }
         }
 
@@ -115,7 +125,7 @@ class OperationDataByParentsFragment : Fragment() , SwipeRefreshLayout.OnRefresh
         mAdapter.loadMoreModule.setOnLoadMoreListener {
 
             //上拉加载时取消下拉刷新
-//            mSwipeRefreshLayout.setRefreshing(false);
+            viewBinding.swipeRefreshLayout.setRefreshing(false);
             mAdapter.loadMoreModule.isEnableLoadMore = true
             //请求数据
             pageNum++

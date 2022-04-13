@@ -13,6 +13,7 @@ data class getSchoolWorkFeedback(
         val noReadList: List<Any>,
         val readList: List<Any>,
         val releaseTime: String,
+        val timetableTime: String,
         val title: String
 )
 
@@ -21,7 +22,10 @@ data class ClassesTimetable(
     val classesId: String,
     val classesName: String,
     val id: String,
-    val subjectName: String
+    val subjectName: String,
+    val timetableTime: String?="",
+    val startTime: String,
+    val sequence: String
 )
 
 data class FeedbackData(

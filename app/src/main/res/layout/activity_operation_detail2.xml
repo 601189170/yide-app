@@ -32,6 +32,9 @@
             android:text="一年级1班"
             android:textColor="#ff222222"
             android:textSize="16sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textStyle="bold"
             app:drawableStartCompat="@drawable/icon_zy"
             app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="@dimen/dp_10"
-            android:background="@color/line_E4E7ED"
+            android:background="#D8D8D8"
             app:layout_constraintTop_toBottomOf="@+id/tv_gl" />
 
         <TextView

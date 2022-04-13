@@ -2,6 +2,7 @@ package com.yyide.chatim.kotlin.network
 
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.kotlin.network.base.BaseNetworkApi
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Query
 
@@ -296,4 +297,13 @@ object NetworkApi : BaseNetworkApi<INetworkService>(BaseConstant.API_SERVER_URL)
             service.getFaceList(id)
         }
 
+
+    /**
+     * 获取学生信息列表
+     */
+    suspend fun upPohto(lists: List<MultipartBody.Part>) =
+            getResult {
+
+                service.upload(lists)
+            }
 }

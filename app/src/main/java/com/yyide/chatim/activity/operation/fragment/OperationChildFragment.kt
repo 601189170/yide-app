@@ -17,8 +17,11 @@ import com.alibaba.fastjson.JSON
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.operation.OperationCreatWorkActivity
+import com.yyide.chatim.activity.operation.OperationDetailActivity
 import com.yyide.chatim.activity.operation.viewmodel.OperationTearcherViewModel
 import com.yyide.chatim.activity.operation.viewmodel.OperationViewModel
+import com.yyide.chatim.activity.table.TableActivity2
 import com.yyide.chatim.databinding.ItemOperationBkBinding
 import com.yyide.chatim.databinding.ItemOperationWorkTypeBinding
 import com.yyide.chatim.databinding.OperationChildFragmentBinding
@@ -32,7 +35,6 @@ class OperationChildFragment : Fragment() {
 
     companion object {
         private const val ARG_TYPE = "type"
-//        fun newInstance() = OperationChildFragment()
         @JvmStatic
         fun newInstance(type: Int) =
         OperationChildFragment().apply {
@@ -43,7 +45,7 @@ class OperationChildFragment : Fragment() {
     }
     private var type: Int = 0
 
-
+    var mactivity:OperationDetailActivity?=null
 //    var bean:getSchoolWork?=null
     private val viewModel: OperationTearcherViewModel by activityViewModels()
     private lateinit var viewBinding: OperationChildFragmentBinding
@@ -63,6 +65,8 @@ class OperationChildFragment : Fragment() {
             type = it.getInt(ARG_TYPE)
         }
         viewBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
+
+        mactivity = activity as OperationDetailActivity
 
         viewModel.getSchoolWorkRsp.observe(viewLifecycleOwner){
             if (it.isSuccess){
@@ -86,7 +90,7 @@ class OperationChildFragment : Fragment() {
                                 //一键提醒所有
                                 val  workId=result.classesTimetable.workId
                                 val  classesId=result.classesTimetable.classesId
-
+                                mactivity!!.setIndex(true)
                                 if (!TextUtils.isEmpty(workId)&&!TextUtils.isEmpty(classesId)){
                                     viewModel.updateRemind("0",workId,classesId,"")
                                 }
@@ -164,6 +168,7 @@ class OperationChildFragment : Fragment() {
                         viewBind.tv3.text="提醒"
                         viewBind.tv3.setTextColor(resources.getColor(R.color.select_circle_color))
                         viewBind.tv3.setOnClickListener(View.OnClickListener {
+                            mactivity!!.setIndex(true)
                             //发送提醒
                             val workId= viewModel.getSchoolWorkRsp.value?.getOrNull()?.classesTimetable?.workId
                             val classesId= viewModel.getSchoolWorkRsp.value?.getOrNull()?.classesTimetable?.classesId

@@ -25,6 +25,7 @@ data class getSchoolWork(
                 val id: String,
                 val sequence: String,
                 val startTime: String,
+                val timetableTime: String,
                 val subjectName: String,
                 val week: String,
                 val weekTime: String,

@@ -1,9 +1,11 @@
 package com.yyide.chatim.activity.operation
 
+import android.Manifest
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
@@ -27,24 +29,42 @@ import com.yyide.chatim.databinding.*
 import com.yyide.chatim.dialog.deletePop
 import com.yyide.chatim.dialog.postClassDataPop
 import com.yyide.chatim.model.*
-import com.yyide.chatim.utils.DatePickerDialogUtil
-import com.yyide.chatim.utils.DateUtils
-import com.yyide.chatim.utils.GlideUtil
-import com.yyide.chatim.utils.logd
 import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.view.SpacesItemDecoration
-import com.yyide.chatim.widget.WheelView
 import org.joda.time.DateTime
 import java.util.*
-import android.R.attr.data
-import android.widget.Toast
 import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.table.TableActivity2
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import java.io.File
+import com.yyide.chatim.activity.user.RegisterActivity
+import com.yyide.chatim.base.BaseActivity
+import com.yyide.chatim.dialog.selectphotoAndCarmer
+
+import com.yyide.chatim.kotlin.network.base.BaseResponse
+
+import com.yyide.chatim.login.LoginActivity
+import top.zibin.luban.Luban
+import top.zibin.luban.OnCompressListener
+import android.R.attr.data
+import android.graphics.Bitmap
+import android.R.attr.data
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.os.StrictMode
+import com.tbruyelle.rxpermissions3.RxPermissions
+import com.yyide.chatim.utils.*
+import org.apache.commons.io.FileUtils.getFile
+import android.R.attr.data
+
+
+
 
 
 class OperationCreatWorkActivity :
-    KTBaseActivity<ActivityOperationPostWorkBinding>(ActivityOperationPostWorkBinding::inflate) {
+    KTBaseActivity<ActivityOperationPostWorkBinding>(ActivityOperationPostWorkBinding::inflate),selectphotoAndCarmer.SelectDateListener{
     private lateinit var viewModel: OperationPostWorkModel
 
 
@@ -66,11 +86,20 @@ class OperationCreatWorkActivity :
     var RESULT_LOAD_IMAGE=1
 
     var RESULT_SELECT_SUBJECT=2
+
+    var RESULT_CARMER=3
+
     var kbID:String=""
 
     var imglist: MutableList<String> = ArrayList()
 
     var index:Int=-1;
+
+    val FileList: MutableList<File> = ArrayList()
+
+    var SD_CARD_PATH = Environment.getExternalStorageDirectory().absolutePath
+
+    var photoUrl =""
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -80,7 +109,7 @@ class OperationCreatWorkActivity :
         viewModel.getSubject()
 
         viewModel.getClassList()
-
+        initPhotoError()
         viewModel.ispost.observe(this){
             if (it.isSuccess){
                 var  result=it.getOrNull()
@@ -89,6 +118,27 @@ class OperationCreatWorkActivity :
                     finish()
                 }else{
                     ToastUtils.showShort("发布作业失败")
+                }
+            }
+        }
+        viewModel.UploadRsp.observe(this){
+            if (it.isSuccess){
+                if (it.getOrNull()!=null){
+                    var  result=it.getOrNull();
+                    Log.e("TAG", "图片上传成功2: "+JSON.toJSONString(result) )
+                    if (result!=null){
+                        val sb=StringBuffer()
+                        for (i in result.indices) {
+                            if (i==result.size-1){
+                                sb.append(result[i].url)
+                            }else{
+                                sb.append(result[i].url+",")
+                            }
+                        }
+                        postData(sb.toString())
+                    }
+
+
                 }
             }
         }
@@ -187,6 +237,14 @@ class OperationCreatWorkActivity :
                 viewModel.endTimeLiveData.value = startTime
             }
 
+    fun initPhotoError(){
+
+
+        val builder =StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        builder.detectFileUriExposure();
+
+    }
 
     override fun initView() {
         binding.top.title.text = getString(R.string.operation_post_work_title)
@@ -222,11 +280,10 @@ class OperationCreatWorkActivity :
             },postsubjectList,viewModel.subjectId.value)
         })
 
-        binding.img.setOnClickListener(View.OnClickListener {
-            val i = Intent(
-                    Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        binding.imglayout.setOnClickListener(View.OnClickListener {
+            val pop = selectphotoAndCarmer(this@OperationCreatWorkActivity)
+            pop.setJK(this)
 
-            startActivityForResult(i, RESULT_LOAD_IMAGE)
         })
         binding.btnCommit.setOnClickListener(View.OnClickListener {
             //提交
@@ -235,6 +292,8 @@ class OperationCreatWorkActivity :
 
 
     }
+
+
 
     fun commit(){
         if(TextUtils.isEmpty(binding.workname.text.toString())){
@@ -245,14 +304,40 @@ class OperationCreatWorkActivity :
             ToastUtils.showShort("请输入作业内容")
             return
         }
+        var bean2list: MutableList<CreateWorkBean.ClassesListDTO> = ArrayList()
+        if (mAdapter.data.size==0){
+            ToastUtils.showShort("请选择班级")
+            return
+        }else{
+            mAdapter.data.forEach(){
 
+                if (!TextUtils.isEmpty(it.classesId)){
+                    var  bean=CreateWorkBean.ClassesListDTO()
+                    bean.classesId=it.classesId
+                    bean.timetableId=it.timetableId
+                    bean.timetableTime=it.timetableTime
+                    bean2list.add(bean)
+                    classListBean=bean2list
+                }else{
+                    ToastUtils.showShort("请选择班级")
+                    return
+                }
+            }
+        }
 
+        imglist.forEach(){
+            showPicFileByLuban(File(it))
+        }
+
+    }
+
+    fun postData(sb:String) {
         var  bean= CreateWorkBean()
-        getclassesList();
         bean.title=binding.workname.text.toString()
         bean.content=binding.edit.text.toString()
+
         //图片地址
-//        bean.imgPaths=imglist.toString()
+        bean.imgPaths=sb
         if (!binding.feedbackEndTime.text.toString().equals("无")){
             bean.feedbackEndTime=binding.feedbackEndTime.text.toString()
         }
@@ -264,12 +349,43 @@ class OperationCreatWorkActivity :
         viewModel.createWork(bean)
     }
 
+    private fun showPicFileByLuban(file: File) {
+        Luban.with(this)
+                .load(file)
+                .ignoreBy(100) //.putGear(Luban.THIRD_GEAR)//压缩等级
+                .setTargetDir(Environment.getExternalStorageDirectory().absolutePath)
+                .filter { path: String -> !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif")) }
+                .setCompressListener(object : OnCompressListener {
+                    override fun onStart() {
+                        showLoading()
+                    }
 
-    private val mAdapterimg =
+                    override fun onSuccess(file: File) {
+                        FileList.add(file)
+                        Log.e("TAG", "上传完: " +FileList.size/+imglist.size)
+                        if (FileList.size==imglist.size){
+                            viewModel.upPohto(FileList)
+                        }else{
+                            Log.e("TAG", "压缩完: "+FileList.size )
+                        }
+                    }
+
+                    override fun onError(e: Throwable) {
+                        hideLoading()
+                        ToastUtils.showShort("图片压缩失败请重试")
+                    }
+                }).launch()
+    }
+    public val mAdapterimg =
             object :
                     BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_operation_work_img2) {
                 override fun convert(holder: BaseViewHolder, item: String) {
-                    val viewBind = ItemOperationWorkImgBinding.bind(holder.itemView)
+                    val viewBind = ItemOperationWorkImg2Binding.bind(holder.itemView)
+                    viewBind.delete.setOnClickListener(View.OnClickListener {
+
+                        deleteImg(item)
+
+                    })
                     GlideUtil.loadImageRadius(baseContext, item, viewBind.img, SizeUtils.dp2px(4f))
                     viewBind.img.setOnClickListener(View.OnClickListener {
                         PhotoViewActivity.start(this@OperationCreatWorkActivity, item)
@@ -278,6 +394,13 @@ class OperationCreatWorkActivity :
 
                 }
             }
+
+
+    fun deleteImg(item:String){
+        imglist.remove(item)
+        mAdapterimg.setList(imglist)
+
+    }
     private val mAdapter =
             object :
                     BaseQuickAdapter<AddClassBean, BaseViewHolder>(R.layout.item_add_class) {
@@ -301,10 +424,6 @@ class OperationCreatWorkActivity :
                     //选择课表
                     viewBind.selectlayout2.setOnClickListener(View.OnClickListener {
                         //课程表跳转
-//                        item.subjectName=
-//                        item.subjectId=
-//                        item.timetableId=
-//                        item.timetableTime=
                         if(!TextUtils.isEmpty(item.classesId)){
                             val intent = Intent(this@OperationCreatWorkActivity, TableActivity2::class.java)
                             intent.putExtra("classesId",item.classesId)
@@ -318,11 +437,6 @@ class OperationCreatWorkActivity :
                         }else {
                             ToastUtils.showShort("请选择班级")
                         }
-
-//                        val i = Intent(
-//                                Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-//
-//                        startActivityForResult(i, RESULT_LOAD_IMAGE)
                     })
                     //刪除
                     viewBind.delete.setOnClickListener(View.OnClickListener {
@@ -347,24 +461,7 @@ class OperationCreatWorkActivity :
 
 
 
-    fun getclassesList(){
-        var bean2list: MutableList<CreateWorkBean.ClassesListDTO> = ArrayList()
 
-        mAdapter.data.forEach(){
-
-            if (!TextUtils.isEmpty(it.classesId)){
-                var  bean=CreateWorkBean.ClassesListDTO()
-                bean.classesId=it.classesId
-                bean.timetableId=it.timetableId
-                bean.timetableTime=it.timetableTime
-                bean2list.add(bean)
-                classListBean=bean2list
-            }else{
-                ToastUtils.showShort("请关联班级")
-                return
-            }
-        }
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -393,9 +490,6 @@ class OperationCreatWorkActivity :
             val timetableId: String = data.getStringExtra("timetableId")
             val timetableTime: String = data.getStringExtra("timetableTime")
             val timetableName: String = data.getStringExtra("timetableName")
-            Log.e("TAG", "onActivityResult: "+JSON.toJSONString(timetableName) )
-            Log.e("TAG", "onActivityResult: "+JSON.toJSONString(timetableTime) )
-            Log.e("TAG", "onActivityResult: "+JSON.toJSONString(timetableId) )
             if (index!=-1){
                 for (i in mAdapter.data.indices) {
                     mAdapter.data[index].timetableId=timetableId
@@ -410,9 +504,48 @@ class OperationCreatWorkActivity :
 
 
 
+        }else if (requestCode == RESULT_CARMER && resultCode == RESULT_OK && null != data) {
+            Log.e("TAG", "RESULT_CARMER: " )
 
+            val bundle= data.getExtras()
+            // 获取相机返回的数据，并转换为Bitmap图片格式，这是缩略图
+            val bitmap = bundle!!["data"] as Bitmap?
+
+            var path=Utils.getFile(bitmap).absolutePath
+            imglist.add(path)
+            mAdapterimg.setList(imglist)
 
         }
     }
+
+    override fun onphoto() {
+        val i = Intent(
+                Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+
+        startActivityForResult(i, RESULT_LOAD_IMAGE)
+    }
+
+    override fun oncarmer() {
+
+
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+////
+        startActivityForResult(intent, RESULT_CARMER)
+//path为保存图片的路径，执行完拍照以后能保存到指定的路径下
+
+//        photoUrl=SD_CARD_PATH+System.currentTimeMillis() + ".jpg";
+//
+//        val file = File(photoUrl)
+//
+//        val imageUri = Uri.fromFile(file)
+//
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+//
+//        startActivityForResult(intent, RESULT_CARMER)
+
+    }
+
+
+
 
 }
