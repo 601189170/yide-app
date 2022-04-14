@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -174,11 +175,14 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             menuTv4.setText("通行");
             menuTv5.setText("周报");
         }else {
-            menuTv1.setText("信息发布");
             menuTv2.setText("课表");
+            menuTv1.setCompoundDrawablesRelative(null,ContextCompat.getDrawable(requireContext(),R.mipmap.home_tab_table),null,null);
             menuTv3.setText("学生考勤");
+            menuTv1.setCompoundDrawablesRelative(null,ContextCompat.getDrawable(requireContext(),R.mipmap.home_tab_student_attendance),null,null);
             menuTv4.setText("图书馆");
+            menuTv1.setCompoundDrawablesRelative(null,ContextCompat.getDrawable(requireContext(),R.mipmap.home_tab_library),null,null);
             menuTv5.setText("食堂");
+            menuTv1.setCompoundDrawablesRelative(null,ContextCompat.getDrawable(requireContext(),R.mipmap.home_tab_canteen),null,null);
         }
 
         viewModel.getAcceptMessage().observe(requireActivity(), acceptMessageBean -> {

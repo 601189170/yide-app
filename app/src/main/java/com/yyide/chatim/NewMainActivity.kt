@@ -618,11 +618,11 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
 
     private fun getUserSig() {
         //请求组合创建
-        viewModel.getUserSig(SpData.getUserId())
+        viewModel.getUserSig(SpData.getUser().identityUserId)
     }
 
     private fun initIm(userSig: UserSigRsp.IMDataBean) {
-        logd("userid= ${SpData.getUserId()}")
+        logd("id= ${SpData.getUserId()},id=${SpData.getUser().identityUserId}")
         TUIKit.login(userSig.identifier, userSig.userSig, object : IUIKitCallBack {
             override fun onError(module: String, code: Int, desc: String) {
                 runOnUiThread {
