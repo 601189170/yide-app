@@ -120,6 +120,15 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @BindView(R.id.tvMenu5)
     TextView menuTv5;
 
+    @BindView(R.id.iv_menu2)
+    ImageView menuIv2;
+    @BindView(R.id.iv_menu3)
+    ImageView menuIv3;
+    @BindView(R.id.iv_menu4)
+    ImageView menuIv4;
+    @BindView(R.id.iv_menu5)
+    ImageView menuIv5;
+
     boolean isStaff = false;
 
 
@@ -176,13 +185,13 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             menuTv5.setText("周报");
         }else {
             menuTv2.setText("课表");
-            menuTv1.setCompoundDrawablesRelative(null,ContextCompat.getDrawable(requireContext(),R.mipmap.home_tab_table),null,null);
+            menuIv2.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.mipmap.home_tab_table));
             menuTv3.setText("学生考勤");
-            menuTv1.setCompoundDrawablesRelative(null,ContextCompat.getDrawable(requireContext(),R.mipmap.home_tab_student_attendance),null,null);
+            menuIv2.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.mipmap.home_tab_student_attendance));
             menuTv4.setText("图书馆");
-            menuTv1.setCompoundDrawablesRelative(null,ContextCompat.getDrawable(requireContext(),R.mipmap.home_tab_library),null,null);
+            menuIv2.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.mipmap.home_tab_library));
             menuTv5.setText("食堂");
-            menuTv1.setCompoundDrawablesRelative(null,ContextCompat.getDrawable(requireContext(),R.mipmap.home_tab_canteen),null,null);
+            menuIv2.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.mipmap.home_tab_canteen));
         }
 
         viewModel.getAcceptMessage().observe(requireActivity(), acceptMessageBean -> {
@@ -306,7 +315,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     private LeftMenuPop mLeftMenuPop;
 
     @OnClick({R.id.head_img, R.id.scan, R.id.student_honor_content, R.id.class_honor_content, R.id.school_name,
-            R.id.tvMenu1, R.id.tvMenu2, R.id.tvMenu3, R.id.tvMenu4, R.id.tvMenu5})
+            R.id.home_menu1_cl, R.id.home_menu2_cl, R.id.home_menu3_cl, R.id.home_menu4_cl, R.id.home_menu5_cl})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.head_img:
@@ -335,33 +344,32 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 } else {
                     startActivity(new Intent(getActivity(), OperationActivityByParents.class));
                 }
-//                startActivity(new Intent(getActivity(), SchoolCalendarActivity.class));
                 break;
-            case R.id.tvMenu1:
+            case R.id.home_menu1_cl:
                 MessagePushActivity.Companion.startGo(requireContext());
                 break;
-            case R.id.tvMenu2:
+            case R.id.home_menu2_cl:
                 if (isStaff){
                     JumpUtil.appOpen(requireContext(),"教师考勤","","教师考勤");
                 }else {
                     JumpUtil.appOpen(requireContext(),"课表","","课表");
                 }
                 break;
-            case R.id.tvMenu3:
+            case R.id.home_menu3_cl:
                 if (isStaff){
                     JumpUtil.appOpen(requireContext(),"待办","","待办");
                 }else {
                     JumpUtil.appOpen(requireContext(),"学生考勤","","学生考勤");
                 }
                 break;
-            case R.id.tvMenu4:
+            case R.id.home_menu4_cl:
                 if (isStaff){
                     JumpUtil.appOpen(requireContext(),"通行统计","","通行统计");
                 }else {
                     JumpUtil.appOpen(requireContext(),"图书馆","","图书馆");
                 }
                 break;
-            case R.id.tvMenu5:
+            case R.id.home_menu5_cl:
                 if (isStaff){
                     JumpUtil.appOpen(requireContext(),"周报","","周报");
                 }else {

@@ -260,8 +260,8 @@ public class BaseApplication extends Application {
             public void onNewMessage(V2TIMMessage msg) {
                 //处理华为推送两条消息问题
                 DemoLog.i(TAG, "onNewMessage: " + msg.getMsgID());
-//                MessageNotification notification = MessageNotification.getInstance();
-//                notification.notify(msg);
+                MessageNotification notification = MessageNotification.getInstance();
+                notification.notify(msg);
             }
         };
 

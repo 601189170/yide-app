@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -9,7 +10,8 @@
         android:layout_height="220dp"
         android:scaleType="fitXY"
         android:src="@mipmap/icon_home_top_bg"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -78,79 +80,175 @@
         android:layout_marginTop="@dimen/dp_30"
         app:layout_constraintTop_toBottomOf="@+id/homeBanner">
 
-        <TextView
-            android:id="@+id/tvMenu1"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/home_menu1_cl"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/dp_4"
-            android:foreground="?android:attr/selectableItemBackgroundBorderless"
-            android:gravity="center"
-            android:text="信息发布"
-            android:textColor="#ff666666"
-            android:textSize="13sp"
-            app:drawableTopCompat="@mipmap/home_tab_message"
-            app:layout_constraintEnd_toStartOf="@+id/tvMenu2"
+            app:layout_constraintEnd_toStartOf="@id/home_menu2_cl"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tvMenu2"
+            <ImageView
+                android:id="@+id/iv_menu1"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:src="@mipmap/home_tab_message"
+                app:layout_constraintEnd_toEndOf="@id/tvMenu1"
+                app:layout_constraintStart_toStartOf="@id/tvMenu1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvMenu1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="信息发布"
+                android:textColor="#ff666666"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_menu1" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/home_menu2_cl"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/dp_4"
-            android:foreground="?android:attr/selectableItemBackgroundBorderless"
-            android:gravity="center"
-            android:text="教师考勤"
-            android:textColor="#ff666666"
-            android:textSize="13sp"
-            app:drawableTopCompat="@mipmap/home_tab_teacher_attendance"
-            app:layout_constraintEnd_toStartOf="@+id/tvMenu3"
-            app:layout_constraintStart_toEndOf="@+id/tvMenu1"
-            app:layout_constraintTop_toTopOf="@+id/tvMenu1" />
+            app:layout_constraintEnd_toStartOf="@id/home_menu3_cl"
+            app:layout_constraintStart_toEndOf="@id/home_menu1_cl"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tvMenu3"
+
+            <ImageView
+                android:id="@+id/iv_menu2"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:src="@mipmap/home_tab_teacher_attendance"
+                app:layout_constraintEnd_toEndOf="@id/tvMenu2"
+                app:layout_constraintStart_toStartOf="@id/tvMenu2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvMenu2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="教师考勤"
+                android:textColor="#ff666666"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_menu2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/home_menu3_cl"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/dp_4"
-            android:foreground="?android:attr/selectableItemBackgroundBorderless"
-            android:gravity="center"
-            android:text="待办"
-            android:textColor="#ff666666"
-            android:textSize="13sp"
-            app:drawableTopCompat="@mipmap/home_tab_todo"
-            app:layout_constraintEnd_toStartOf="@+id/tvMenu4"
-            app:layout_constraintStart_toEndOf="@+id/tvMenu2"
-            app:layout_constraintTop_toTopOf="@+id/tvMenu2" />
+            app:layout_constraintEnd_toStartOf="@id/home_menu4_cl"
+            app:layout_constraintStart_toEndOf="@id/home_menu2_cl"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tvMenu4"
+
+            <ImageView
+                android:id="@+id/iv_menu3"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:src="@mipmap/home_tab_todo"
+                app:layout_constraintEnd_toEndOf="@id/tvMenu3"
+                app:layout_constraintStart_toStartOf="@id/tvMenu3"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvMenu3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="待办"
+                android:textColor="#ff666666"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_menu3" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/home_menu4_cl"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/dp_4"
-            android:foreground="?android:attr/selectableItemBackgroundBorderless"
-            android:gravity="center"
-            android:text="通行"
-            android:textColor="#ff666666"
-            android:textSize="13sp"
-            app:drawableTopCompat="@mipmap/home_tab_pass"
-            app:layout_constraintEnd_toStartOf="@+id/tvMenu5"
-            app:layout_constraintStart_toEndOf="@+id/tvMenu3"
-            app:layout_constraintTop_toTopOf="@+id/tvMenu3" />
+            app:layout_constraintEnd_toStartOf="@id/home_menu5_cl"
+            app:layout_constraintStart_toEndOf="@id/home_menu3_cl"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tvMenu5"
+
+            <ImageView
+                android:id="@+id/iv_menu4"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:src="@mipmap/home_tab_pass"
+                app:layout_constraintEnd_toEndOf="@id/tvMenu4"
+                app:layout_constraintStart_toStartOf="@id/tvMenu4"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvMenu4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+
+                android:gravity="center"
+                android:text="通行"
+                android:textColor="#ff666666"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_menu4" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/home_menu5_cl"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/dp_4"
-            android:foreground="?android:attr/selectableItemBackgroundBorderless"
-            android:gravity="center"
-            android:text="周报"
-            android:textColor="#ff666666"
-            android:textSize="13sp"
-            app:drawableTopCompat="@mipmap/home_tab_report"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvMenu4"
-            app:layout_constraintTop_toTopOf="@+id/tvMenu4" />
+            app:layout_constraintStart_toEndOf="@id/home_menu4_cl"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageView
+                android:id="@+id/iv_menu5"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:src="@mipmap/home_tab_report"
+                app:layout_constraintEnd_toEndOf="@id/tvMenu5"
+                app:layout_constraintStart_toStartOf="@id/tvMenu5"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvMenu5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:drawablePadding="@dimen/dp_4"
+                android:gravity="center"
+                android:text="周报"
+                android:textColor="#ff666666"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_menu5" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
