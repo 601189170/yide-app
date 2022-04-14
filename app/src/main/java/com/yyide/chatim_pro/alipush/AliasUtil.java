@@ -126,7 +126,7 @@ public class AliasUtil {
     public static void clearAlias() {
         CloudPushService mPushService = PushServiceFactory.getCloudPushService();
         //保证当前账号的当前身份
-        final String userid = String.valueOf(SpData.getIdentityInfo().getId());
+        final String userid = SpData.getUser().getIdentityUserId();
         delUserEquipmentInfo(userid);
         delAlias(mPushService, userid);
     }

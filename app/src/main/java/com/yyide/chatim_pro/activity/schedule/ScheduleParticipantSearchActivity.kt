@@ -36,6 +36,8 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
 
     private var staffOpen = true
     private var studentOpen = true
+    // 从哪个跳转过来的搜索 0日程 1会议
+    private var type:Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         scheduleParticipantSearchBinding =
@@ -78,6 +80,9 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
     }
 
     private fun initView() {
+
+        type = intent.getIntExtra("type",0)
+
         scheduleParticipantSearchBinding.top.title.text = "添加参与人"
         scheduleParticipantSearchBinding.top.backLayout.setOnClickListener {
             finish()
@@ -115,7 +120,7 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
                     ToastUtils.showShort("请输入关键词内容")
                 }
                 //搜索参与人
-                staffParticipantViewModel.searchParticipant(keyWord)
+                staffParticipantViewModel.searchParticipant(keyWord,type)
             }
             false
         }

@@ -304,7 +304,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 if (isClose) return;
                 loading();
                 isClose = true;
-                viewModel.confirmDetail(model.getId());
+                viewModel.confirmDetail(model.getReceiveId());
             });
 
             dialog.show();

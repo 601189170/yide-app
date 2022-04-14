@@ -147,7 +147,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         registerMessageReceiver() // used for receive msg
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        //注册极光别名
+        //注册阿里云别名
         AliasUtil.syncAliases()
         //ConversationManagerKit.getInstance().addUnreadWatcher(this);
         //离线消息推送处理
