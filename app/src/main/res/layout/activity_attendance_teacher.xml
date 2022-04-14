@@ -24,7 +24,7 @@
         app:layout_constraintTop_toBottomOf="@id/cl_teacher_attendance_top">
 
 
-        <com.yyide.chatim.widget.RadiusImageView
+        <com.yyide.chatim_pro.widget.RadiusImageView
             android:id="@+id/riv_teacher_attendance_img"
             android:layout_width="50dp"
             android:layout_height="50dp"

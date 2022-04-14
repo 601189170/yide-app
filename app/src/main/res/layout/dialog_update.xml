@@ -43,7 +43,7 @@
             android:textColor="@color/text_666666"
             android:textSize="@dimen/text_16" />
 
-        <com.yyide.chatim.widget.LoadingButton
+        <com.yyide.chatim_pro.widget.LoadingButton
             android:id="@+id/btn_update"
             android:layout_width="match_parent"
             android:layout_height="40dp"

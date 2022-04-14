@@ -181,7 +181,7 @@
             app:current_month_lunar_text_color="#CFCFCF"
             app:current_month_text_color="#333333"
             app:min_year="2004"
-            app:month_view="com.yyide.chatim.view.calendar.AttendanceMonthView"
+            app:month_view="com.yyide.chatim_pro.view.calendar.AttendanceMonthView"
             app:month_view_show_mode="mode_fix"
             app:selected_lunar_text_color="#FFFFFF"
             app:selected_text_color="#FFFFFF"
@@ -190,7 +190,7 @@
             app:scheme_text_color="#333333"
             app:scheme_month_text_color="#333333"
             app:week_text_color="#333333"
-            app:week_view="com.yyide.chatim.view.calendar.AttendanceWeekView" />
+            app:week_view="com.yyide.chatim_pro.view.calendar.AttendanceWeekView" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_teacher_attendance_calendar_bottom"

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.yyide.chatim.ScanActivity"
+    tools:context="com.yyide.chatim_pro.ScanActivity"
     android:orientation="vertical">
 
     <include layout="@layout/title_layout2" />

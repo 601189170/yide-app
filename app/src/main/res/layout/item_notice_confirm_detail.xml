@@ -67,7 +67,7 @@
                     android:layout_height="match_parent"
                     android:visibility="gone">
 
-                    <com.yyide.chatim.widget.RadiusImageView
+                    <com.yyide.chatim_pro.widget.RadiusImageView
                         android:id="@+id/iv_notice_img"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

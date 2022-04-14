@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.yyide.chatim.widget.TextProgressBar
+    <com.yyide.chatim_pro.widget.TextProgressBar
         android:id="@+id/progressbar_this"
         android:layout_width="0dp"
         android:layout_height="20dp"
@@ -40,7 +40,7 @@
         app:lyj_text_visible="true"
         app:lyj_unreached_color="#FFFFFF" />
 
-    <com.yyide.chatim.widget.TextProgressBar
+    <com.yyide.chatim_pro.widget.TextProgressBar
         android:id="@+id/progressbar_last"
         android:layout_width="0dp"
         android:layout_height="20dp"

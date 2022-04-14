@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.yyide.chatim.widget.RadiusImageView
+    <com.yyide.chatim_pro.widget.RadiusImageView
         android:id="@+id/iv_notice_img"
         android:layout_width="match_parent"
         android:layout_height="300dp"
@@ -17,7 +17,7 @@
         app:right_bottom_radius="2dp"
         app:right_top_radius="2dp" />
 
-    <com.yyide.chatim.widget.RadiusImageView
+    <com.yyide.chatim_pro.widget.RadiusImageView
         android:id="@+id/iv_notice_blank"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         app:right_bottom_radius="2dp"
         app:right_top_radius="2dp" />
 
-    <com.yyide.chatim.widget.RadiusImageView
+    <com.yyide.chatim_pro.widget.RadiusImageView
         android:id="@+id/iv_icon_img"
         android:layout_width="@dimen/dp_20"
         android:layout_height="@dimen/dp_20"

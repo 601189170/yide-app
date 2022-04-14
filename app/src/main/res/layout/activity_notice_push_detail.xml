@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.yyide.chatim.widget.RadiusImageView
+            <com.yyide.chatim_pro.widget.RadiusImageView
                 android:id="@+id/iv_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

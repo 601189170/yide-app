@@ -73,7 +73,7 @@
             app:layout_constraintStart_toStartOf="@+id/tv_attendance_leave_desc"
             app:layout_constraintTop_toBottomOf="@+id/tv_attendance_leave_desc" />
 
-        <com.yyide.chatim.widget.RadiusImageView
+        <com.yyide.chatim_pro.widget.RadiusImageView
             android:id="@+id/iv_head"
             android:layout_width="@dimen/dp_60"
             android:layout_height="@dimen/dp_60"

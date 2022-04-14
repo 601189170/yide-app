@@ -59,7 +59,7 @@
         app:calendar_height="50dp"
         android:background="@color/color_F3FCF9"
         app:week_background="@color/color_F3FCF9"
-        app:month_view="com.yyide.chatim.view.calendar.DialogTimeMonthView"
+        app:month_view="com.yyide.chatim_pro.view.calendar.DialogTimeMonthView"
         app:month_view_show_mode="mode_fix"
         app:selected_lunar_text_color="#FFFFFF"
         app:selected_text_color="#FFFFFF"

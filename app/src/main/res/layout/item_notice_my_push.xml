@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:visibility="gone">
 
-        <com.yyide.chatim.widget.RadiusImageView
+        <com.yyide.chatim_pro.widget.RadiusImageView
             android:id="@+id/iv_notice_img"
             android:layout_width="match_parent"
             android:layout_height="120dp"
@@ -78,7 +78,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.yyide.chatim.widget.RadiusImageView
+    <com.yyide.chatim_pro.widget.RadiusImageView
         android:id="@+id/iv_icon_img"
         android:layout_width="@dimen/dp_20"
         android:layout_height="@dimen/dp_20"

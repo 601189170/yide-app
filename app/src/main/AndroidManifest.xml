@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.yyide.chatim">
+    package="com.yyide.chatim_pro">
     <!-- 极光推送权限配置 -->
     <!-- Required  一些系统要求的权限，如访问网络等 -->
     <permission
-        android:name="com.yyide.chatim.permission.JPUSH_MESSAGE"
+        android:name="com.yyide.chatim_pro.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="com.yyide.chatim.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="com.yyide.chatim_pro.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission
         android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
@@ -92,78 +92,78 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".activity.TodoActivity"
+            android:name="com.yyide.chatim_pro.activity.TodoActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.leave.LeaveParticipantActivity"
+            android:name="com.yyide.chatim_pro.activity.leave.LeaveParticipantActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.leave.AddApprovalActivity"
+            android:name="com.yyide.chatim_pro.activity.leave.AddApprovalActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.leave.AddCcActivity"
+            android:name="com.yyide.chatim_pro.activity.leave.AddCcActivity"
             android:exported="false" />
         <activity
-            android:name=".login.IdentitySelectActivity"
+            android:name="com.yyide.chatim_pro.login.IdentitySelectActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.face.FaceMultipleActivity"
+            android:name="com.yyide.chatim_pro.activity.face.FaceMultipleActivity"
             android:exported="false" />
         <activity
-            android:name=".login.NewLoginActivity"
+            android:name="com.yyide.chatim_pro.login.NewLoginActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".NewMainActivity"
+            android:name="com.yyide.chatim_pro.NewMainActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.operation.FilterTimeActivity"
+            android:name="com.yyide.chatim_pro.activity.operation.FilterTimeActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.operation.OperationDetailActivity"
+            android:name="com.yyide.chatim_pro.activity.operation.OperationDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.operation.OperationDetailActivityByParents"
+            android:name="com.yyide.chatim_pro.activity.operation.OperationDetailActivityByParents"
             android:exported="false" />
         <activity
-            android:name=".base.KTBaseActivity"
+            android:name="com.yyide.chatim_pro.base.KTBaseActivity"
             android:exported="false"
             tools:ignore="Instantiatable" />
         <activity
-            android:name=".activity.operation.OperationActivityByTeacher"
+            android:name="com.yyide.chatim_pro.activity.operation.OperationActivityByTeacher"
             android:exported="false" />
         <activity
-            android:name=".activity.operation.OperationCreatWorkActivity"
+            android:name="com.yyide.chatim_pro.activity.operation.OperationCreatWorkActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.operation.OperationActivityByParents"
+            android:name="com.yyide.chatim_pro.activity.operation.OperationActivityByParents"
             android:exported="false" />
         <activity
-            android:name=".activity.meeting.MeetingHistoryActivity"
+            android:name="com.yyide.chatim_pro.activity.meeting.MeetingHistoryActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.meeting.MeetingSaveActivity"
+            android:name="com.yyide.chatim_pro.activity.meeting.MeetingSaveActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.meeting.MeetingHomeActivity"
+            android:name="com.yyide.chatim_pro.activity.meeting.MeetingHomeActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.meeting.MeetingDetailActivity"
+            android:name="com.yyide.chatim_pro.activity.meeting.MeetingDetailActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.weekly.WeeklyDetailsActivity"
+            android:name="com.yyide.chatim_pro.activity.weekly.WeeklyDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.weekly.WeeklyHomeActivity"
+            android:name="com.yyide.chatim_pro.activity.weekly.WeeklyHomeActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.PushSettingActivity"
+            android:name="com.yyide.chatim_pro.activity.PushSettingActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
@@ -175,54 +175,54 @@
             android:value="812" />
 
         <activity
-            android:name=".activity.schedule.ScheduleSearchActivity"
+            android:name="com.yyide.chatim_pro.activity.schedule.ScheduleSearchActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.book.BookPatriarchDetailActivity"
+            android:name="com.yyide.chatim_pro.activity.book.BookPatriarchDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.book.BookStudentDetailActivity"
+            android:name="com.yyide.chatim_pro.activity.book.BookStudentDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.book.BookTeacherDetailActivity"
+            android:name="com.yyide.chatim_pro.activity.book.BookTeacherDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.book.NewBookActivity"
+            android:name="com.yyide.chatim_pro.activity.book.NewBookActivity"
             android:screenOrientation="portrait" /> <!-- 如果您项目中的所有页面都只需要以高或宽中的一个作为基准进行适配的话, 那就只需要填写高或宽中的一个设计图尺寸即可 -->
         <activity
-            android:name=".activity.user.RegisterActivity"
+            android:name="com.yyide.chatim_pro.activity.user.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.AgreementActivity"
+            android:name="com.yyide.chatim_pro.activity.AgreementActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user.PrivacyActivity"
+            android:name="com.yyide.chatim_pro.activity.user.PrivacyActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.newnotice.NoticeUnConfirmListActivity" />
+        <activity android:name="com.yyide.chatim_pro.activity.newnotice.NoticeUnConfirmListActivity" />
         <activity
-            android:name=".activity.newnotice.NoticeDesignatedPersonnelActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.newnotice.NoticeGeneralPushActivity"
+            android:name="com.yyide.chatim_pro.activity.newnotice.NoticeDesignatedPersonnelActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.newnotice.NoticeTemplatePushActivity"
+            android:name="com.yyide.chatim_pro.activity.newnotice.NoticeGeneralPushActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.newnotice.NoticeConfirmDetailActivity"
+            android:name="com.yyide.chatim_pro.activity.newnotice.NoticeTemplatePushActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yyide.chatim_pro.activity.newnotice.NoticeConfirmDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.attendance.AttendanceClassStudentActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.newnotice.NoticeDetailActivity"
+            android:name="com.yyide.chatim_pro.activity.newnotice.NoticeDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.newnotice.NewNoticeAnnouncementActivity"
+            android:name="com.yyide.chatim_pro.activity.newnotice.NewNoticeAnnouncementActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MessageDetailActivity"
@@ -259,7 +259,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".activity.WebViewActivity"
+            android:name="com.yyide.chatim_pro.activity.WebViewActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
@@ -280,7 +280,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.yyide.chatim.FileProvider"
+            android:authorities="com.yyide.chatim_pro.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -299,7 +299,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".activity.notice.NoticeAnnouncementActivity"
+            android:name="com.yyide.chatim_pro.activity.notice.NoticeAnnouncementActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
@@ -371,7 +371,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".chat.ChatActivity"
+            android:name="com.yyide.chatim_pro.chat.ChatActivity"
             android:screenOrientation="portrait">
 
             <!-- 华为离线推送打开应用内页面 -->
@@ -439,11 +439,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".activity.table.TableActivity"
+            android:name="com.yyide.chatim_pro.activity.table.TableActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".activity.table.TableActivity2"
+            android:name="com.yyide.chatim_pro.activity.table.TableActivity2"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
@@ -486,7 +486,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" /> <!-- 请假界面 -->
         <activity
-            android:name=".activity.leave.AskForLeaveActivity"
+            android:name="com.yyide.chatim_pro.activity.leave.AskForLeaveActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" /> <!-- 请假抄送人界面 -->
         <activity
@@ -498,7 +498,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" /> <!-- *********极光推送 start********* -->
         <activity
-            android:name=".activity.PhotoViewActivity"
+            android:name="com.yyide.chatim_pro.activity.PhotoViewActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" /> <!-- <receiver -->
@@ -768,14 +768,13 @@
         <activity android:name=".activity.attendance.teacher.TeacherAttendanceActivity" />
         <activity android:name=".activity.attendance.teacher.AttendanceRuleActivity" />
 
-
         <!-- 信息发布 -->
-        <activity android:name=".activity.message.MessagePushActivity"/>
-        <activity android:name=".activity.message.NoticeContentActivity"/>
-        <activity android:name=".activity.message.PublishContentActivity"/>
-        <activity android:name=".activity.message.MessageNotifyActivity"/>
-        <activity android:name=".activity.message.NotifyParentActivity"/>
-        <activity android:name=".activity.message.NotifyStaffActivity"/>
+        <activity android:name=".activity.message.MessagePushActivity" />
+        <activity android:name=".activity.message.NoticeContentActivity" />
+        <activity android:name=".activity.message.PublishContentActivity" />
+        <activity android:name=".activity.message.MessageNotifyActivity" />
+        <activity android:name=".activity.message.NotifyParentActivity" />
+        <activity android:name=".activity.message.NotifyStaffActivity" />
 
         <!-- 高德地图-->
         <service android:name="com.amap.api.location.APSService" />

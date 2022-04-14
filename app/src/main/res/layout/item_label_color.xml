@@ -16,7 +16,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.yyide.chatim.widget.CircleFrameLayout
+    <com.yyide.chatim_pro.widget.CircleFrameLayout
         android:id="@+id/v_border_circle"
         android:layout_width="@dimen/dp_24"
         android:layout_height="@dimen/dp_24"

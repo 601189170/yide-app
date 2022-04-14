@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.yyide.chatim.widget.RoundImageView
+    <com.yyide.chatim_pro.widget.RoundImageView
         android:layout_width="190dp"
         android:id="@+id/item"
         android:scaleType="fitXY"

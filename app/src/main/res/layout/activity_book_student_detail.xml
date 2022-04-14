@@ -32,7 +32,7 @@
                 android:background="@color/white"
                 android:gravity="center_vertical">
 
-                <com.yyide.chatim.widget.RadiusImageView
+                <com.yyide.chatim_pro.widget.RadiusImageView
                     android:id="@+id/ivHead"
                     android:layout_width="60dp"
                     android:layout_height="60dp"

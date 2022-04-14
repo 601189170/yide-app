@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:paddingBottom="@dimen/dp_10">
 
-    <com.yyide.chatim.widget.RadiusImageView
+    <com.yyide.chatim_pro.widget.RadiusImageView
         android:id="@+id/iv_user_head"
         android:layout_width="30dp"
         android:layout_height="30dp"

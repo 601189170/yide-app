@@ -22,14 +22,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="#F9FAF9"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    <LinearLayout
-        android:id="@+id/blank_page"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/layout_head"
-        android:visibility="gone">
-        <include layout="@layout/layout_blank_page" />
-    </LinearLayout>
 </RelativeLayout>

@@ -43,7 +43,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <com.yyide.chatim.widget.RadiusImageView
+                    <com.yyide.chatim_pro.widget.RadiusImageView
                         android:id="@+id/iv_bg"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

@@ -11,23 +11,23 @@ android {
             v1SigningEnabled true
             v2SigningEnabled true
             storeFile file('/school.jks')
-            storePassword 'hao12345'
-            keyPassword 'hao12345'
-            keyAlias 'school'
+            storePassword 'yide123'
+            keyPassword 'yide123'
+            keyAlias 'yide'
         }
         debug {
             v1SigningEnabled true
             v2SigningEnabled true
             storeFile file('/school.jks')
-            storePassword 'hao12345'
-            keyPassword 'hao12345'
-            keyAlias 'school'
+            storePassword 'yide123'
+            keyPassword 'yide123'
+            keyAlias 'yide'
         }
     }
 
     compileSdkVersion 29
     defaultConfig {
-        applicationId "com.yyide.chatim"
+        applicationId "com.yyide.chatim_pro"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 114
@@ -272,7 +272,7 @@ dependencies {
     implementation 'com.amap.api:location:latest.integration'
 
     // 下拉刷新
-    implementation  'io.github.scwang90:refresh-layout-kernel:2.0.5'      //核心必须依赖
+    implementation 'io.github.scwang90:refresh-layout-kernel:2.0.5'      //核心必须依赖
     implementation 'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
 
 }

@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/dp_20">
 
-        <com.yyide.chatim.widget.RadiusImageView
+        <com.yyide.chatim_pro.widget.RadiusImageView
             android:id="@+id/ivHead"
             android:layout_width="@dimen/dp_50"
             android:layout_height="@dimen/dp_50"

@@ -20,7 +20,7 @@
             android:textSize="@dimen/text_15"
             android:textStyle="bold" />
 
-        <com.yyide.chatim.widget.MyGridView
+        <com.yyide.chatim_pro.widget.MyGridView
             android:id="@+id/grid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
             android:scrollbars="none"
             android:verticalSpacing="8dp">
 
-        </com.yyide.chatim.widget.MyGridView>
+        </com.yyide.chatim_pro.widget.MyGridView>
     </LinearLayout>
 
 

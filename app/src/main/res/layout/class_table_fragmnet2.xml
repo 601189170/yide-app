@@ -56,7 +56,7 @@
                     android:scrollbars="none"
                     android:verticalSpacing="1dp" />
 
-                <com.yyide.chatim.widget.MyGridView
+                <com.yyide.chatim_pro.widget.MyGridView
                     android:id="@+id/tablegrid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

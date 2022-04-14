@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="#F9FAF9">
 
-    <com.yyide.chatim.widget.VpSwipeRefreshLayout
+    <com.yyide.chatim_pro.widget.VpSwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -139,5 +139,5 @@
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
-    </com.yyide.chatim.widget.VpSwipeRefreshLayout>
+    </com.yyide.chatim_pro.widget.VpSwipeRefreshLayout>
 </LinearLayout>

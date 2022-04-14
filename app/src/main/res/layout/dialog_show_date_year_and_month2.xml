@@ -3,10 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
-    >
-
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,8 +13,7 @@
         android:id="@+id/toplayout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-      >
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:background="#F3FCF9"
@@ -29,7 +25,7 @@
             android:paddingEnd="@dimen/dp_15"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.yyide.chatim.widget.WheelView
+            <com.yyide.chatim_pro.widget.WheelView
                 android:id="@+id/year_wv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -45,7 +41,7 @@
                 app:selectedTextSize="18sp"
                 app:unitHeight="50dp" />
 
-            <com.yyide.chatim.widget.WheelView
+            <com.yyide.chatim_pro.widget.WheelView
                 android:id="@+id/month_wv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
