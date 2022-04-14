@@ -407,21 +407,22 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             kqBannerContent.setVisibility(View.VISIBLE);
             noticeContent.setVisibility(View.VISIBLE);
             tableContent.setVisibility(View.GONE);
-            if (SpData.getClassInfo() != null) {
+            //if (SpData.getClassInfo() != null) {
+            //校长也可以是老师
                 tableContent.setVisibility(View.VISIBLE);
                 fragmentTransaction.replace(R.id.table_content, new TableFragment());
-            }
+
             //通知
             /*NoticeFragment noticeFragment = new NoticeFragment();
             Bundle bundle = new Bundle();
             bundle.putString("type", "school");
             noticeFragment.setArguments(bundle);
             fragmentTransaction.replace(R.id.notice_content, noticeFragment);*/
-            //班级考勤情况
-            fragmentTransaction.replace(R.id.kq_content,  AttendanceSchoolFragment.newInstance());
+            //班级考勤情况 第一版本不做数据考勤
+            //fragmentTransaction.replace(R.id.kq_content,  AttendanceSchoolFragment.newInstance());
             //学生考勤
             fragmentTransaction.replace(R.id.kq_banner_content, new AttendanceStudentFragment());
-
+            fragmentTransaction.replace(R.id.work_content, new WorkFragment());
         } else if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
             //家长身份
             tableContent.setVisibility(View.GONE);//课表

@@ -34,4 +34,15 @@
         android:layout_height="0.5dp"
         android:background="#E4E7ED"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_10"
+        android:src="@drawable/icon_gray_arrow_right"
+        android:id="@+id/department_view"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

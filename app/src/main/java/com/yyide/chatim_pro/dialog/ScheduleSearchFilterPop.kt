@@ -123,16 +123,16 @@ class ScheduleSearchFilterPop(
         //反选类型 日程类型【0：校历日程，1：课表日程，2：事务日程, 3：会议日程】
         filterTagCollect.type?.forEach {
             when (it) {
-                2 -> {
+                0 -> {
                     binding.cbTransactionSchedule.isChecked = true
                 }
-                0 -> {
+                1 -> {
                     binding.cbSchoolCalendar.isChecked = true
                 }
                 3 -> {
                     binding.cbMeeting.isChecked = true
                 }
-                1 -> {
+                2 -> {
                     binding.cbClassSchedule.isChecked = true
                 }
                 else -> {

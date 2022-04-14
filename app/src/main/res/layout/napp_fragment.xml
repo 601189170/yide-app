@@ -33,22 +33,31 @@
                     android:textStyle="bold" />
             </FrameLayout>
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/newapp_tablayout"
+            <LinearLayout
+                android:id="@+id/ll1"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_44"
-                android:background="@color/white"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/newapp_title"
-                app:layout_scrollFlags="scroll|snap|enterAlways"
-                app:tabIndicator="@drawable/tab_indicator"
-                app:tabIndicatorColor="@color/colorPrimary"
-                app:tabMaxWidth="200dp"
-                app:tabMinWidth="@dimen/dp_20"
-                app:tabPaddingEnd="@dimen/dp_20"
-                app:tabPaddingStart="@dimen/dp_20"
-                app:tabTextAppearance="@style/TabTextSize"
-                app:tabSelectedTextColor="@color/punch_normal" />
+                app:layout_constraintTop_toBottomOf="@+id/newapp_title">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/newapp_tablayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_44"
+                    android:background="@color/white"
+
+                    app:layout_scrollFlags="scroll|snap|enterAlways"
+                    app:tabIndicator="@drawable/tab_indicator"
+                    app:tabIndicatorColor="@color/colorPrimary"
+                    app:tabMaxWidth="200dp"
+                    app:tabMinWidth="@dimen/dp_20"
+                    app:tabPaddingEnd="@dimen/dp_20"
+                    app:tabPaddingStart="@dimen/dp_20"
+                    app:tabSelectedTextColor="@color/punch_normal"
+                    app:tabTextAppearance="@style/TabTextSize" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/newapp_recycle"
@@ -56,7 +65,7 @@
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/newapp_tablayout" />
+                app:layout_constraintTop_toBottomOf="@+id/ll1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

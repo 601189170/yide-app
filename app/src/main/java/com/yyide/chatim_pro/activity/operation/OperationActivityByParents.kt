@@ -21,6 +21,7 @@ import com.yyide.chatim_pro.dialog.SwitchClassAndSubjectPop2.SSSListener
 import com.yyide.chatim_pro.model.*
 import com.yyide.chatim_pro.utils.DatePickerDialogUtil
 import com.yyide.chatim_pro.utils.DateUtils
+import com.yyide.chatim_pro.utils.loge
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -126,13 +127,14 @@ class OperationActivityByParents :
             if (it.isSuccess){
                 if (it.getOrNull()!=null){
                     val  list=it.getOrNull()
+                    loge("list==" +JSON.toJSONString(list) )
                     listclassssub= list as MutableList<selectParentStudent>
                     Log.e("TAG", "onCreate: "+JSON.toJSONString(listclassssub) )
-                    if (list != null) {
+                    if (!list.isNullOrEmpty()) {
 
-                        Log.e("TAG", "viewModel.name: "+JSON.toJSONString(listclassssub.get(0).name) )
+                       /* Log.e("TAG", "viewModel.name: "+JSON.toJSONString(listclassssub.get(0).name) )
                         Log.e("TAG", "viewModel.studentId: "+JSON.toJSONString(listclassssub.get(0).id) )
-                        Log.e("TAG", "viewModel.classesId: "+JSON.toJSONString(listclassssub.get(0).classesId) )
+                        Log.e("TAG", "viewModel.classesId: "+JSON.toJSONString(listclassssub.get(0).classesId) )*/
 
 
                         list2= listclassssub[0].children as MutableList<selectParentStudent.Children>

@@ -115,7 +115,7 @@ class ScheduleSearchActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (enterDetailPage){
+        if (enterDetailPage) {
             loge("从详情页进入搜索页重新请求数据")
             scheduleSearchViewModel.searchSchedule(filterTagCollect)
         }
@@ -125,6 +125,7 @@ class ScheduleSearchActivity : BaseActivity() {
         super.onDestroy()
         enterDetailPage = false
     }
+
     fun initView() {
         val simpleDateFormat1 = SimpleDateFormat("yyyy-MM", Locale.getDefault())
 //        viewBinding.tvSearchTime.text = simpleDateFormat1.format(Date())
@@ -206,7 +207,8 @@ class ScheduleSearchActivity : BaseActivity() {
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         viewBinding.recyclerview.layoutManager = linearLayoutManager
-        scheduleSearchResultListAdapter = ScheduleTodayAdapter(ScheduleTodayAdapter.TYPE_SEARCH_LIST,scheduleSearchResultList)
+        scheduleSearchResultListAdapter =
+            ScheduleTodayAdapter(ScheduleTodayAdapter.TYPE_SEARCH_LIST, scheduleSearchResultList)
         viewBinding.recyclerview.setSwipeMenuCreator(mWeekSwipeMenuCreator)
         viewBinding.recyclerview.setOnItemMenuClickListener(mWeekMenuItemClickListener)
         viewBinding.recyclerview.addItemDecoration(
@@ -429,7 +431,7 @@ class ScheduleSearchActivity : BaseActivity() {
         BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_schedule_search_history) {
         override fun convert(holder: BaseViewHolder, item: String) {
             holder.setText(R.id.tv_search_value, item)
-            holder.setVisible(R.id.type_img,false)
+            holder.setVisible(R.id.type_img, false)
 
         }
     }
@@ -448,24 +450,25 @@ class ScheduleSearchActivity : BaseActivity() {
                 )
                 when (item.scheduleType) {
                     //【0：校历日程，1：课表日程，2：事务日程, 3：会议日程】
-                    2 -> {
-                        holder.setText(R.id.tv_search_value, "事务日程")
-                        holder.setBackgroundResource(R.id.type_img,R.drawable.richeng)
-                    }
+
                     0 -> {
                         holder.setText(R.id.tv_search_value, "校历")
-                        holder.setBackgroundResource(R.id.type_img,R.drawable.xiaoli)
-                    }
-                    3 -> {
-                        holder.setText(R.id.tv_search_value, "会议")
-                        holder.setBackgroundResource(R.id.type_img,R.drawable.huiyi)
+                        holder.setBackgroundResource(R.id.type_img, R.drawable.xiaoli)
                     }
                     1 -> {
                         holder.setText(R.id.tv_search_value, "课表")
-                        holder.setBackgroundResource(R.id.type_img,R.drawable.kebiao)
+                        holder.setBackgroundResource(R.id.type_img, R.drawable.kebiao)
+                    }
+                    2 -> {
+                        holder.setText(R.id.tv_search_value, "日程")
+                        holder.setBackgroundResource(R.id.type_img, R.drawable.richeng)
+                    }
+                    3 -> {
+                        holder.setText(R.id.tv_search_value, "会议")
+                        holder.setBackgroundResource(R.id.type_img, R.drawable.huiyi)
                     }
                     else -> {
-                        holder.setVisible(R.id.type_img,false)
+                        holder.setVisible(R.id.type_img, false)
                     }
                 }
 

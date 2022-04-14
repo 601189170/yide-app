@@ -60,7 +60,7 @@ class StaffParticipantFragment : Fragment() {
 
         staffParticipantViewModel.getResponseResult().observe(requireActivity()) {
             if (it != null) {
-                loge("it== "+JSON.toJSONString(it))
+                loge("it== " + JSON.toJSONString(it))
                 listCache[it.name ?: "未知"] = it
                 val list = mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
                 it.list?.let {
@@ -140,10 +140,13 @@ class StaffParticipantFragment : Fragment() {
             loge("选择人员：$position")
             staffParticipantViewModel.curParticipantList.value?.also { curList ->
                 val participantListBean = curList[position]
-                Log.e("TAG", "onViewCreated: "+JSON.toJSONString(participantListBean) )
+                Log.e("TAG", "onViewCreated: " + JSON.toJSONString(participantListBean))
                 if (participantListBean.department) {
-                    Log.e("TAG", "participantListBean.department: "+JSON.toJSONString(participantListBean) )
-                    Log.e("TAG", "listCache: "+JSON.toJSONString(listCache) )
+                    Log.e(
+                        "TAG",
+                        "participantListBean.department: " + JSON.toJSONString(participantListBean)
+                    )
+                    Log.e("TAG", "listCache: " + JSON.toJSONString(listCache))
 
                     val dataBean = listCache[participantListBean.name]
                     if (dataBean != null) {
@@ -243,7 +246,7 @@ class StaffParticipantFragment : Fragment() {
                 )
             }
             PARTICIPANT_TYPE_MEETING_GUARDIAN -> {
-                staffParticipantBinding.staffParticipantEmpty.tvDesc.text= "会议不支持勾选学生家长"
+                staffParticipantBinding.staffParticipantEmpty.tvDesc.text = "会议不支持勾选学生家长"
                 staffParticipantBinding.staffParticipantEmpty.root.show()
             }
             else -> {
@@ -283,10 +286,10 @@ class StaffParticipantFragment : Fragment() {
                     holder.getView<ImageView>(R.id.iv_right).visibility = View.VISIBLE
                     holder.setTextColor(R.id.tv_name, resources.getColor(R.color.colorPrimary))
                 }
-                if(item==list[0]){
-                    holder.getView<ImageView>(R.id.home_img).visibility=View.VISIBLE
-                }else{
-                    holder.getView<ImageView>(R.id.home_img).visibility=View.GONE
+                if (item == list[0]) {
+                    holder.getView<ImageView>(R.id.home_img).visibility = View.VISIBLE
+                } else {
+                    holder.getView<ImageView>(R.id.home_img).visibility = View.GONE
                 }
             }
         }
@@ -299,8 +302,13 @@ class StaffParticipantFragment : Fragment() {
             item: ParticipantRsp.DataBean.ParticipantListBean
         ) {
             holder.setText(R.id.tv_name, item.name)
-            holder.getView<CheckBox>(R.id.checkBox).isEnabled = !item.department
-            holder.getView<CheckBox>(R.id.checkBox).isChecked = item.checked
+            val mCheckBox = holder.getView<CheckBox>(R.id.checkBox)
+            val mDepartmnet = holder.getView<ImageView>(R.id.department_view)
+
+            mCheckBox.visibility = if (!item.department) View.VISIBLE else View.GONE
+            mDepartmnet.visibility = if (!item.department) View.GONE else View.VISIBLE
+            mCheckBox.isEnabled = !item.department
+            mCheckBox.isChecked = item.checked
         }
     }
 
@@ -310,10 +318,8 @@ class StaffParticipantFragment : Fragment() {
             holder: BaseViewHolder,
             item: ParticipantRsp.DataBean.ParticipantListBean
         ) {
-
-
             holder.setText(R.id.tv_student_name, "${item.name}")
-           // if (item.department)
+            //if (item.department){}
             val recyclerView = holder.getView<RecyclerView>(R.id.rv_parent_of_student)
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
             val parentsAdapter = object :
