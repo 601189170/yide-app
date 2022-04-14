@@ -56,13 +56,13 @@ import org.joda.time.format.DateTimeFormatter
  * @description 日程/列表
  */
 class ScheduleListFragment : Fragment(), OnCalendarClickListener,
-    SwipeRefreshLayout.OnRefreshListener ,ScheduleListAdapter.ImgListener{
+    SwipeRefreshLayout.OnRefreshListener, ScheduleListAdapter.ImgListener {
     lateinit var fragmentScheduleListBinding: FragmentScheduleListBinding
     private val scheduleListViewViewModel: ScheduleListViewViewModel by viewModels()
     private val scheduleEditViewModel: ScheduleEditViewModel by viewModels()
     private lateinit var rvScheduleList: SwipeRecyclerView
     private lateinit var blankPage: ConstraintLayout
-    private lateinit var swipeRefreshLayout:SwipeRefreshLayout
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var calendarComposeLayout: CalendarComposeLayout
     private var list = mutableListOf<ScheduleData>()
     private var first: Boolean = true
@@ -73,6 +73,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
     private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
     private var refresh = false
     private var scroll = true
+
     //是否显示时间轴
     private var timeAxisDateTime: DateTime? = null
 
@@ -118,18 +119,21 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
             }
         }
         //重置更新列表时调用，和向上加载，向下加载区分开来
-        scheduleListViewViewModel.updateListViewData.observe(requireActivity()){ it ->
+        scheduleListViewViewModel.updateListViewData.observe(requireActivity()) { it ->
             list.clear()
             list.addAll(it)
             scheduleListAdapter.setList(list)
-            if (refresh){
+            scheduleViewModel.curDateTime.value?.also {
+                if (!refresh) {
+                    scrollToPosition(it.year, it.monthOfYear - 1, it.dayOfMonth)
+                }
+            }
+            if (refresh) {
                 rvScheduleList.smoothScrollToPosition(0)
                 refresh = false
                 swipeRefreshLayout.isRefreshing = false
             }
-           scheduleViewModel.curDateTime.value?.also {
-                scrollToPosition(it.year,it.monthOfYear-1,it.dayOfMonth)
-            }
+
 
             blankPage.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
         }
@@ -145,14 +149,14 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
             if (it) {
                 ToastUtils.showShort("日程修改成功")
                 ScheduleDaoUtil.changeScheduleState(
-                    curModifySchedule?.id ?: "", curModifySchedule?.status?:""
+                    curModifySchedule?.id ?: "", curModifySchedule?.status ?: ""
                 )
                 updateDate()
             } else {
                 ToastUtils.showShort("日程修改失败")
             }
         })
-        scheduleViewModel.requestAllScheduleResult.observe(requireActivity()){
+        scheduleViewModel.requestAllScheduleResult.observe(requireActivity()) {
             loge("刷新数据列表 $it")
             updateDate()
         }
@@ -209,7 +213,8 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
         loge("onPageChange year=$year,month=$month,day=$day")
         val dateTime = DateTime(year, month + 1, day, 0, 0, 0).simplifiedDataTime()
         scheduleViewModel.curDateTime.value = dateTime
-        val monthDateList = list.filter { it.isMonthHead }.map { ScheduleDaoUtil.toDateTime(it.startTime).simplifiedToMonthOfDateTime()}
+        val monthDateList = list.filter { it.isMonthHead }
+            .map { ScheduleDaoUtil.toDateTime(it.startTime).simplifiedToMonthOfDateTime() }
         if (!monthDateList.contains(dateTime.simplifiedToMonthOfDateTime())) {
             loge("monthDateList${monthDateList},dateTime=${dateTime.simplifiedToMonthOfDateTime()}")
             if (dateTime > curBottomDateTime) {
@@ -227,14 +232,17 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
     fun scrollToPosition(year: Int, month: Int, day: Int) {
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
         //定位到指定日期
-        val dateTime = DateTime.parse("$year-${month + 1}-$day 00:00:00", dateTimeFormatter).simplifiedDataTime()
+        val dateTime = DateTime.parse("$year-${month + 1}-$day 00:00:00", dateTimeFormatter)
+            .simplifiedDataTime()
         var scrollOuter: Int = -1
         //先找对应位置
         dateTime.let {
-            for (i in 0 until list.size -1){
+            for (i in 0 until list.size - 1) {
                 val scheduleData1 = list[i]
                 //val scheduleData2 = list[i+1]
-                val dateTime1 = ScheduleDaoUtil.toDateTime(scheduleData1.moreDayStartTime?:scheduleData1.startTime).simplifiedDataTime()
+                val dateTime1 = ScheduleDaoUtil.toDateTime(
+                    scheduleData1.moreDayStartTime ?: scheduleData1.startTime
+                ).simplifiedDataTime()
                 //val dateTime2 = ScheduleDaoUtil.toDateTime(scheduleData2.moreDayStartTime?:scheduleData2.startTime).simplifiedDataTime()
                 if (i != 0 && i != list.size - 1 && it == dateTime1) {
                     loge("----找到定位的位置----")
@@ -248,9 +256,13 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
             //找不到对应点击日期，找范围
             for (i in 0 until list.size - 1) {
                 val scheduleData1 = list[i]
-                val scheduleData2 = list[i+1]
-                val dateTime1 = ScheduleDaoUtil.toDateTime(scheduleData1.moreDayStartTime?:scheduleData1.startTime).simplifiedDataTime()
-                val dateTime2 = ScheduleDaoUtil.toDateTime(scheduleData2.moreDayStartTime?:scheduleData2.startTime).simplifiedDataTime()
+                val scheduleData2 = list[i + 1]
+                val dateTime1 = ScheduleDaoUtil.toDateTime(
+                    scheduleData1.moreDayStartTime ?: scheduleData1.startTime
+                ).simplifiedDataTime()
+                val dateTime2 = ScheduleDaoUtil.toDateTime(
+                    scheduleData2.moreDayStartTime ?: scheduleData2.startTime
+                ).simplifiedDataTime()
                 if (i != 0 && i != list.size - 1 && it in dateTime1..dateTime2) {
                     loge("----找到定位的位置----")
                     if (!scheduleData1.isMonthHead && !scheduleData1.isTimeAxis) {
@@ -286,16 +298,16 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
         loge("moveToPosition:firstItem=$firstItem,lastItem=$lastItem")
         if (position < firstItem || position > lastItem) {
             //recyclerView.smoothScrollToPosition(position)
-                logd("scrollToPosition=$position")
+            logd("scrollToPosition=$position")
             //recyclerView.scrollToPosition(position)
             val manager = recyclerView.layoutManager as LinearLayoutManager
-            manager.scrollToPositionWithOffset(position,0)
+            manager.scrollToPositionWithOffset(position, 0)
         } else {
             val movePosition = position - firstItem
             val top: Int = recyclerView.getChildAt(movePosition).getTop()
             logd("scrollBy=$top")
             //recyclerView.smoothScrollBy(0, top)
-            recyclerView.scrollBy(0,top)
+            recyclerView.scrollBy(0, top)
         }
     }
 
@@ -368,7 +380,12 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
         curTopDateTime = DateTime.now()
         curBottomDateTime = DateTime.now().plusMonths(1)
         //timeAxisDateTime = DateTime.now().simplifiedDataTime()
-        scheduleListViewViewModel.scheduleDataList(DateTime.now().plusMonths(1), timeAxisDateTime,false,true)
+        scheduleListViewViewModel.scheduleDataList(
+            DateTime.now().plusMonths(1),
+            timeAxisDateTime,
+            false,
+            true
+        )
 
     }
 
@@ -442,8 +459,8 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
             if (direction == SwipeRecyclerView.RIGHT_DIRECTION) {
                 val scheduleData = list[position]
                 val type = scheduleData.type
-                when(type.toInt()){
-                    Schedule.SCHEDULE_TYPE_SCHEDULE ->{
+                when (type.toInt()) {
+                    Schedule.SCHEDULE_TYPE_SCHEDULE -> {
 //                        if (menuPosition == 0) {
 //                            loge("修改")
 //                            curModifySchedule = scheduleData
@@ -463,7 +480,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
                             return@OnItemMenuClickListener
                         }
                     }
-                    Schedule.SCHEDULE_TYPE_CONFERENCE ->{
+                    Schedule.SCHEDULE_TYPE_CONFERENCE -> {
                         if (menuPosition == 0) {
                             loge("删除")
                             curModifySchedule = scheduleData
@@ -480,9 +497,9 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
 
     override fun onRefresh() {
         refresh = true
-        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
+        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
 
-       scrollOrientation = -1
+        scrollOrientation = -1
         //curTopDateTime = curTopDateTime.minusMonths(1)
 //        scheduleListViewViewModel.scheduleDataList(curTopDateTime, timeAxisDateTime)
     }

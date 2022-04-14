@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import com.youth.banner.indicator.DrawableIndicator;
 import com.yyide.chatim_pro.R;
 import com.yyide.chatim_pro.SpData;
-import com.yyide.chatim_pro.base.BaseConstant;
 import com.yyide.chatim_pro.base.BaseMvpFragment;
 import com.yyide.chatim_pro.databinding.FragmentAttendanceStudentBinding;
 import com.yyide.chatim_pro.home.BannerStudentAttendanceAdapter;
@@ -19,12 +18,10 @@ import com.yyide.chatim_pro.model.AttendanceStudentRsp;
 import com.yyide.chatim_pro.model.AttendanceTeacherRsp;
 import com.yyide.chatim_pro.presenter.AttendanceStudentPresenter;
 import com.yyide.chatim_pro.utils.JumpUtil;
-import com.yyide.chatim_pro.utils.LogUtil;
 import com.yyide.chatim_pro.view.AttendanceStudentView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -97,31 +94,33 @@ public class AttendanceStudentFragment extends BaseMvpFragment<AttendanceStudent
 
     @Override
     public void getAttendanceFail(String rsp) {
-        mViewBinding.emptyView.setVisibility(View.VISIBLE);
+        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().staffIdentity()) {
+            mViewBinding.icTeacherView.layoutTeacher.setVisibility(View.VISIBLE);
+        } else {
+            mViewBinding.icStudentView.layoutStudent.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void getStudentAttendanceSuccess(List<AttendanceStudentRsp.AttendanceAdapterBean> rsp) {
         if (!rsp.isEmpty()) {
-            mViewBinding.emptyView.setVisibility(View.GONE);
+            mViewBinding.icStudentView.layoutStudent.setVisibility(View.GONE);
             bannerStudentAttendanceAdapter = new BannerStudentAttendanceAdapter(rsp);
             mViewBinding.attendanceBanner.setAdapter(bannerStudentAttendanceAdapter);
         } else {
-            mViewBinding.emptyView.setVisibility(View.VISIBLE);
+            mViewBinding.icStudentView.layoutStudent.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override
     public void getTeacherAttendanceSuccess(List<AttendanceTeacherRsp.AttendanceTeacherAdapterBean> rsp) {
         if (!rsp.isEmpty()) {
-            mViewBinding.emptyView.setVisibility(View.GONE);
+            mViewBinding.icTeacherView.layoutTeacher.setVisibility(View.GONE);
             bannerTeacherAttendanceAdapter = new BannerTeacherAttendanceAdapter(rsp);
             mViewBinding.attendanceBanner.setAdapter(bannerTeacherAttendanceAdapter);
         } else {
-            mViewBinding.emptyView.setVisibility(View.VISIBLE);
+            mViewBinding.icTeacherView.layoutTeacher.setVisibility(View.VISIBLE);
         }
-
 
     }
 }

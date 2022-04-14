@@ -69,7 +69,6 @@
         android:layout_height="@dimen/dp_16"
         android:button="@null"
         android:checked="false"
-        android:enabled="false"
         app:layout_constraintRight_toRightOf="parent"
         android:background="@drawable/schedule_add_label_selector"
         app:layout_constraintBottom_toBottomOf="parent"

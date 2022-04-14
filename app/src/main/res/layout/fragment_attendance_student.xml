@@ -3,12 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/banner_constrain"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:paddingLeft="@dimen/dp_15"
     android:paddingTop="@dimen/dp_10"
     android:paddingEnd="@dimen/dp_10"
     android:paddingRight="@dimen/dp_15"
-    android:layout_height="match_parent"
-
     android:paddingBottom="@dimen/dp_10">
 
     <TextView
@@ -26,25 +25,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ViewStub
-        android:id="@+id/stubView"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_desc"
+    <include
+        android:id="@+id/ic_teacher_view"
         android:layout_width="match_parent"
-        android:inflatedId="@id/attendance_banner"
-        android:layout="@layout/item_teacher_attendance"
-        android:layout_height="wrap_content"/>
-
-
-
-    <ImageView
-        android:id="@+id/emptyView"
-        android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="wrap_content"
-        android:src="@mipmap/icon_no_data"
+        android:visibility="gone"
+        layout="@layout/item_teacher_attendance"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
+
+    <include
+        android:id="@+id/ic_student_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        layout="@layout/item_student_attendance"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
+
 
     <com.youth.banner.Banner
         android:id="@+id/attendance_banner"
