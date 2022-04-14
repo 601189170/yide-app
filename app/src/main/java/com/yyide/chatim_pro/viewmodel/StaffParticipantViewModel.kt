@@ -192,7 +192,7 @@ class StaffParticipantViewModel : ViewModel() {
     fun searchParticipant(keyword: String,type: Int) {
         val parameterMap = mutableMapOf<String, Any>()
         parameterMap["name"] = keyword
-        parameterMap["model"] = type
+        parameterMap["mode"] = type
         val toJSONString = JSON.toJSONString(parameterMap)
         val requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)
         apiStores.searchParticipant(requestBody).enqueue(object : Callback<SearchParticipantRsp> {
