@@ -1,47 +1,47 @@
 {
   "config": {
-	"emas.appKey":"333499175",
-	"emas.appSecret":"4f418b018eb4431d8ecebfc74f019fa0",
-	"emas.packageName":"com.yyide.chatim",
-	"hotfix.idSecret":"333499175-1",
-	"hotfix.rsaSecret":"MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCPSELtAVwhYqMcfUBzw/RuqRr6emmr5UWx/2ZV9nkMKM2vB3TOOsS4GbF2MxmptZS6U+phvAhHMjNFEKcXWTJKz/g/AElgOqrpnQ19wkywE6bkB+MS0uyib5j9zGO/H+aGk9CuRUgikGZe9uudtCM4tGgZwwIBmmcSOQKHPYEbQs7xRc2qHH1edZrJohTVJ59Dc4lowYkCsFwOn1Mi2lEw+x2TmZ3Sc8QMLUJlYL4XjweXBUkpQfVuWzxXOG6IOUPp8F9vFvqr+mZQj0GNbCfe5Ky62zOTqxf7BNsjW7KAQhvDYqOAyOUVS9rk1rRUITYLyvVJ9Pjp6ewppYVkNzh1AgMBAAECggEATFEF7K0LwHCERplkKgUWfZau2vk2ras52xwZCvJz+QkGvRJwoaPlwdVVk4qWQbGI3VHzBkmb8ygG7ON4zFPjGLv7Ert5WbsF69aOKAzEwghFnTGiPhWAmuhsCcrC2jsIk2fJ//jA+kAFdtF4IBChrgNRa19WAzqVabxZ32TgDn9TytWIJgi9ThvVaph/wat7N0Qx4u1k8Yz8kRCerIK5fAyAx+DLHSFikbyaxpxX8DVIaQ3g3pG+2OGTN5BWwxX5xhrh1vGdF6SY9/ixhXukoF1LJEg2ibVf/4/8tySCIbSszXIpZ7ehSLd8OgDJXJaA7dxbiVgyZhk+a/YvSlCBYQKBgQDLeQfJnQvWy55vja+pvleT7oWTdzPq8AYwfWAU242Wy0fv57ocnpVwBEeFTwnJ2ivAzCTEt3c8bHfGDSFNwZH3/I6Po5aYDKxVqkTc1d9zIJxGe+LU19wG8alXK2+i27VXhzSb3laPXL5u+lWXTu7HszdlaycPJZnyuDM6cyazOQKBgQC0RWbz/GVtNb6cj0+A2OCRbn/XzuYot+FmZCSaAiWLNqOhzmOQYlMCwdCKToA1uBDGPl/ebxarDc9ladOravf2N4WOkdNM9NksxToYG2t0Mt5OKjwqLi3/Psqc33v94Plnwz0jc9NYkjpSryyNYrffYPbSWmjijjp7jNOJZlVDHQKBgQCbZX/xFqPoE/KYt9klBl3UeSJDEZLxJwdTGS28QEHOnMoACzY0jVkMB/inc0nCg4FO6ZpbMtM5ro17EKQSwnc8sgIe6Y0l6ufjNPsKvby+LHWtzwfaDlHYa9As5tuHwcypYHVpZVEuhGJcV4vu1zW+Br2UE1XtV4ZPvSZCyZcQ4QKBgQCgET/pRSOKZT5rJZUig3BjsgoyRbR4U04A7MrTNTTA+DMzaV9exO+QcygIpsuQ5299l8TobRtjp0+QbPdWLhUeuw4MGc/VdVOhPT7oSPCQrNpX7Yieq4KMMeUWhhpCw5CxYdrXr/DppG3FHWYh5JX/8sk23rBi+odTTShHyGXMwQKBgCUy3sS/YH4w+Jv64xxWJvF/i7PvNlApZZXM8D22MrCQsJsRmPjMvaPeiX4jfQP1QkmiSv2hYbqeKQERidY3eM70dyUn7uNwpgQfdl5VelvPdXn68UXVpyOhZV/TpOX4L6EeG8gG1yHPjA62cGCdzXX5scvNHuVmT2kdYy4lyaOu",
+	"emas.appKey":"333691099",
+	"emas.appSecret":"93b01ba558d84f4f98d1159bc7715362",
+	"emas.packageName":"com.yyide.chatim_pro",
+	"hotfix.idSecret":"333691099-1",
+	"hotfix.rsaSecret":"MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCIx5Vo/IziIgMfCZJAVH7h7gpgO34XQQ9gHpwbDH5MBwJjpCg4q5rPs90840t36KEpJHP6e+6frlTGP35Rx6C/nnwX1xg1HWutZnpv74w66vu3oUyh+orxaLvUb0qvobGmW7Jxs+G8LfjsSwcP+QBdRpw5M9gv6ZjB42MvB/u/TNs9EsnRXHNWC0wvBxi19BQWtT/tc+q6E3fq21HUXAYA82cz0sOZoKPsZay+B4xeUngxdaqREkM2zaUCR5Fv680AFPxqUcV2jMvjgsdpxgmPnJ58hcswNdnc0r+VYMRsea9oQT+617PWwuqoWszo0j4/KCiM0HSMH7av5/8yP31XAgMBAAECggEBAIK0RgBXJcGJwvXLzagPllgLgnrHHwzVrP2rAn2OiLnaENxqp8zPn1ZPiGCAy0NAV5DbNsDr4PFSQ8xWLD21x9SUe/zEHGvVO2ot/V4tyREcL4IgbvxyUIe0D5lG6FXA6+QOyAyDWnjabX5Pi+YlicWYjfzToAjY7pKI2eS9ekIoo7F5wsWrqXXoIS7vhz8a5FWG1YISDJt+JrG9mlIRl1UwXnZWE62UfmoxiHdq7wBR5zyRfXWo8V4gBLovURNHVfvbnvCChCAKXygUU/xNQocVay+xRiaPJtlwNfTmYZhCVVZHtQKzj7BgVLKRGiNNiQPZaeqcaGNRuzFe4Wa7SwECgYEA2b4bM4hDNNTTW85OvPjfArIEcLRHiAauq1VvyTMc7aC5dXXYqLeY7/sGxmDRsBcd5DHQlLr3RHoy/vfwua18DcLeAPWOtH52hCxbFTZ8O+SOPzXLr1A/rLY35jRP+bGsYElXP1+o2cTZgdn8PzcdojgFkWlwCf1ILaLnAw6FjEECgYEAoM/TQyBh/DxbmJv5MID93jzF49BS/NG/EHUPZTcBhyBeXAd00cl6ckIH0/DWkrWvhfvdY9WSiIXF/eCYSF3eJvkwGnceZoxS0KEGqq85W+mhvBrQfGVMi4KdslpV9GwWoPae78p5WHa3P4pmHwMo1ussT+FZjYrJUOeuq6+VA5cCgYB1f32kOEKz7qjDYLfih5WoGbIFs3LqN1joQelZtEhG/rU1akto9/IChf5o7HQaxs6thigdKisme56rMdZoC/LmZiJweBHy2k9QEbNw5f7yPup3t6rbRr2lkIrnoZEKl9MB/nGjVBaEtRH+XUgeQLqv//UZO8Fm0pOxdLeeUabFQQKBgHMThYi5uaS4xIs2wmGVTRYlwy69O0W0CtgKDNRPQoaiASQ2KcCeP0NYQSXHaKVf4pUsoUb55HxRzldYy2Ct23VkSKoHp/eWXwTw1kZ6Ub+WNqjXP25lRxtmgtbIkk3ws1jIYwARkjhd69BKh72VkzoI3JLlHiKNuHZu9K3jXe1NAoGBAIolTazUFnfDjEKGJmKmJI8I05U5YwN+emnAbWoVtrIl78FVAGX7p+dt+2uZvNaaumWfuqQ9MKVexhlYDR3lzYmlSjtz7NH3Cl46hP3CIBFYnZ+nOha6/DhslVdhsjMLejhLJ/h00e9YIn2ivAK/JGhYhE/n33xvePr79IG7Jf2B",
 	"httpdns.accountId":"195368",
 	"httpdns.secretKey":"0d811a134bc1006c85e40ca93ef9b0b3",
-	"appmonitor.tlog.rsaSecret":"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCw16VVAdhH/KXJaGjHzv7q8HWoCeex+NvfYacxk2c6siOVbjgx8zcSeBMrbTKFPlZdyuJadF1F/tLwYuCCIolkckx0f2ekSBBAFefB3d/slvhIhidIY/LlkG9QiMXzBWd0yG/pMIQLF4fetFARYj6QaFMhygeZTxN4coohUX1sNQIDAQAB",
-	"appmonitor.rsaSecret":"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCw16VVAdhH/KXJaGjHzv7q8HWoCeex+NvfYacxk2c6siOVbjgx8zcSeBMrbTKFPlZdyuJadF1F/tLwYuCCIolkckx0f2ekSBBAFefB3d/slvhIhidIY/LlkG9QiMXzBWd0yG/pMIQLF4fetFARYj6QaFMhygeZTxN4coohUX1sNQIDAQAB"
+	"appmonitor.tlog.rsaSecret":"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCWQkaNcLTdQSALhKxUCLIjOid4qQbqKPeW3F0dggweXr7ZXX4F/2SPBI9Lz4dhrVn6AzqVuDC7o3sCDy7y6IhwVWqNdiP8U2HrfnNVKVqSY/X0jHNNmzZgPNudsuVfYyWUpP8LzVsIcSrj9jmTYccsIEfxizgKtz0xs0NdIANI8wIDAQAB",
+	"appmonitor.rsaSecret":"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCWQkaNcLTdQSALhKxUCLIjOid4qQbqKPeW3F0dggweXr7ZXX4F/2SPBI9Lz4dhrVn6AzqVuDC7o3sCDy7y6IhwVWqNdiP8U2HrfnNVKVqSY/X0jHNNmzZgPNudsuVfYyWUpP8LzVsIcSrj9jmTYccsIEfxizgKtz0xs0NdIANI8wIDAQAB"
 },
   "services": {
 	"hotfix_service":{
 		"status":1,
-		"version":"3.3.0"
+		"version":"3.3.5"
 	},
 	"ha-adapter_service":{
 		"status":1,
-		"version":"1.1.5.1-open"
+		"version":"1.1.5.2-open"
 	},
 	"feedback_service":{
 		"status":1,
-		"version":"3.3.3"
+		"version":"3.3.7"
 	},
 	"tlog_service":{
 		"status":1,
-		"version":"1.1.3.3-open"
+		"version":"1.1.4.4-open"
 	},
 	"httpdns_service":{
 		"status":1,
-		"version":"2.0.2"
+		"version":"2.2.2"
 	},
 	"apm_service":{
 		"status":1,
-		"version":"1.0.10.0-open"
+		"version":"1.1.0.0-open"
 	},
 	"man_service":{
 		"status":1,
-		"version":"1.2.5"
+		"version":"1.2.7"
 	},
 	"cps_service":{
 		"status":1,
-		"version":"3.4.0"
+		"version":"3.7.5"
 	}
 },
   "use_maven":true,

@@ -27,9 +27,9 @@ public class BaseConstant {
      * 腾讯IM APPID
      */
     //线上版本APPID
-    public static final int SDKAPPID_RELEASE = 1400511951;
+    public static final int SDKAPPID_RELEASE = 1400662597;
     //UAT- APPID
-    public static final int SDKAPPID_UAT = 1400511951;//1400537733
+    public static final int SDKAPPID_UAT = 1400662597;//1400537733
 
     public static final int SDKAPPID = BuildConfig.DEBUG ? SDKAPPID_UAT : SDKAPPID_RELEASE;
 
