@@ -117,6 +117,11 @@ class AttendanceRuleActivity:KTBaseActivity<ActivityAttendanceV2RuleBinding>(Act
                 listRuleInfo.add(bean)
             }
 
+            for ((index,data) in it.deviceList.withIndex()){
+                val bean = ItemRuleInfoBean("设备蓝牙名称${index+1}",data.deviceId)
+                listRuleInfo.add(bean)
+            }
+
             adapter.setList(listRuleInfo)
 
 

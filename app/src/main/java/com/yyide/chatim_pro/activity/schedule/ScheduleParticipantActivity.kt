@@ -1,5 +1,6 @@
 package com.yyide.chatim_pro.activity.schedule
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -109,6 +110,7 @@ class ScheduleParticipantActivity : BaseActivity() {
         //tabs.add("学生")
         tabs.add("家长")
         scheduleParticipantBinding.viewpager.adapter =
+            @SuppressLint("WrongConstant")
             object : FragmentPagerAdapter(
                 supportFragmentManager,
                 BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
@@ -175,6 +177,11 @@ class ScheduleParticipantActivity : BaseActivity() {
         //日程搜索
         scheduleParticipantBinding.clSearch.setOnClickListener {
             val intent = Intent(this, ScheduleParticipantSearchActivity::class.java)
+            var typeInt = 0
+            if (isFromMeeting){
+                typeInt = 1
+            }
+            intent.putExtra("type",typeInt)
             participantSearchResultHandler.launch(intent)
         }
 

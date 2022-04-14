@@ -9,6 +9,7 @@ import com.blankj.utilcode.util.Utils;
 import com.yyide.chatim_pro.BaseApplication;
 import com.yyide.chatim_pro.SpData;
 import com.yyide.chatim_pro.base.BaseConstant;
+import com.yyide.chatim_pro.kotlin.network.interceptor.CommonResponseInterceptor;
 import com.yyide.chatim_pro.model.LoginRsp;
 
 import java.io.File;
@@ -115,6 +116,7 @@ public class AppClient {
             Cache cache = new Cache(httpCacheDirectory, cacheSize);
             builder.cache(cache);
             builder.addInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR);
+            builder.addInterceptor(new CommonResponseInterceptor());
 //            builder.addInterceptor(new TokenHeaderInterceptor());
             builder.connectTimeout(30, TimeUnit.SECONDS). // 设置连接超时时间
                     readTimeout(30, TimeUnit.SECONDS).
