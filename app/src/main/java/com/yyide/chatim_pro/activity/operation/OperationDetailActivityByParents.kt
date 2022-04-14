@@ -60,11 +60,16 @@ class OperationDetailActivityByParents :
                     setCheckDonw()
                     ispost=result.feedbackData.isFeedback
                     Log.e("TAG", "getSchoolWorkRsp: "+JSON.toJSONString(result))
-                    binding.tvClassName.text=result.classesTimetable.classesName+result.classesTimetable.subjectName
+                    if (!TextUtils.isEmpty(result.classesTimetable.subjectName)){
+                        binding.tvClassName.text=result.classesTimetable.classesName+result.classesTimetable.subjectName
+                        binding.tvGl.text="关联课程:"+result.classesTimetable.timetableTime+"第"+result.classesTimetable.sequence+"节"+result.classesTimetable.startTime
+                    }else{
+                        binding.tvGl.visibility=View.GONE
+                        binding.tvClassName.text=result.classesTimetable.classesName
+                    }
                     binding.tvTitle.text=result.title
                     binding.tvContent.text=result.content
 //                    android:text="关联课程：03-13 第一节 08:30"
-                    binding.tvGl.text="关联课程:"+result.classesTimetable.timetableTime+"第"+result.classesTimetable.sequence+"节"+result.classesTimetable.startTime
 
                     if (result.feedbackData.isFeedback){
                         //已反馈

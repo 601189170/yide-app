@@ -243,7 +243,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_333333"
                     android:textSize="@dimen/text_14"
-                    android:layout_marginLeft="100dp"
+                    android:layout_marginLeft="120dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

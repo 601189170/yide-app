@@ -44,8 +44,11 @@ import top.zibin.luban.OnCompressListener
 import android.graphics.Bitmap
 import android.os.StrictMode
 import com.yyide.chatim_pro.utils.*
-
-
+/**
+ * @Desc 添加作业
+ * @Data 2022年2月17日13:35:32
+ * @Author lrz
+ */
 class OperationCreatWorkActivity :
     KTBaseActivity<ActivityOperationPostWorkBinding>(ActivityOperationPostWorkBinding::inflate),selectphotoAndCarmer.SelectDateListener{
     private lateinit var viewModel: OperationPostWorkModel
@@ -349,7 +352,7 @@ class OperationCreatWorkActivity :
 
                     override fun onSuccess(file: File) {
                         FileList.add(file)
-                        Log.e("TAG", "上传完: " +FileList.size/+imglist.size)
+                        Log.e("TAG", "上传进度: " +FileList.size+"/"+imglist.size)
                         if (FileList.size==imglist.size){
                             viewModel.upPohto(FileList)
                         }else{
@@ -464,7 +467,6 @@ class OperationCreatWorkActivity :
                 cursor.moveToFirst()
                 val columnIndex: Int = cursor.getColumnIndex(filePathColumn[0])
                 val picturePath: String = cursor.getString(columnIndex)
-                Log.e("TAG", "onActivityResult: "+picturePath )
                 imglist.add(picturePath)
                 mAdapterimg.setList(imglist)
                 cursor.close()
@@ -484,7 +486,6 @@ class OperationCreatWorkActivity :
                     mAdapter.data[index].timetableTime=timetableTime
                 }
             }
-            Log.e("TAG", "mAdapterDATA==》: "+JSON.toJSONString(mAdapter.data) )
 
             mAdapter.setList(mAdapter.data)
 
@@ -492,7 +493,6 @@ class OperationCreatWorkActivity :
 
 
         }else if (requestCode == RESULT_CARMER && resultCode == RESULT_OK && null != data) {
-            Log.e("TAG", "RESULT_CARMER: " )
 
             val bundle= data.getExtras()
             // 获取相机返回的数据，并转换为Bitmap图片格式，这是缩略图

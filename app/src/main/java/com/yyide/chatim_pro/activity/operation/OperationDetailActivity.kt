@@ -54,10 +54,16 @@ class OperationDetailActivity :
                 val result = it.getOrNull()
                 if (result!=null){
                     Log.e("TAG", "getSchoolWorkRsp: "+JSON.toJSONString(result))
-                    binding.tvClassName.text=result.classesTimetable.classesName+result.classesTimetable.subjectName
+                    if (!TextUtils.isEmpty(result.classesTimetable.subjectName)){
+                        binding.tvGl.text="关联课程:"+result.classesTimetable.timetableTime+"第"+result.classesTimetable.sequence+"节"+result.classesTimetable.startTime
+                        binding.tvClassName.text=result.classesTimetable.classesName+result.classesTimetable.subjectName
+                    }else{
+                        binding.tvGl.visibility=View.GONE
+                        binding.tvClassName.text=result.classesTimetable.classesName
+                    }
+
                     binding.textView38.text=result.releaseTime+"发布"
 
-                    binding.tvGl.text="关联课程:"+result.classesTimetable.timetableTime+"第"+result.classesTimetable.sequence+"节"+result.classesTimetable.startTime
 
                     binding.tvTitle.text=result.title
                     binding.tvContent.text=result.content

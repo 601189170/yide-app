@@ -24,7 +24,7 @@ import com.yyide.chatim_pro.model.ParentWorkList
 import com.yyide.chatim_pro.model.getClassSubjectListRsp
 
 /**
- * @Desc 作业-数据
+ * @Desc 作业-数据 家长身份
  * @Data 2022年2月17日13:35:32
  * @Author lrz
  */
