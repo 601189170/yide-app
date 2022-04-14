@@ -37,6 +37,7 @@ class NAppFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         savedInstanceState: Bundle?
     ): View {
         binding = NappFragmentBinding.inflate(layoutInflater)
+        //NappFragmentBinding.inflate(R.id.)
         return binding.root
     }
 

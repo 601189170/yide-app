@@ -123,12 +123,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/label_list"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            app:layout_constraintRight_toLeftOf="@+id/iv_finish_tag"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_schedule_time_interval"
-            tools:ignore="MissingConstraints"/>
+            tools:ignore="MissingConstraints" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

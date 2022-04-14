@@ -26,9 +26,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ViewStub
+        android:id="@+id/stubView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_desc"
+        android:layout_width="match_parent"
+        android:inflatedId="@id/attendance_banner"
+        android:layout="@layout/item_teacher_attendance"
+        android:layout_height="wrap_content"/>
+
+
+
     <ImageView
         android:id="@+id/emptyView"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="wrap_content"
         android:src="@mipmap/icon_no_data"
         app:layout_constraintLeft_toLeftOf="parent"

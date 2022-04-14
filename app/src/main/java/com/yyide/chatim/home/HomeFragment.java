@@ -62,6 +62,7 @@ import com.yyide.chatim.model.message.HomeNoticeDetaiBean;
 import com.yyide.chatim.presenter.HomeFragmentPresenter;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.JumpUtil;
+import com.yyide.chatim.utils.LogUtil;
 import com.yyide.chatim.utils.TakePicUtil;
 import com.yyide.chatim.view.HomeFragmentView;
 
@@ -386,6 +387,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         fragmentTransaction = childFragmentManager.beginTransaction();
         if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().staffIdentity()) {//校长
             //校长身份
+            LogUtil.e("校长身份");
             workContent.setVisibility(View.GONE);
             studentHonorContent.setVisibility(View.GONE);
             classHonorContent.setVisibility(View.GONE);

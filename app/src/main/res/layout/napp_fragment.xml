@@ -43,7 +43,6 @@
                 app:layout_scrollFlags="scroll|snap|enterAlways"
                 app:tabIndicator="@drawable/tab_indicator"
                 app:tabIndicatorColor="@color/colorPrimary"
-                app:tabIndicatorHeight="@dimen/dp_2"
                 app:tabMaxWidth="200dp"
                 app:tabMinWidth="@dimen/dp_20"
                 app:tabPaddingEnd="@dimen/dp_20"

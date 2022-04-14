@@ -59,11 +59,7 @@ class ScheduleTodayAdapter(type: Int,data: List<ScheduleData>) :
         if (item.promoterSelf()){
             holder.getView<CheckBox>(R.id.iv_finish_tag).visibility=View.VISIBLE
             holder.getView<CheckBox>(R.id.iv_finish_tag).isEnabled=true
-            if (item.status == "1") {
-                holder.getView<CheckBox>(R.id.iv_finish_tag).isChecked=true
-            } else {
-                holder.getView<CheckBox>(R.id.iv_finish_tag).isChecked=false
-            }
+            holder.getView<CheckBox>(R.id.iv_finish_tag).isChecked = item.status == "1"
 
             holder.getView<CheckBox>(R.id.iv_finish_tag).setOnClickListener(View.OnClickListener {
                 if (listener!=null){
