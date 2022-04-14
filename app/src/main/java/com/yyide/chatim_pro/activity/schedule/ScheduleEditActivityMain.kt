@@ -190,6 +190,7 @@ class ScheduleEditActivityMain : BaseActivity() {
             scheduleEditBinding.tvBt6.visibility = View.GONE
             scheduleEditBinding.clParticipant.visibility = View.GONE
         }
+
         val scheduleData = JSON.parseObject(stringExtra, ScheduleData::class.java)
         val format = getString(R.string.schedule_create_time_and_status)
         scheduleData?.let {
@@ -279,13 +280,12 @@ class ScheduleEditActivityMain : BaseActivity() {
             it.participantList.map {
                 it.realname
             }.forEach {
-                stringBuilder.append(it).append("  ,")
+                stringBuilder.append(it).append("  ")
             }
-
             if (stringBuilder.isEmpty() || stringBuilder.isBlank()) {
-                scheduleEditBinding.tvParticipant.text = SpData.getUser().name
+                scheduleEditBinding.tvParticipant.text = "${SpData.getUser().name} ,"
             } else {
-                scheduleEditBinding.tvParticipant.text = stringBuilder.toString()
+                scheduleEditBinding.tvParticipant.text = stringBuilder.toString().replace("  ", ",")
             }
             scheduleEditBinding.tvParticipant.setTextColor(resources.getColor(R.color.black9))
 
@@ -833,13 +833,13 @@ class ScheduleEditActivityMain : BaseActivity() {
     private fun showSelectedParticipant(list: List<ParticipantRsp.DataBean.ParticipantListBean>) {
         val stringBuilder = StringBuilder()
         list.map { it.name }.forEach {
-            stringBuilder.append(it).append(" ,")
+            stringBuilder.append(it).append("  ")
         }
-//        loge("showSelectedParticipant:$"+stringBuilder.toString())
         if (stringBuilder.isEmpty() || stringBuilder.isBlank()) {
-            scheduleEditBinding.tvParticipant.text = SpData.getUser().name
+            scheduleEditBinding.tvParticipant.text = "${SpData.getUser().name} ,"
         } else {
-            scheduleEditBinding.tvParticipant.text = stringBuilder.toString()
+
+            scheduleEditBinding.tvParticipant.text = stringBuilder.toString().replace("  ", ",")
         }
         scheduleEditBinding.tvParticipant.setTextColor(resources.getColor(R.color.black9))
 

@@ -40,10 +40,10 @@ data class Schedule(
     companion object {
         //日程列表头显示月份
         const val TYPE_LIST_VIEW_HEAD:Int = 0
-        const val TYPE_EXPIRED_NOT_COMPLETED: Int = 1
-        const val TYPE_EXPIRED_COMPLETED: Int = 2
-        const val TYPE_UNEXPIRED_COMPLETED: Int = 3
-        const val TYPE_UNEXPIRED_NOT_COMPLETED: Int = 4
+        const val TYPE_EXPIRED_NOT_COMPLETED: Int = 1 //过时间未完成
+        const val TYPE_EXPIRED_COMPLETED: Int = 2  //过时间完成
+        const val TYPE_UNEXPIRED_COMPLETED: Int = 3 //未过期已完成
+        const val TYPE_UNEXPIRED_NOT_COMPLETED: Int = 4//未过期未完成
         const val TYPE_TIME_AXIS: Int = 5
         //日程类型【0：校历日程，1：课表日程，2：事务日程 3：会议日程】
         const val SCHEDULE_TYPE_SCHEDULE = 2
