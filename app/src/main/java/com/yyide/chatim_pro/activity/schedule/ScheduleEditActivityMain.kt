@@ -279,7 +279,7 @@ class ScheduleEditActivityMain : BaseActivity() {
             it.participantList.map {
                 it.realname
             }.forEach {
-                stringBuilder.append(it).append("  ")
+                stringBuilder.append(it).append("  ,")
             }
 
             if (stringBuilder.isEmpty() || stringBuilder.isBlank()) {
@@ -833,7 +833,7 @@ class ScheduleEditActivityMain : BaseActivity() {
     private fun showSelectedParticipant(list: List<ParticipantRsp.DataBean.ParticipantListBean>) {
         val stringBuilder = StringBuilder()
         list.map { it.name }.forEach {
-            stringBuilder.append(it).append("  ")
+            stringBuilder.append(it).append(" ,")
         }
 //        loge("showSelectedParticipant:$"+stringBuilder.toString())
         if (stringBuilder.isEmpty() || stringBuilder.isBlank()) {
